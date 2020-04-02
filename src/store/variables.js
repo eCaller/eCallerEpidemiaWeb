@@ -12,7 +12,7 @@ export default {
 
     respuestapositivo: (state) => {
       if (state.variables && state.variables.length>0) {
-        return state.variables.find(p => p.nombre==='REPUESTA_POSITIVO');
+        return state.variables.find(p => p.nombre==='RESPUESTA_POSITIVO');
       } else {
         return {valor:null};
       }
@@ -35,11 +35,13 @@ export default {
         .catch((error) => {
           commit('setVariables', {variables: error.data})
         });
+    },
+    saveVariables (state) {
+      return variablesservice.saveVariables({variables: state.getters.variables});
     }
   },
   mutations: {
     setVariables(state, response) {
-      console.log(response)
       state.variables = response.variables;
     },
 

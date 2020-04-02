@@ -17,6 +17,7 @@
       <div class="col-md-12">
       	<h3>
       	   <i class="fa fa-edit fa-fw"></i> <label>Diseño del triage </label>
+           <span class="pull-right"><button class="btn btn-default" @click="reload()"><i class="fa fa-sync fa-fw"></i></button></span>
   			</h3>
   		</div>
 		</div>
@@ -202,11 +203,8 @@ export default {
   },
   watch: {
     variables(newValue, oldValue) {
-      console.log('newValue')
-      console.log(newValue)
       this.respuestanegativo= this.$store.getters.respuestanegativo;
       this.respuestapositivo= this.$store.getters.respuestapositivo;
-      console.log(this.respuestanegativo);
     },
     triage(newValue, oldValue) {
       this.opcionesrespuesta = this.$store.getters.getPreguntasRespuestas;
@@ -412,14 +410,23 @@ export default {
       try {
         this.saveTriage().then((respuesta) => {
           //TODO Guardamos los datos de las variables
-          console.log("** datos guardados")
-          this.spinner = false;
-          this.mensajeInfo = "Datos guardados correctamente.";
+          console.log("** triage guardado")
+          this.saveVariables().then((respuesta) => {
+            console.log("** variables guardado")
+            this.spinner = false;
+            this.mensajeInfo = "Datos guardados correctamente.";
 
-          //TODO recargamos la página de nuevo
+            //recargamos la página de nuevo
+            this.reload();
+          })
+          .catch((error) => {
+            this.spinner = false;
+            this.mensajeError = "Se ha producido un error al guardar el triage.";
+            console.error(error);
+          });
+
         })
         .catch((error) => {
-          //TODO
           this.spinner = false;
           this.mensajeError = "Se ha producido un error al guardar el triage.";
           console.error(error);
@@ -432,9 +439,15 @@ export default {
     },
 
     cancelar() {
-      //TODO recarga de nuevo la página
+      //recarga de nuevo la página
+      this.reload();
     },
 
+    reload() {
+      var location = this.$route.fullPath
+      this.$router.replace('/')
+      this.$nextTick(() => this.$router.replace(location))
+    },
 
     isEmpty(e) {
       switch (e) {
@@ -451,6 +464,7 @@ export default {
       fetchTriage: 'fetchTriage',
       saveTriage: 'saveTriage',
       fetchVariables:'fetchVariables',
+      saveVariables: 'saveVariables',
     })
   },
 

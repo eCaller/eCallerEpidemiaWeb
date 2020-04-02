@@ -4,7 +4,9 @@ export default {
         username: null,
         nombre: null,
         imagen: null,
-        rol: null
+        rol: null,
+        access_token: null,
+        refresh_token: null,
   },
   getters: {
     usuario (state) {

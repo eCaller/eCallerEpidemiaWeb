@@ -21,45 +21,54 @@
 
     <div class="row">
       <div class="col-md-2">
-        <panel type="primary">
+        <panel type="danger">
           <template slot="header">
-            <i class="far fa-map fa-fw"></i> <label> Provincias</label>
+            <i class="far fa-map fa-fw"></i> <label> Departamentos</label>
           </template>
 
           <div class="row">
-            <div class="col-md-12" v-for="p in provincias" :key="p.id"><checkbox v-model="p.select" type="info" style="margin-top: 0px; margin-bottom: 0px; font-weight: 100;">{{p.nombre}}</checkbox></div>
+            <div class="col-md-12">
+
+            <button-group v-model="departamentosselect" :buttons="false">
+                <checkbox v-for="d in departamentos" :key="d.id" :true-value="d.id" type="info"
+                  style="margin-top: 0px; margin-bottom: 0px; font-weight: 100;">{{d.nombre}}</checkbox>
+            </button-group>
+            </div>
           </div>
         </panel>
 
         <panel type="warning">
           <template slot="header">
-            <i class="far fa-map fa-fw"></i> <label> Municipios</label>
+            <i class="fa fa-map fa-fw"></i> <label> Provincias</label>
           </template>
 
           <div class="row">
             <div class="col-md-12">
-              <button-group justified><v-select v-model="municipiosselect" :options="municipios" options-label="nombre" options-value="nombre"
+              <button-group justified>
+                <v-select v-model="provinciasselect" :options="provincias" options-label="nombre" options-value="id"
                   multiple show-count
                   placeholder="Nada seleccionado"
                   search justified
                   clear-button
-                ></v-select></button-group>
+                ></v-select>
+              </button-group>
             </div>
             <div class="col-md-12"><br></div>
             <div class="col-md-12">
-              <p><code v-for="i in municipiosselect" style="margin-right: 5px; margin-top: 3px; float: left;">{{i}}</code></p>
+              <p><code v-for="i in provinciasselobject" :key="i.id" style="margin-right: 5px; margin-top: 3px; float: left;">{{i.nombre}}</code></p>
             </div>
           </div>
         </panel>
 
         <panel type="success">
           <template slot="header">
-            <i class="far fa-map fa-fw"></i> <label> Distritos</label>
+            <i class="fa fa-map-marked fa-fw"></i> <label> Municipios</label>
           </template>
 
           <div class="row">
             <div class="col-md-12">
-              <button-group justified><v-select v-model="distritosselect" :options="distritos" options-label="nombre" options-value="nombre"
+              <button-group justified>
+                <v-select v-model="municipiosselect" :options="municipios" options-label="nombre" options-value="id"
                   multiple show-count
                   placeholder="Nada seleccionado"
                   search justified
@@ -68,10 +77,10 @@
             </div>
             <div class="col-md-12"><br></div>
             <div class="col-md-12">
-              <p><code v-for="i in distritosselect" style="margin-right: 5px; margin-top: 3px; float: left;">{{i}}</code></p>
+              <p><code v-for="i in municipiosselobject" :key="i.id" style="margin-right: 5px; margin-top: 3px; float: left;">{{i.nombre}}</code></p>
             </div>
-
           </div>
+
         </panel>
 
       </div>
@@ -112,6 +121,8 @@
                 />
               </gmap-map>
 
+              <v-chart v-if="grafica=='S'" :options="graficalineoption" />
+
               <v-chart v-if="grafica=='E'" :options="graficaop" />
             </div>
 
@@ -143,12 +154,12 @@
           </div>
         </panel>
 
-        <panel type="info">
+        <panel type="info" v-if="false">
           <template slot="header">
             <i class="far fa-calendar-alt fa-fw"></i> <label> Estado por selección</label>
           </template>
 
-          <div class="row" v-for="d2 in resumen" :key="d2.id">
+          <div class="row" v-for="d2 in resumenfiltro" :key="d2.id">
             <div class="col-md-6"><checkbox v-model="d2.select" type="info" style="margin-top: 0px; margin-bottom: 0px; font-weight: 100;">{{d2.nombre}}</checkbox></div>
             <div class="col-md-1"><label :class="d2.clase">{{d2.value}}</label></div>
             <div class="col-md-1"><i :class="d2.flecha"></i></div>
@@ -156,31 +167,27 @@
           </div>
         </panel>
 
-
-
-
       </div>
 
     </div>
-
-
-
 	</div>
 </template>
 
 <script>
 import VueStrap from 'vue-strap';
-import {mapGetters} from 'vuex';
+import {mapGetters, mapActions, mapMutations} from 'vuex';
 import axios from 'axios';
 import moment from 'moment';
 import ECharts from 'vue-echarts';
 
 import 'echarts/lib/chart/line'
+import 'echarts/lib/chart/bar'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/legend'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/toolbox'
 import 'echarts/lib/component/grid'
+import 'echarts/lib/component/markPoint'
 
 import * as VueGoogleMaps from 'vue2-google-maps';
 import { gmapApi } from 'vue2-google-maps'
@@ -206,109 +213,69 @@ export default {
     gmapHeatmap: GmapHeatmapLayer,
   },
   computed: {
-    ...mapGetters(['triage']), //TODO Recuperar los datos de WS
+    ...mapGetters(['departamentos', 'provincias', 'municipios', 'resumen', 'resumenfiltro', 'estadisticas', 'casosmapa']),
     google: gmapApi,
   },
   created () {
   },
   mounted () {
-    var self =this;
-    this.$refs.mapa.$mapPromise.then(() => {
-        self.markers = [{location: new google.maps.LatLng(36.724, -4.483), weight: 0.5},
-                  new google.maps.LatLng(36.724, -4.481),
-                  {location: new google.maps.LatLng(36.724, -4.479), weight: 2},
-                  {location: new google.maps.LatLng(36.724, -4.477), weight: 3},
-                  {location: new google.maps.LatLng(36.724, -4.475), weight: 2},
-                  new google.maps.LatLng(36.724, -4.473),
-                  {location: new google.maps.LatLng(36.724, -4.471), weight: 50 },
-
-
-
-                  {location: new google.maps.LatLng(36.726, -4.483), weight: 3},
-                  {location: new google.maps.LatLng(36.726, -4.481), weight: 2},
-                  new google.maps.LatLng(36.726, -4.479),
-                  {location: new google.maps.LatLng(36.726, -4.477), weight: 0.5},
-                  new google.maps.LatLng(36.726, -4.475),
-                  {location: new google.maps.LatLng(36.726, -4.473), weight: 2},
-                  {location: new google.maps.LatLng(36.726, -4.471), weight: 3},
-
-                  {location: new google.maps.LatLng(36.742, -4.476), weight: 2},
-                  {location: new google.maps.LatLng(36.742, -4.474), weight: 3},
-                  new google.maps.LatLng(36.742, -4.472),
-                  {location: new google.maps.LatLng(36.742, -4.470), weight: 0.5},
-                  new google.maps.LatLng(36.742, -4.469),
-                  {location: new google.maps.LatLng(36.742, -4.468), weight: 100},
-                  {location: new google.maps.LatLng(36.742, -4.467), weight: 3},
-
-                  {location: new google.maps.LatLng(36.710, -4.420), weight: 100},
-                ];
-
-    })
-    console.log(this.markers)
+    this.fetchDepartamentos();
+    this.fetchResumen();
+    this.fetchCasosMapa();
+  },
+  watch: {
+    departamentosselect(newValue, oldValue) {
+      if (this.departamentosselect && this.departamentosselect.length>0) {
+        this.fetchProvincias(this.departamentosselect);
+      } else {
+        this.reloadProvincias([]);
+        this.provinciasselect = [];
+        this.municipiosselect = [];
+      }
+      if (newValue && newValue.length>0) {
+        let p = this.departamentos.find(i => i.id === newValue[newValue.length-1]);
+        if (p) {
+          this.centrar(p.lat, p.lng);
+        }
+      }
+    },
+    provinciasselect(newValue, oldValue) {
+      if (this.provinciasselect && this.provinciasselect.length>0) {
+        this.fetchMunicipios(this.provinciasselect);
+      } else {
+        this.reloadMunicipios([]);
+        this.municipiosselect = [];
+      }
+      this.provinciasselobject = this.getprovinciasselobject();
+      this.municipiosselobject = this.getmunicipiosselobject();
+    },
+    municipiosselect(newValue, oldValue) {
+      this.municipiosselobject = this.getmunicipiosselobject();
+    },
+    estadisticas(newValue, oldValue) {
+      this.asignaEstadisticas();
+      this.asignaEstadisticasLine();
+    },
+    grafica(newValue, oldValue) {
+      this.cambiaGrafica();
+    },
+    casosmapa(newValue, oldValue) {
+      this.cambiaPuntosMapa();
+    },
   },
   data () {
-    let fechas = ['21/03/2020', '22/03/2020', '23/03/2020', '24/03/2020', '25/03/2020', '26/03/2020', '27/03/2020']
-
     return {
       spinner: false,
       fullscreen: false,
       mensajeError: null,
-      showConfirm: false,
-      showParte: false,
 
       fecha: new Date(),
 
-      resumen: [
-        {id:1, nombre:'Sospechosos', value: 650, percent: 12, clase: "t-warning", flecha: "fa fa-arrow-up fa-fw t-danger", select: true},
-        {id:2, nombre:'Confirmados', value: 45, percent: 3, clase: "t-danger", flecha: "fa fa-arrow-up fa-fw t-danger", select: true},
-        {id:3, nombre:'Activos', value: 50, percent: 23, clase: "t-danger", flecha: "fa fa-arrow-down fa-fw t-success", select: true},
-        {id:4, nombre:'Recuperados', value: 100, percent: 23, clase: "t-success", flecha: "fa fa-arrow-up fa-fw t-success", select: true},
-        {id:5, nombre:'Decesos', value: 23, percent: 6, clase: "t-danger", flecha: "fa fa-arrow-down fa-fw t-success", select: true},
-      ],
-
-      provincias: [
-        {id:1, nombre: "Málaga", select: true},
-        {id:2, nombre: "Granada", select: false},
-        {id:3, nombre: "Almería", select: false},
-        {id:4, nombre: "Jaén", select: false},
-        {id:5, nombre: "Cordoba", select: false},
-        {id:6, nombre: "Sevilla", select: false},
-        {id:7, nombre: "Huelva", select: false},
-        {id:8, nombre: "Cádiz", select: false},
-      ],
-
-      municipios: [
-        {id:1, nombre: "Málaga", select: true},
-        {id:2, nombre: "Marbella", select: false},
-        {id:3, nombre: "Mijas", select: false},
-        {id:4, nombre: "Fuengirola", select: false},
-        {id:5, nombre: "Torremolinos", select: false},
-        {id:6, nombre: "Benalmádena", select: false},
-        {id:7, nombre: "Estepona", select: false},
-        {id:8, nombre: "Rincón de la Victoria", select: false},
-        {id:9, nombre: "Antequera", select: false},
-        {id:10, nombre: "Alhaurín de la Torre", select: false}
-
-      ],
-
-      municipiosselect: ["Málaga"],
-
-      distritos: [
-        {id:1, nombre: "Centro", select: true},
-        {id:2, nombre: "Este", select: true},
-        {id:3, nombre: "Ciudad Jardín", select: true},
-        {id:4, nombre: "Bailén-Miraflores", select: true},
-        {id:5, nombre: "Palma-Palmilla", select: true},
-        {id:6, nombre: "Cruz de Humilladero", select: true},
-        {id:7, nombre: "Carretera de Cádiz", select: true},
-        {id:8, nombre: "Churriana", select: true},
-        {id:9, nombre: "Campanillas", select: true},
-        {id:10, nombre: "Puerto de la Torre", select: true},
-        {id:11, nombre: "Teatinos-Universidad", select: true}
-      ],
-
-      distritosselect: ["Centro", "Este", "Ciudad Jardín", "Bailén-Miraflores", "Palma-Palmilla", "Cruz de Humilladero", "Carretera de Cádiz", "Churriana", "Campanillas", "Puerto de la Torre", "Teatinos-Universidad"],
-
+      departamentosselect: [],
+      provinciasselect: [],
+      provinciasselobject: [],
+      municipiosselect: [],
+      municipiosselobject: [],
 
       grafica: "M",
       tiposGrafica: [
@@ -318,123 +285,166 @@ export default {
         {tipo: "E", nombre: "Evolución diaria"},
       ],
 
-
-      graficaop: {
-        title: { text: 'Evolución diaria' },
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'cross',
-                label: {
-                    backgroundColor: '#6a7985'
-                }
-            }
-        },
-        legend: {
-            data: ['Sospechosos', 'Confirmados', 'Activos', 'Recuperados', 'Decesos']
-        },
-        toolbox: {
-            feature: {
-                saveAsImage: {}
-            }
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        xAxis: [
-            {
-                type: 'category',
-                boundaryGap: false,
-                data: fechas
-            }
-        ],
-        yAxis: [
-            {
-                type: 'value'
-            }
-        ],
-        series: [
-            {
-                name: 'Sospechosos',
-                type: 'line',
-                stack: 'Total',
-                areaStyle: {},
-                data: [120, 132, 101, 134, 90, 230, 210]
-            },
-            {
-                name: 'Confirmados',
-                type: 'line',
-                stack: 'Total',
-                areaStyle: {},
-                data: [220, 182, 191, 234, 290, 330, 310]
-            },
-            {
-                name: 'Activos',
-                type: 'line',
-                stack: 'Total',
-                areaStyle: {},
-                data: [150, 232, 201, 154, 190, 330, 410]
-            },
-            {
-                name: 'Recuperados',
-                type: 'line',
-                stack: 'Total',
-                areaStyle: {},
-                data: [320, 332, 301, 334, 390, 330, 320]
-            },
-            {
-                name: 'Decesos',
-                type: 'line',
-                stack: 'Total',
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'top'
-                    }
-                },
-                areaStyle: {},
-                data: [5, 10, 13, 14, 100, 120, 130]
-            }
-        ]
-    },
-
-
-
-
-
-
-
+      graficalineoption: null,
+      graficaop: null,
 
       mapOptions: {fullscreenControl: false},
-      center: {lat: 36.724933, lng: -4.471145},
-      zoom: 13,
+      center: this.$store.getters.configuracion.general.center,
+      zoom: this.$store.getters.configuracion.general.zoom,
 
       markers: null,
     }
   },
 
   methods: {
-    addMensajeError(mensaje) {
-      if (!this.mensajeError) {
-        this.mensajeError="";
-      }
-      this.mensajeError += " " + mensaje;
-    },
-
-    guardarDatos() {
-    },
-
-    noResultsAddress() {
-      console.log("noResultsAddress");
-    },
-
     dateFormat: function(date) {
   		return moment(date, 'YYYY-MM-DD hh:mm').format('DD/MM/YYYY HH:mm');
   	},
+    getprovinciasselobject() {
+      if (this.provinciasselect && this.provinciasselect.length>0) {
+        let arr = [];
+        for (let i in this.provinciasselect) {
+          let pr = this.provincias.find(item => item.id===this.provinciasselect[i]);
+          if (pr) {
+            arr.push(pr);
+          }
+        }
+        return arr;
+      } else {
+        return [];
+      }
+    },
+    getmunicipiosselobject() {
+      if (this.municipiosselect && this.municipiosselect.length>0) {
+        let arr = [];
+        for (let i in this.municipiosselect) {
+          let pr = this.municipios.find(item => item.id===this.municipiosselect[i]);
+          if (pr) {
+            arr.push(pr);
+          }
+        }
+        return arr;
+      } else {
+        return [];
+      }
+    },
 
+    cambiaGrafica() {
+        if (this.grafica==="E" || this.grafica==="S") {
+          this.fetchEstadisticas();
+        } else if (this.grafica==="M" || this.grafica==="C") {
+          this.fetchCasosMapa();
+        }
+    },
+
+    asignaEstadisticasLine() {
+      let fechas = this.getFechasEstadistica();
+
+      this.graficalineoption = {
+        title: { text: 'Seguimiento de casos' },
+        tooltip: { trigger: 'axis' },
+        legend: {
+          data: ['Sospechosos', 'Confirmados', 'Activos', 'Recuperados', 'Decesos']
+        },
+        toolbox: { show: true,
+          feature: {
+            dataView: {show: true, readOnly: false},
+            magicType: {show: true, type: ['line', 'bar']},
+            saveAsImage: {show: true}
+          }
+        },
+        calculable: true,
+        xAxis: [ { type: 'category', data: fechas } ],
+        yAxis: [ { type: 'value' } ],
+        series: [
+          { name: 'Sospechosos', type: 'bar', data: this.estadisticas.sospechosos,
+            markPoint: { data: [ {type: 'max', name: 'Max'}, {type: 'min', name: 'Min'} ] }
+          },
+          { name: 'Confirmados', type: 'bar', data: this.estadisticas.confirmados,
+            markPoint: { data: [ {name: 'Max', value: 182.2, xAxis: 7, yAxis: 183}, {name: 'Min', value: 2.3, xAxis: 11, yAxis: 3} ] }
+          },
+          { name: 'Activos', type: 'bar', data: this.estadisticas.activos,
+            markPoint: { data: [ {type: 'max', name: 'Max'}, {type: 'min', name: 'Min'} ] }
+          },
+          { name: 'Recuperados', type: 'bar', data: this.estadisticas.recuperados,
+            markPoint: { data: [ {type: 'max', name: 'Max'}, {type: 'min', name: 'Min'} ] }
+          },
+          { name: 'Decesos', type: 'bar', data: this.estadisticas.decesos,
+            markPoint: { data: [ {type: 'max', name: 'Max'}, {type: 'min', name: 'Min'} ] }
+          },
+        ]
+      };
+
+    },
+
+    asignaEstadisticas() {
+      let fechas = this.getFechasEstadistica();
+
+      this.graficaop = {
+        title: { text: 'Evolución diaria' },
+        tooltip: { trigger: 'axis', axisPointer: { type: 'cross', label: { backgroundColor: '#6a7985'} } },
+        legend: { data: ['Sospechosos', 'Confirmados', 'Activos', 'Recuperados', 'Decesos'] },
+        toolbox: { feature: { saveAsImage: {} } },
+        grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+        xAxis: [ { type: 'category', boundaryGap: false, data: fechas } ],
+        yAxis: [ { type: 'value' } ],
+        series: [
+            { name: 'Sospechosos', type: 'line', stack: 'Total', areaStyle: {}, data: this.estadisticas.sospechosos },
+            { name: 'Confirmados', type: 'line', stack: 'Total', areaStyle: {}, data: this.estadisticas.confirmados },
+            { name: 'Activos', type: 'line', stack: 'Total', areaStyle: {}, data: this.estadisticas.activos },
+            { name: 'Recuperados', type: 'line', stack: 'Total', areaStyle: {}, data: this.estadisticas.recuperados },
+            { name: 'Decesos', type: 'line', stack: 'Total', label: { normal: { show: true, position: 'top' } }, areaStyle: {}, data: this.estadisticas.decesos }
+        ]
+      };
+
+    },
+    getFechasEstadistica() {
+      let hoy = new Date();
+      return [
+        moment(hoy.setDate(hoy.getDate()-6)).format('DD/MM/YYYY'),
+        moment(hoy.setDate(hoy.getDate()+1)).format('DD/MM/YYYY'),
+        moment(hoy.setDate(hoy.getDate()+1)).format('DD/MM/YYYY'),
+        moment(hoy.setDate(hoy.getDate()+1)).format('DD/MM/YYYY'),
+        moment(hoy.setDate(hoy.getDate()+1)).format('DD/MM/YYYY'),
+        moment(hoy.setDate(hoy.getDate()+1)).format('DD/MM/YYYY'),
+        moment(hoy.setDate(hoy.getDate()+1)).format('DD/MM/YYYY')];
+    },
+
+    cambiaPuntosMapa() {
+      var self =this;
+      let mapa = null;
+      if (this.grafica==="M"){
+        mapa = this.$refs.mapa;
+      } else if (this.grafica==="C") {
+        mapa = this.$refs.mapaCasos;
+      }
+
+      if (mapa) {
+        mapa.$mapPromise.then(() => {
+          self.markers = [];
+          for (let i in self.casosmapa) {
+            self.markers.push(
+                {location: new google.maps.LatLng(self.casosmapa[i].lat, self.casosmapa[i].lng), weight: 3}
+              );
+          }
+        });
+      }
+
+    },
+    centrar(lat, lng) {
+      this.center={lat: lat, lng: lng};
+      this.zoom = 7;
+    },
+    ...mapActions({
+      fetchDepartamentos: 'fetchDepartamentos',
+      fetchProvincias: 'fetchProvincias',
+      fetchMunicipios: 'fetchMunicipios',
+      reloadProvincias: 'reloadProvincias',
+      reloadMunicipios: 'reloadMunicipios',
+      fetchResumen: 'fetchResumen',
+      fetchEstadisticas: 'fetchEstadisticas',
+      fetchCasosMapa: 'fetchCasosMapa'
+    }),
   },
 
 }
@@ -448,32 +458,6 @@ export default {
 
 .small-font {
   font-size: 12px;
-}
-
-.titulo-menu {
-  color: rgba(38,38,38,0.7);
-  font-size: 14px;
-  font-weight: 600;
-  padding: 10px;
-  white-space: nowrap;
-  text-transform: uppercase;
-}
-.label-destino {
-  background-color: #D63E2A !important;
-  text-transform: capitalize !important;
-}
-.label-disponible {
-  background-color: #2D9BB7 !important;
-  text-transform: capitalize !important;
-}
-.label-origen {
-  background-color: #E18247 !important;
-  text-transform: capitalize !important;
-}
-.my-title {
-  font-size: 14px !important;
-  font-weight: 700 !important;
-  padding: 8px !important;
 }
 
 .t-danger {

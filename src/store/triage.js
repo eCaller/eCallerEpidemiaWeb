@@ -112,11 +112,9 @@ export default {
   },
   mutations: {
     setTriage(state, response) {
-      console.log(response)
       state.triage = response.triage;
     },
     setCasospositivos(state, response) {
-      console.log(response)
       state.casospositivos = response.casospositivos;
     },
 

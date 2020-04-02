@@ -14,4 +14,19 @@ export default {
       });
     },
 
+    saveVariables(variables) {
+      return new Promise((resolve, reject) => {
+        axios.put(conf.state.variables.url, variables, {
+              headers: {
+              "Content-Type": 'application/json'
+            }
+          })
+          .then((respuesta) => {
+              resolve(respuesta);
+          })
+          .catch((error) => {
+              reject({data: []})
+          });
+      });
+    },
 }

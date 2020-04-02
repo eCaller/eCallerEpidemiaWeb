@@ -1,3 +1,5 @@
+import casosservice from '@/apis/casosservice'
+
 export default {
   state: {
     /////////////////////////////////////////////////////////////////////////////////// caso
@@ -152,6 +154,31 @@ export default {
 
     ],
 
+    resumen: [
+      {id:1, nombre:'Sospechosos', value: 0, percent: 0, clase: "t-warning", flecha: "fa fa-arrow-up fa-fw t-danger", select: true},
+      {id:2, nombre:'Confirmados', value: 0, percent: 0, clase: "t-danger", flecha: "fa fa-arrow-up fa-fw t-danger", select: true},
+      {id:3, nombre:'Activos', value: 0, percent: 0, clase: "t-danger", flecha: "fa fa-arrow-down fa-fw t-success", select: true},
+      {id:4, nombre:'Recuperados', value: 0, percent: 0, clase: "t-success", flecha: "fa fa-arrow-up fa-fw t-success", select: true},
+      {id:5, nombre:'Decesos', value: 0, percent: 0, clase: "t-danger", flecha: "fa fa-arrow-down fa-fw t-success", select: true},
+    ],
+
+    resumenfiltro: [
+      {id:1, nombre:'Sospechosos', value: 0, percent: 0, clase: "t-warning", flecha: "fa fa-arrow-up fa-fw t-danger", select: true},
+      {id:2, nombre:'Confirmados', value: 0, percent: 0, clase: "t-danger", flecha: "fa fa-arrow-up fa-fw t-danger", select: true},
+      {id:3, nombre:'Activos', value: 0, percent: 0, clase: "t-danger", flecha: "fa fa-arrow-down fa-fw t-success", select: true},
+      {id:4, nombre:'Recuperados', value: 0, percent: 0, clase: "t-success", flecha: "fa fa-arrow-up fa-fw t-success", select: true},
+      {id:5, nombre:'Decesos', value: 0, percent: 0, clase: "t-danger", flecha: "fa fa-arrow-down fa-fw t-success", select: true},
+    ],
+
+    estadisticas: {
+      sospechosos: [],
+      confirmados: [],
+      activos: [],
+      recuperados: [],
+      decesos: []
+    },
+
+    casosmapa: [],
 
   },
   getters: {
@@ -162,6 +189,119 @@ export default {
       return state.caso;
     },
 
-  },
+    resumen (state) {
+      return state.resumen;
+    },
 
+    resumenfiltro (state) {
+      return state.resumenfiltro;
+    },
+
+    estadisticas (state) {
+      return state.estadisticas;
+    },
+
+    casosmapa (state) {
+      return state.casosmapa;
+    },
+  },
+  actions: {
+    fetchResumen ({commit}) {
+      casosservice.getResumen()
+        .then((respuesta) => {
+          commit('setResumen', {resumen: respuesta.data})
+        })
+        .catch((error) => {
+          commit('setResumen', {resumen: error.data})
+        });
+    },
+    fetchEstadisticas ({commit}) {
+      casosservice.getEstadisticas()
+        .then((respuesta) => {
+          commit('setEstadisticas', {estadisticas: respuesta.data})
+        })
+        .catch((error) => {
+          commit('setEstadisticas', {estadisticas: error.data})
+        });
+    },
+    fetchCasosMapa ({commit}) {
+      casosservice.getCasosMapa()
+        .then((respuesta) => {
+          commit('setCasosmapa', {casosmapa: respuesta.data})
+        })
+        .catch((error) => {
+          commit('setCasosmapa', {casosmapa: error.data})
+        });
+    },
+
+  },
+  mutations: {
+    setResumen(state, response) {
+      if (response.resumen) {
+        let resumenr = response.resumen;
+
+        let sospechosos = state.resumen.find(i => i.id===1);
+        sospechosos.value = resumenr.sospechosos.value;
+        sospechosos.percent = resumenr.sospechosos.percent?parseInt(resumenr.sospechosos.percent):0;
+        let estado = resumenr.sospechosos.estado;
+        sospechosos.clase=(estado===1?"t-danger":(estado===-1?"t-success":"t-warning"));
+        sospechosos.flecha=(estado===1?"fa fa-arrow-up fa-fw t-danger":"fa fa-arrow-down fa-fw t-success");
+
+        let confirmados = state.resumen.find(i => i.id===2);
+        confirmados.value = resumenr.confirmados.value;
+        confirmados.percent = resumenr.confirmados.percent?parseInt(resumenr.confirmados.percent):0;
+        estado = resumenr.confirmados.estado;
+        confirmados.clase=(estado===1?"t-danger":(estado===-1?"t-success":"t-warning"));
+        confirmados.flecha=(estado===1?"fa fa-arrow-up fa-fw t-danger":"fa fa-arrow-down fa-fw t-success");
+
+        let activos = state.resumen.find(i => i.id===3);
+        activos.value = resumenr.activos.value;
+        activos.percent = resumenr.activos.percent?parseInt(resumenr.activos.percent):0;
+        estado = resumenr.activos.estado;
+        activos.clase=(estado===1?"t-danger":(estado===-1?"t-success":"t-warning"));
+        activos.flecha=(estado===1?"fa fa-arrow-up fa-fw t-danger":"fa fa-arrow-down fa-fw t-success");
+
+        let recuperados = state.resumen.find(i => i.id===4);
+        recuperados.value = resumenr.recuperados.value;
+        recuperados.percent = resumenr.recuperados.percent?parseInt(resumenr.recuperados.percent):0;
+        estado = resumenr.recuperados.estado;
+        recuperados.clase=(estado===1?"t-danger":(estado===-1?"t-success":"t-warning"));
+        recuperados.flecha=(estado===1?"fa fa-arrow-up fa-fw t-danger":"fa fa-arrow-down fa-fw t-success");
+
+        let decesos = state.resumen.find(i => i.id===5);
+        decesos.value = resumenr.decesos.value;
+        decesos.percent = resumenr.decesos.percent?parseInt(resumenr.decesos.percent):0;
+        estado = resumenr.decesos.estado;
+        decesos.clase=(estado===1?"t-danger":(estado===-1?"t-success":"t-warning"));
+        decesos.flecha=(estado===1?"fa fa-arrow-up fa-fw t-danger":"fa fa-arrow-down fa-fw t-success");
+
+      } else {
+
+        let sospechosos = state.resumen.find(i => i.id===1);
+        sospechosos = {id:1, nombre:'Sospechosos', value: 0, percent: 0, clase: "t-success", flecha: "fa fa-arrow-down fa-fw t-success", select: true};
+
+        let confirmados = state.resumen.find(i => i.id===2);
+        confirmados = {id:2, nombre:'Confirmados', value: 0, percent: 0, clase: "t-success", flecha: "fa fa-arrow-down fa-fw t-success", select: true};
+
+        let activos = state.resumen.find(i => i.id===3);
+        activos = {id:3, nombre:'Activos', value: 0, percent: 0, clase: "t-success", flecha: "fa fa-arrow-down fa-fw t-success", select: true};
+
+        let recuperados = state.resumen.find(i => i.id===4);
+        recuperados = {id:4, nombre:'Recuperados', value: 0, percent: 0, clase: "t-success", flecha: "fa fa-arrow-down fa-fw t-success", select: true};
+
+        let decesos = state.resumen.find(i => i.id===5);
+        decesos = {id:5, nombre:'Decesos', value: 0, percent: 0, clase: "t-success", flecha: "fa fa-arrow-down fa-fw t-success", select: true};
+
+      }
+    },
+
+    setEstadisticas(state, response) {
+      state.estadisticas = response.estadisticas;
+    },
+
+    setCasosmapa(state, response) {
+      state.casosmapa = response.casosmapa;
+    },
+
+  }
 }

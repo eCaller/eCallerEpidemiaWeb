@@ -11,7 +11,7 @@ import caso from './components/caso/caso.vue'
 export const routes = [
   {path: '/', component: home, name:"home"},
   {path: '/main', component: main, children: [
-     {path: '', name:'sie', component:sie},
+     {path: '', name:'s', component:sie},
      {path: 'listado', name:'listado', component:listado},
      {path: 'triage', name:'triage', component:triage},
      {path: 'sie', name:'sie', component:sie},
