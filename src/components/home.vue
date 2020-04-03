@@ -68,14 +68,6 @@ export default {
       password: null,
       mensajeError: null,
       spinner: false,
-
-      usuario: {
-            id: 1,
-            username: "jfpastor",
-            nombre: "Juan Fernando Pastor Ruiz",
-            imagen: null,
-            centro: "Prueba",
-      },
     }
   },
   methods: {
@@ -85,14 +77,11 @@ export default {
       this.$store.commit("LOGIN");
       this.$store.commit('encode', this.username + ':' + this.password);
 
-      this.$store.commit('encode', 'vue' + ':' + 'secret');
-      // this.getToken(this.$store.state.configuracion.autenticacion.url);
-
-      this.$store.dispatch("login", this.usuario).then(() => {
+      this.$store.dispatch("login")
+        .then((res) => {
           this.spinner = false;
           this.$router.push("/main");
         }, (error)=> {
-          console.error(error);
           this.mensajeError="Se ha producido un error al validar al usuario.";
           this.spinner = false;
         });

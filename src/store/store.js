@@ -103,10 +103,28 @@ export const store = new Vuex.Store({
     guardarToken({state, commit}, token) {
       commit(GUARDAR_TOKEN, token);
     },
-    login({state, commit}, usuario) {
-      localStorage.setItem("token", "Basic " + state.base64.authdata);
-      commit(ASIGNAR, usuario);
-      commit(LOGIN_SUCCESS);
+    login({state, commit}) {
+      return new Promise((resolve, reject) => {      
+        let instance = axios.create({
+          baseURL: state.configuracion.autenticacion.url,
+          headers: {
+            'Authorization':'Basic ' + state.base64.authdata
+          }
+        });
+
+        instance.get()
+          .then((respuesta) => {
+            if (respuesta.status === 200) {
+              localStorage.setItem("token", "Basic " + state.base64.authdata);            
+              commit(ASIGNAR, respuesta.data);
+              commit(LOGIN_SUCCESS);
+              resolve(respuesta);
+            }
+          })
+          .catch((error) => {
+            reject('No encontrado')
+          });
+      })      
     },
     recargarAccessToken({state, commit}) {
       let instance = axios.create({
