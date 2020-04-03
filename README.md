@@ -47,11 +47,11 @@ eCaller Epidemias está constituida por dos componentes software:
 
 ## Descripción funcional
 
-La documentación funcional de la solución software se encuentra disponible en el enlace [Wiki-ReferenciaFuncional](https://gitlab.ingenia.es/Emergencias/eCallerEpidemias/eCallerEpidemiaDocumentacion/wikis/referencia-funcional).
+La documentación funcional de la solución software se encuentra disponible en el enlace [Wiki-ReferenciaFuncional](https://github.com/eCaller/eCallerEpidemiaWeb/wiki/documentación-funcional).
 
 ## Descripción técnica
 
-La documentación técnica de la solución software se encuentra disponible en el enlace [Wiki-ReferenciaTecnica](https://gitlab.ingenia.es/Emergencias/eCallerEpidemias/eCallerEpidemiaDocumentacion/wikis/referencia-técnica).
+La documentación técnica de la solución software se encuentra disponible en el enlace [Wiki-ReferenciaTecnica](https://github.com/eCaller/eCallerEpidemiaWeb/wiki/documentación-técnica).
 
 ## Licencia
 
