@@ -1,3 +1,14 @@
+<!--
+Copyright 2020, Ingenia, S.A.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+-->
 <template lang="html">
   <section>
     <div id="page-wrapper" class="fondo">
@@ -17,10 +28,10 @@
               <form role="form" @submit.prevent="login" class="login">
                   <fieldset>
                       <div class="form-group">
-                          <bs-input placeholder="Usuario" error="Indique el nombre del usuario" icon name="usuario" id="usuario" v-model.trim="username"></bs-input>
+                          <bs-input placeholder="Usuario" error="Indique el nombre del usuario" icon name="usuario" id="usuario" required v-model.trim="username"></bs-input>
                       </div>
                       <div class="form-group">
-                          <bs-input type="password" placeholder="Password" error="Indique la password del usuario" icon name="password" id="password" v-model.trim="password"></bs-input>
+                          <bs-input type="password" placeholder="Password" error="Indique la password del usuario" icon required name="password" id="password" v-model.trim="password"></bs-input>
                       </div>
                       <br>
                       <input type="submit" name="submit" class="btn btn-lg btn-warning btn-block" value="Entrar">
@@ -43,7 +54,7 @@
 
 <script>
 import VueStrap from 'vue-strap';
-import axios from 'axios';
+import axiosCustom from '../store/axios-custom.js';
 
 export default {
   components: {
@@ -74,6 +85,9 @@ export default {
       this.$store.commit("LOGIN");
       this.$store.commit('encode', this.username + ':' + this.password);
 
+      this.$store.commit('encode', 'vue' + ':' + 'secret');
+      // this.getToken(this.$store.state.configuracion.autenticacion.url);
+
       this.$store.dispatch("login", this.usuario).then(() => {
           this.spinner = false;
           this.$router.push("/main");
@@ -82,7 +96,89 @@ export default {
           this.mensajeError="Se ha producido un error al validar al usuario.";
           this.spinner = false;
         });
-    }
+    },
+    //Conseguir un token bearer
+  	getToken(baseURL){
+      let datosAutenticacion = {
+        url: baseURL,
+        authdata: this.$store.state.base64.authdata,
+        username: this.username,
+        password: this.password,
+      }
+      axiosCustom
+        .axiosConParams(datosAutenticacion)
+        .post('/oauth/token')
+      		.then((res) => {
+      			if(res.status == 200) {
+      				this.$store.dispatch("guardarToken",res.data).then(() => {
+      					this.getUsuario(baseURL);
+      				}, (error)=> {
+      					console.error(error);
+                this.validado = false;
+                this.mensajeError="Se ha producido un error al validar al usuario.";
+                this.spinner = false;
+      				});
+      			} else {
+          		console.error("Respuesta status: " + res.status);
+          		this.validado = false;
+          		this.mensajeError="Se ha producido un error al validar al usuario.";
+          		this.spinner = false;
+           	}
+      		})
+      		.catch((error) => {
+      			console.error(error);
+          	this.validado = false;
+          	this.mensajeError="Se ha producido un error al validar al usuario.";
+          	this.spinner = false;
+      		});
+      	//return true;
+  	},
+  	// Información del usuario
+  	getUsuario(baseURL){
+		//Usuarios disponibles
+      if (this.$store.state.base64.authdata) {
+      	axiosCustom
+          .axiosAutenticadoConUrl(baseURL, this.$store.state.usuario.access_token)
+          .post('/user')
+      			.then((respuesta) => {
+        			if(respuesta.status == 200) {
+        				if(respuesta.data.authenticated){
+                  this.$store.dispatch("login", respuesta.data.principal).then(() => {
+                    this.spinner = false;
+                    this.$router.push("/main");
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    this.validado = false;
+                    this.mensajeError="Se ha producido un error al validar al usuario.";
+                    this.spinner = false;
+                  })
+        				} else {
+              		console.error(respuesta.statusText);
+              		this.validado = false;
+              		this.mensajeError=respuesta.statusText;
+              		this.spinner = false;
+            		}
+        			} else {
+            		console.error("Respuesta status: " + respuesta.status);
+            		this.validado = false;
+            		this.mensajeError="Se ha producido un error al validar al usuario.";
+            		this.spinner = false;
+           		}
+      			})
+      			.catch((error) => {
+        			console.error(error);
+              	this.validado = false;
+              	this.mensajeError="Se ha producido un error al validar al usuario.2";
+              	this.spinner = false;
+        		});
+    	} else {
+     	 	console.error("Error authdata");
+      	this.validado = false;
+      	this.mensajeError="Se ha producido un error al validar al usuario.3";
+     		this.spinner = false;
+    	}
+  	},
   }
 }
 </script>

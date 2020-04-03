@@ -1,3 +1,14 @@
+<!--
+Copyright 2020, Ingenia, S.A.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+-->
 <template lang="html">
   <div id="page-wrapper" :class="[{'full-width-div': fullscreen}]">
     <spinner ref="spinner" v-model="spinner" size="xl" text="Cargando"></spinner>
@@ -17,6 +28,7 @@
       <div class="col-md-12">
       	<h3>
       	   <i class="fa fa-edit fa-fw"></i> <label>Diseño del triage </label>
+           <span class="pull-right"><button class="btn btn-default" @click="reload()"><i class="fa fa-sync fa-fw"></i></button></span>
   			</h3>
   		</div>
 		</div>
@@ -202,11 +214,8 @@ export default {
   },
   watch: {
     variables(newValue, oldValue) {
-      console.log('newValue')
-      console.log(newValue)
       this.respuestanegativo= this.$store.getters.respuestanegativo;
       this.respuestapositivo= this.$store.getters.respuestapositivo;
-      console.log(this.respuestanegativo);
     },
     triage(newValue, oldValue) {
       this.opcionesrespuesta = this.$store.getters.getPreguntasRespuestas;
@@ -412,14 +421,23 @@ export default {
       try {
         this.saveTriage().then((respuesta) => {
           //TODO Guardamos los datos de las variables
-          console.log("** datos guardados")
-          this.spinner = false;
-          this.mensajeInfo = "Datos guardados correctamente.";
+          console.log("** triage guardado")
+          this.saveVariables().then((respuesta) => {
+            console.log("** variables guardado")
+            this.spinner = false;
+            this.mensajeInfo = "Datos guardados correctamente.";
 
-          //TODO recargamos la página de nuevo
+            //recargamos la página de nuevo
+            this.reload();
+          })
+          .catch((error) => {
+            this.spinner = false;
+            this.mensajeError = "Se ha producido un error al guardar el triage.";
+            console.error(error);
+          });
+
         })
         .catch((error) => {
-          //TODO
           this.spinner = false;
           this.mensajeError = "Se ha producido un error al guardar el triage.";
           console.error(error);
@@ -432,9 +450,15 @@ export default {
     },
 
     cancelar() {
-      //TODO recarga de nuevo la página
+      //recarga de nuevo la página
+      this.reload();
     },
 
+    reload() {
+      var location = this.$route.fullPath
+      this.$router.replace('/')
+      this.$nextTick(() => this.$router.replace(location))
+    },
 
     isEmpty(e) {
       switch (e) {
@@ -451,6 +475,7 @@ export default {
       fetchTriage: 'fetchTriage',
       saveTriage: 'saveTriage',
       fetchVariables:'fetchVariables',
+      saveVariables: 'saveVariables',
     })
   },
 

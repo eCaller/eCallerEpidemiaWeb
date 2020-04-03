@@ -13,9 +13,9 @@ import axios from "axios";
 import conf from '../store/configuracion.js';
 
 export default {
-    getTriage() {
+    getResumen() {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.triage.url)
+        axios.get(conf.state.casos.urlResumen)
               .then((respuesta) => {
                   resolve(respuesta);
               })
@@ -25,9 +25,9 @@ export default {
       });
     },
 
-    getCombinaciones() {
+    getEstadisticas() {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.triage.urlCasospositivos)
+        axios.get(conf.state.casos.urlEstadisticas)
               .then((respuesta) => {
                   resolve(respuesta);
               })
@@ -37,19 +37,16 @@ export default {
       });
     },
 
-    saveTriage(triage) {
+    getCasosMapa() {
       return new Promise((resolve, reject) => {
-        axios.post(conf.state.triage.url, triage, {
-              headers: {
-              "Content-Type": 'application/json'
-            }
-          })
-          .then((respuesta) => {
-              resolve(respuesta);
-          })
-          .catch((error) => {
-              reject({data: []})
-          });
+        axios.get(conf.state.casos.urlMapa)
+              .then((respuesta) => {
+                  resolve(respuesta);
+              })
+              .catch((error) => {
+                  reject({data: []})
+              });
       });
     },
+
 }
