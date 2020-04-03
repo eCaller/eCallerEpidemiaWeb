@@ -15,7 +15,7 @@ export default {
   state: {
       general: {
         url: "https://127.0.0.1:8443",
-        mapkey: "AIzaSyCMfZc6jsxjU8-tZ3PJp3pNNYAb4wTHNtY",
+        mapkey: "",
         center: {lat: -16.2901535, lng: -63.5886536},
         zoom: 5, //4
       },
