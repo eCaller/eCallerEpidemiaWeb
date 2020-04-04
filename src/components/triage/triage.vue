@@ -301,7 +301,7 @@ export default {
 
     nuevaCombinacion() {
       let combinacion = {id:1, respuestas: null};
-      if (this.casospositivos) {
+      if (this.casospositivos && this.casospositivos.length>0) {
         let orden = this.casospositivos[this.casospositivos.length-1].id + 1;
         combinacion.id=orden;
         this.casospositivos.push(combinacion);
