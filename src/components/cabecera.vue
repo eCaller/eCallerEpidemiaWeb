@@ -16,7 +16,7 @@ GNU General Public License for more details.
       <a class="navbar-brand"><h2 class="title">Módulo Epidemiológico</h2></a>
 
       <ul class="nav navbar-top-links navbar-right">
-          <li><a class="pointer" @click="listadoCasos()" v-if="false"><i class="far fa-copy fa-fw"></i><span> Gestión casos</span></a></li>
+          <li><a class="pointer" @click="listadoCasos()"><i class="far fa-copy fa-fw"></i><span> Gestión casos</span></a></li>
           <li><a class="pointer" @click="listadoTriage()"><i class="far fa-edit fa-fw"></i><span> Diseño triage</span></a></li>
           <li><a class="pointer" @click="sie()"><i class="far fa-chart-bar fa-fw"></i><span> SIE</span></a></li>
           <li class="dropdown" v-if="false">

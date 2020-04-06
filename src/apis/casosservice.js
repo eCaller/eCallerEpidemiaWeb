@@ -13,6 +13,30 @@ import axios from "axios";
 import conf from '../store/configuracion.js';
 
 export default {
+    getCaso(id) {
+      return new Promise((resolve, reject) => {
+        axios.get(conf.state.casos.url + "/" + id)
+              .then((respuesta) => {
+                  resolve(respuesta);
+              })
+              .catch((error) => {
+                  reject(error)
+              });
+      });
+    },
+
+    getTriagecaso(id) {
+      return new Promise((resolve, reject) => {
+        axios.get(conf.state.triage.urlcaso + "/" + id)
+              .then((respuesta) => {
+                  resolve(respuesta);
+              })
+              .catch((error) => {
+                  reject(error)
+              });
+      });
+    },
+
     getResumen() {
       return new Promise((resolve, reject) => {
         axios.get(conf.state.casos.urlResumen)

@@ -8,6 +8,8 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
+
+@author jfpastor@ingenia.es
 -->
 <template lang="html">
   <div id="page-wrapper" :class="[{'full-width-div': fullscreen}]">
@@ -165,7 +167,7 @@ GNU General Public License for more details.
           </div>
         </panel>
 
-        <panel type="info" v-if="false">
+        <panel type="info">
           <template slot="header">
             <i class="far fa-calendar-alt fa-fw"></i> <label> Estado por selección</label>
           </template>

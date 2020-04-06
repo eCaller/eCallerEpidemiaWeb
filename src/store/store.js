@@ -8,6 +8,8 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
+
+@author jfpastor@ingenia.es
 */
 
 import Vue from 'vue';
@@ -86,12 +88,6 @@ export const store = new Vuex.Store({
       state.usuario.refresh_token = token.refresh_token;
     },
 
-    changecaso(state, caso) {
-      state.casos.caso = caso;
-    },
-
-
-
   },
   getters: {
     isLoggedIn(state) {
@@ -104,7 +100,7 @@ export const store = new Vuex.Store({
       commit(GUARDAR_TOKEN, token);
     },
     login({state, commit}) {
-      return new Promise((resolve, reject) => {      
+      return new Promise((resolve, reject) => {
         let instance = axios.create({
           baseURL: state.configuracion.autenticacion.url,
           headers: {
@@ -115,7 +111,7 @@ export const store = new Vuex.Store({
         instance.get()
           .then((respuesta) => {
             if (respuesta.status === 200) {
-              localStorage.setItem("token", "Basic " + state.base64.authdata);            
+              localStorage.setItem("token", "Basic " + state.base64.authdata);
               commit(ASIGNAR, respuesta.data);
               commit(LOGIN_SUCCESS);
               resolve(respuesta);
@@ -124,7 +120,7 @@ export const store = new Vuex.Store({
           .catch((error) => {
             reject('No encontrado')
           });
-      })      
+      })
     },
     recargarAccessToken({state, commit}) {
       let instance = axios.create({

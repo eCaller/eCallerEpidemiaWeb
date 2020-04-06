@@ -8,10 +8,18 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
+
+@author jfpastor@ingenia.es
 -->
 <template lang="html">
   <div class="row">
     <div class="col-lg-12">
+      <alert v-model="mensajeError" placement="top-right" type="danger" duration="3000" dismissable>
+        <span class="icon-info-circled alert-icon-float-left"></span>
+        <strong>¡Error!</strong>
+        <p>{{mensajeError}}</p>
+      </alert>
+
       <panel>
         <template slot="header">
           <i class="far fa-file fa-fw"></i> <label> {{titulo}}</label>
@@ -37,8 +45,8 @@ GNU General Public License for more details.
 
               <div class="col-md-4">
                 <div class="form-group">
-                  <label class="control-label">Texto</label>
-                  <bs-input placeholder="Texto" style="width: 100%;"></bs-input>
+                  <label class="control-label">Buscar</label>
+                  <bs-input v-model="filterText" placeholder="código, nombre o dirección" style="width: 100%;"></bs-input>
                 </div>
               </div>
 
@@ -46,13 +54,15 @@ GNU General Public License for more details.
                 <label class="control-label">&nbsp;</label>
                 <button class="btn btn-primary" @click="doFilter">Buscar</button>
               </div>
+              <div class="col-md-1" style="display: grid;">
+                <label class="control-label">&nbsp;</label>
+                <button class="btn btn-default" @click="resetFilter">Limpiar</button>
+              </div>
             </div>
 
             <br>
             <vuetable ref="vuetable" v-show="!spinner"
-              :api-url="''"
-              :api-mode=false
-              :data=datos
+              :api-url="apiUrl"
               pagination-path=""
               :fields="fields"
               :sort-order="sortOrder"
@@ -60,38 +70,25 @@ GNU General Public License for more details.
               :per-page="6"
               :append-params="moreParams"
               :row-class="rowClassCB"
+              :http-fetch="myFetch"
               no-data-template="Sin datos"
               @vuetable:pagination-data="onPaginationData"
               @vuetable:loading="onLoading"
               @vuetable:loaded="onLoaded"
               @vuetable:row-clicked="onRowClicked"
-            >
-              <template slot="horainicio" slot-scope="props">
-                <div v-if="props.rowData.paradas!==null && props.rowData.paradas.length>0">{{props.rowData.paradas[0].hora}}</div>
-                <div v-else>{{props.rowData.horainicio}}</div>
-              </template>
-              <template slot="horafin" slot-scope="props">
-                <div v-if="props.rowData.paradas!==null && props.rowData.paradas.length>0">{{props.rowData.paradas[props.rowData.paradas.length-1].hora}}</div>
-                <div v-else>{{props.rowData.horafin}}</div>
-              </template>
-            </vuetable>
-            <vuetable-pagination ref="pagination"
-              :css="css.pagination"
-              @vuetable-pagination:change-page="onChangePage"
-            ></vuetable-pagination>
-            <nav aria-label="Page navigation" class="pull-right">
-              <ul class="pagination" style="margin:0px">
-                <li>
-                  <a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-                </li>
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li>
-                  <a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-                </li>
-              </ul>
-            </nav>
+            ></vuetable>
+            <div class="col-md-1">
+              <vuetable-pagination-info ref="paginationInfo"
+                info-template="Total {total} filas"
+                no-data-template=""
+              ></vuetable-pagination-info>
+            </div>
+            <div class="col-md-11">
+              <vuetable-pagination-bootstrap ref="pagination"
+                :css="css.pagination"
+                @vuetable-pagination:change-page="onChangePage"
+              ></vuetable-pagination-bootstrap>
+            </div>
           </div>
         </div>
 
@@ -111,16 +108,19 @@ GNU General Public License for more details.
 import Vue from 'vue';
 import VueStrap from 'vue-strap';
 import Vuetable from 'vuetable-2/src/components/Vuetable.vue';
-import VuetablePagination from 'vuetable-2/src/components/VuetablePagination.vue';
+import VuetablePaginationBootstrap  from 'vuetable-2/src/components/VuetablePagination.vue';
+import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo'
 import tableConf from '../../store/table-configuration.js';
-import axios from 'axios';
+import axiosCustom from '../../store/axios-custom.js';
 import moment from 'moment';
 import datetimepicker from '../utils/datetimepicker.vue';
+import {mapMutations} from 'vuex';
 
 export default {
   components: {
     'panel': VueStrap.panel,
     'spinner': VueStrap.spinner,
+    'alert': VueStrap.alert,
     'v-select': VueStrap.select,
     'v-option': VueStrap.option,
     'bs-input': VueStrap.input,
@@ -128,17 +128,10 @@ export default {
 
     datetimepicker: datetimepicker,
     Vuetable,
-    VuetablePagination,
+    VuetablePaginationBootstrap,
+    VuetablePaginationInfo
   },
   props: {
-    verBotonNuevo: {
-      type: Boolean,
-      default: true
-    },
-    verBotonFiltro: {
-      type: Boolean,
-      default: true
-    },
     apiUrl: {
       type: String,
       required: true
@@ -152,88 +145,49 @@ export default {
       default: true
     },
     moreParamsDefault: {
-      type: Object
+      type: Object,
+      default: () => {estados: "cita"}
     },
-    filtroDefecto: {
-      type: Array,
-      default: () => ['PC', 'CO']
+    tipo: {
+      type: String,
+      default: 'C'
     }
   },
 
   watch: {
-  	titulo: function(newVal, oldVal) {
-      //console.log('Prop changed: ', newVal, ' | was: ', oldVal);
-    },
-    filtroDefecto: function(newVal, oldVal) {
-      //console.log('Prop changed: ', newVal, ' | was: ', oldVal);
-      this.datos.data=this.$store.getters.casos.filter(item => (item.estado===newVal[0] || item.estado===newVal[1]));
+  	titulo: function(newVal, oldVal) { },
+    moreParamsDefault: function(newVal, oldVal) {
+      this.moreParams = this.moreParamsDefault;
+      this.filterText = "";
       this.refresh();
     },
-    filtrar: function(newVal, oldVal) {
-    }
   },
   data () {
     return {
       spinner: false,
       selected: null,
+      mensajeError: null,
       filterText: '',
       total: 0,
       moreParams: this.moreParamsDefault,
 
-      fechainicio: new Date(),
-      fechafin: new Date(),
-
-      datos: {
-        "links": {
-            "pagination": {
-              "total": 50, "per_page": 10, "current_page": 1,"last_page": 5,"next_page_url": "...","prev_page_url": "...","from": 1, "to": 10,
-            }
-          },
-          "data": this.$store.getters.casos.filter(item => (item.estado===this.filtroDefecto[0] || item.estado===this.filtroDefecto[1]))
-      },
+      fechainicio: moment().format('DD/MM/YYYY'),
+      fechafin: moment().format('DD/MM/YYYY'),
 
       fields: [
-        {
-          name: 'id',
-          title: 'id',
-          visible: false
+        { name: 'id', title: 'id', visible: false },
+        { name: 'fecha', title: '<span class="orderList"><i class="far fa-calendar-alt"></i> Fecha</span>',
+          titleClass: 'text-center', dataClass: 'text-center', sortField: 'fecha',
+          callback: (value) => {
+            return this.formatDate(value, 'DD/MM/YYYY');
+          }
         },
-        {
-            name: 'fecha',
-            title: '<span class="orderList"><i class="far fa-calendar-alt"></i> Fecha</span>',
-            titleClass: 'text-center',
-            dataClass: 'text-center',
-            sortField: 'fecha',
-            callback: (value) => {
-              return this.formatDate(value, 'DD/MM/YYYY');
-            }
-        },
-        {
-          name: 'codigo',
-          title: '<span class="orderList"><i class="far fa-file"></i> Código</span>',
-          sortField: 'codigo'
-        },
-        {
-          name: 'nombre',
-          title: '<span class="orderList"><i class="glyphicon glyphicon-user"></i> Nombre</span>'
-        },
-        {
-          name: 'direccion',
-          title: '<span class="orderList"><i class="fa fa-map-signs"></i> Dirección</span>'
-        },
-        {
-          name: 'telefono',
-          title: '<span class="orderList"><i class="fa fa-phone-alt"></i> Teléfono</span>'
-        },
-        {
-          name: 'email',
-          title: '<span class="orderList"><i class="far fa-envelope"></i> Email</span>'
-        },
-
-        {
-          name: 'estado',
-          title: '<span class="orderList">Estado</span>',
-          sortField: 'estado',
+        { name: 'codigo', title: '<span class="orderList"><i class="far fa-file"></i> Código</span>', sortField: 'codigo' },
+        { name: 'nombre', title: '<span class="orderList"><i class="glyphicon glyphicon-user"></i> Nombre</span>', sortField: 'nombre' },
+        { name: 'direccion', title: '<span class="orderList"><i class="fa fa-map-signs"></i> Dirección</span>' },
+        { name: 'telefono', title: '<span class="orderList"><i class="fa fa-phone-alt"></i> Teléfono</span>' },
+        { name: 'email', title: '<span class="orderList"><i class="far fa-envelope"></i> Email</span>' },
+        { name: 'estado', title: '<span class="orderList">Estado</span>', sortField: 'estado',
           callback: (value) => {
             return this.estadoLabel (value);
           },
@@ -249,10 +203,14 @@ export default {
 
   },
   methods: {
+      myFetch(apiUrl, httpOptions){
+        return axiosCustom.axiosParaVueTable(this.$store.state.usuario.access_token).get(apiUrl, httpOptions);
+      },
       onPaginationData (paginationData) {
         this.$refs.pagination.setPaginationData(paginationData);
+        this.$refs.paginationInfo.setPaginationData(paginationData);
         this.total = (paginationData.total?paginationData.total:0);
-        this.$emit('updateTotal', this.total);
+        this.$emit('updateTotal', {tipo:this.tipo, total: this.total});
       },
       onChangePage (page) {
         this.$refs.vuetable.changePage(page)
@@ -269,7 +227,12 @@ export default {
           this.moreParams = {};
         }
         this.moreParams['filter'] = this.filterText;
-        Vue.nextTick( () => this.$refs.vuetable.refresh());
+        this.refresh();
+      },
+      resetFilter () {
+        this.filterText = '';
+        this.moreParams['filter'] = null;
+        this.refresh();
       },
       refresh() {
         Vue.nextTick( () => this.$refs.vuetable.refresh());
@@ -289,8 +252,12 @@ export default {
         return this.selected;
       },
       abrirCaso() {
-        this.$store.commit('changecaso', this.selected);
-        this.$router.replace({name: "caso", params: {id: this.selected.id}});
+        if (!this.selected) {
+          this.mensajeError = "Debe seleccionar una fila";
+        } else {
+          this.setCaso({caso:null});
+          this.$router.replace({name: "caso", params: {id: this.selected.id}});
+        }
       },
 
 
@@ -328,6 +295,10 @@ export default {
         : '<span>'+ moment(value).format(fmt) + '</span>';
     },
     //////////////////////////////////////////////////////////////
+    ...mapMutations({
+      setCaso: 'setCaso',
+    }),
+
 
   },
 }

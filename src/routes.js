@@ -8,6 +8,8 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
+
+@author jfpastor@ingenia.es
 */
 import home from './components/home.vue';
 import main from './components/main.vue';
@@ -22,7 +24,7 @@ import caso from './components/caso/caso.vue'
 export const routes = [
   {path: '/', component: home, name:"home"},
   {path: '/main', component: main, children: [
-     {path: '', name:'s', component:sie},
+     {path: '', name:'s', component:listado},
      {path: 'listado', name:'listado', component:listado},
      {path: 'triage', name:'triage', component:triage},
      {path: 'sie', name:'sie', component:sie},

@@ -8,6 +8,8 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
+
+@author jfpastor@ingenia.es
 -->
 <template lang="html">
     <div id="page-wrapper">
@@ -82,7 +84,15 @@ GNU General Public License for more details.
 
       </div>
 
-      <casos :titulo="titulo" :filtroDefecto="filtros" :filtrar="filtrar"></casos>
+      <casos
+          :apiUrl="this.$store.state.configuracion.casos.url"
+          :titulo="titulo"
+          :moreParamsDefault="filtros"
+          :tipo="tipo"
+          :filtrar="filtrar"
+          @updateTotal="refrescaTotal($event)"
+          >
+      </casos>
     </div>
 </template>
 
@@ -92,45 +102,51 @@ import VueStrap from 'vue-strap';
 import casos from './casos.vue';
 
 export default {
-  data () {
-    return {
-      titulo: "Pendientes de cita",
-      filtros: ['PC', 'CO'],
-      filtrar: false
-    }
-  },
   components: {
     casos,
   },
-  computed: {
-    pendientes() {
-      return this.$store.getters.casos.filter(item => item!==null && (item.estado==='PC' || item.estado==='CO')).length;
-    },
-    programados() {
-      return this.$store.getters.casos.filter(item => item!==null && (item.estado==='PT' || item.estado==='PR')).length;
-    },
-    evolucion() {
-      return this.$store.getters.casos.filter(item => item!==null && (item.estado==='PE' || item.estado==='FI')).length;
-    }
+  data () {
+    return {
+      pendientes: 0,
+      programados: 0,
+      evolucion: 0,
 
+      titulo: "Pendientes de cita",
+      filtros: {estados:"cita"},
+      tipo: 'C',
+      filtrar: false,
+    }
   },
   methods: {
     filtrarCita() {
       this.titulo="Pendientes de cita";
-      this.filtros=['PC', 'CO'];
+      this.filtros={estados:"cita"};
+      this.tipo = 'C';
       this.filtrar=false;
     },
     filtrarPrueba() {
       this.titulo="Pendientes de prueba física";
-      this.filtros=['PT', 'PR'];
+      this.filtros={estados:"fisica"};
+      this.tipo = 'P';
       this.filtrar=false;
     },
     filtrarEvolucion() {
       this.titulo="Pendientes evolución";
-      this.filtros=['PE', 'FI'];
+      this.filtros={estados:"evolucion"};
+      this.tipo = 'F';
       this.filtrar=true;
     },
-
+    refrescaTotal(value) {
+      if (value) {
+        if (value.tipo==='C') {
+          this.pendientes = (value.total?value.total:0);
+        } else if (value.tipo==='P') {
+          this.programados = (value.total?value.total:0);
+        } else if (value.tipo==='F') {
+          this.evolucion = (value.total?value.total:0);
+        }
+      }
+    },
   },
 }
 </script>

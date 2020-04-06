@@ -8,44 +8,48 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
+
+@author jfpastor@ingenia.es
 */
 import moment from 'moment';
+import config from '../config.js';
 
 export default {
   state: {
       general: {
-        url: "https://localhost:8443",
-        mapkey: "",
-        center: {lat: -16.2901535, lng: -63.5886536},
-        zoom: 5, //4
+        url: config.url,
+        mapkey: config.googlemapkey,
+        center: config.center,
+        zoom: config.zoom,
       },
 
       autenticacion: {
-        url: "https://localhost:8443/autenticacion/login",
+        url: config.url + "/autenticacion/login",
       },
 
       triage: {
-        url: "https://localhost:8443/triage",
-        urlCasospositivos: "https://localhost:8443/casospositivos"
+        url: config.url + "/triage",
+        urlCasospositivos: config.url + "/casospositivos",
+        urlcaso: config.url + "/triage/caso",
       },
 
       variables: {
-        url: "https://localhost:8443/variables"
+        url: config.url + "/variables"
       },
 
       territorios: {
-        urlDepartamentos: "https://localhost:8443/departamentos",
-        urlProvincias: "https://localhost:8443/provincias",
-        urlMunicipios: "https://localhost:8443/municipios",
-        urlDistritos: "https://localhost:8443/distritos",
+        urlDepartamentos: config.url + "/departamentos",
+        urlProvincias: config.url + "/provincias",
+        urlMunicipios: config.url + "/municipios",
+        urlDistritos: config.url + "/distritos",
       },
 
       casos: {
-        url: "https://localhost:8443/caso",
-        urlResumen: "https://localhost:8443/caso/resumen",
-        urlResumenFiltro: "https://localhost:8443/caso/resumenfiltro",
-        urlEstadisticas: "https://localhost:8443/caso/estadisticas",
-        urlMapa: "https://localhost:8443/caso/mapa"
+        url: config.url + "/caso",
+        urlResumen: config.url + "/caso/resumen",
+        urlResumenFiltro: config.url + "/caso/resumenfiltro",
+        urlEstadisticas: config.url + "/caso/estadisticas",
+        urlMapa: config.url + "/caso/mapa"
       },
 
   },
