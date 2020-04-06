@@ -177,7 +177,7 @@ GNU General Public License for more details.
 
 <script>
 import VueStrap from 'vue-strap';
-import {mapGetters, mapActions} from 'vuex';
+import {mapGetters, mapActions, mapMutations} from 'vuex';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -308,7 +308,7 @@ export default {
         combinacion.id=orden;
         this.casospositivos.push(combinacion);
       } else {
-        this.casospositivos = [combinacion];
+        this.setCasospositivos({casospositivos: [combinacion]});
       }
     },
 
@@ -478,7 +478,10 @@ export default {
       saveTriage: 'saveTriage',
       fetchVariables:'fetchVariables',
       saveVariables: 'saveVariables',
-    })
+    }),
+    ...mapMutations({
+      setCasospositivos: 'setCasospositivos',
+    }),
   },
 
 }
