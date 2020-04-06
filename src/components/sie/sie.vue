@@ -27,6 +27,7 @@ GNU General Public License for more details.
            <div class="pull-right ">
              <i class="far fa-clock fa-fw"></i>
              <label> {{dateFormat(fecha)}} </label>
+             <button class="btn btn-default" @click="reload()"><i class="fa fa-sync fa-fw"></i></button>
            </div>
         </h3>
   		</div>
@@ -447,6 +448,11 @@ export default {
     centrar(lat, lng) {
       this.center={lat: lat, lng: lng};
       this.zoom = 7;
+    },
+    reload() {
+      var location = this.$route.fullPath
+      this.$router.replace('/')
+      this.$nextTick(() => this.$router.replace(location))
     },
     ...mapActions({
       fetchDepartamentos: 'fetchDepartamentos',

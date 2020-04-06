@@ -37,6 +37,34 @@ export default {
       });
     },
 
+    saveCaso(caso) {
+      return new Promise((resolve, reject) => {
+        axios.put(conf.state.casos.url, caso, {
+              headers: {
+              "Content-Type": 'application/json'
+            }
+          })
+          .then((respuesta) => {
+              resolve(respuesta);
+          })
+          .catch((error) => {
+              reject({data: []})
+          });
+      });
+    },
+
+    getContadoresCaso() {
+      return new Promise((resolve, reject) => {
+        axios.get(conf.state.casos.urlContadores)
+              .then((respuesta) => {
+                  resolve(respuesta);
+              })
+              .catch((error) => {
+                  reject({data: []})
+              });
+      });
+    },
+
     getResumen() {
       return new Promise((resolve, reject) => {
         axios.get(conf.state.casos.urlResumen)

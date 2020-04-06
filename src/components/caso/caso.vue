@@ -32,6 +32,11 @@ GNU General Public License for more details.
         <strong>¡Error!</strong>
         <p>{{mensajeError}}</p>
       </alert>
+      <alert v-model="mensajeInfo" placement="top-right" type="success" duration="3000" dismissable>
+        <span class="icon-info-circled alert-icon-float-left"></span>
+        <strong>Información</strong>
+        <p>{{mensajeInfo}}</p>
+      </alert>
 
       <spinner ref="spinner" v-model="spinner" size="xl" text="Cargando"></spinner>
 
@@ -51,6 +56,11 @@ GNU General Public License for more details.
             <template slot="header">
               <i class="far fa-file fa-fw"></i> <label> Caso </label><span> {{caso.codigo}} </span>
               <i class="far fa-clock fa-fw"></i><span> {{hora}} </span>
+              <div class="pull-right">
+                <button type="button" class="btn btn-default btn-xs" @click="reload()">
+                  <i class="fa fa-sync fa-fw"></i>
+                </button>
+              </div>
             </template>
 
             <div class="row">
@@ -60,7 +70,7 @@ GNU General Public License for more details.
                   <div class="col-md-12">
                     <bs-input label="Nombre" placeholder="Nombre" v-model="caso.nombre" :disabled="isDisabled"></bs-input>
                   </div>
-                  <div class="col-md-12" style="padding-bottom:5px">
+                  <div class="col-md-8">
                     <label for="mapadir" class="control-label">Dirección</label>
                     <div class="input-group">
                       <gmap-autocomplete
@@ -78,7 +88,18 @@ GNU General Public License for more details.
                     </div>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-4">
+                    <label class="control-label">Municipio</label>
+                    <button-group justified>
+                      <v-select v-model="idmunicipio" :options="municipios" options-label="nombre" options-value="id" :disabled="isDisabled"
+                        show-count
+                        placeholder="<Seleccione>"
+                        search justified
+                        clear-button
+                      ></v-select></button-group>
+                  </div>
+
+                  <div class="col-md-3">
                     <bs-input label="Teléfono" placeholder="Teléfono" v-model="caso.telefono" :disabled="isDisabled"></bs-input>
                   </div>
 
@@ -97,7 +118,7 @@ GNU General Public License for more details.
                   <div class="col-md-12 cell-textArea-display">
                     <bs-input id="observaciones" label="Observaciones" type="textarea" :rows="3" placeholder="Observaciones"
                         v-model.lazy.trim="caso.observaciones"
-                        :disabled="isDisabled"></bs-input>
+                        :disabled="caso.estado==='FI'"></bs-input>
                   </div>
 
                   <div class="col-md-12">
@@ -107,8 +128,8 @@ GNU General Public License for more details.
                         <label for="resultado" class="control-label">Resultado prueba física</label>
                         <div class="btn-group btn-group-justified">
                           <v-select id="resultado" close-on-select placeholder=" "
-                              v-model="caso.resultadotest"
-                              :disabled="isDisabled">
+                              v-model="caso.resultadotest" clear-button
+                              :disabled="caso.estado==='FI'">
                               <v-option :value="null"></v-option>
                               <v-option value="P">Positivo</v-option>
                               <v-option value="N">Negativo</v-option>
@@ -120,8 +141,8 @@ GNU General Public License for more details.
                         <label for="resultado" class="control-label">Resultado final</label>
                         <div class="btn-group btn-group-justified">
                           <v-select id="resultado" close-on-select placeholder=" "
-                              v-model="caso.resultado"
-                              :disabled="isDisabled">
+                              v-model="caso.resultado" clear-button
+                              :disabled="caso.estado==='FI'">
                               <v-option :value="null"></v-option>
                               <v-option value="R">Recuperado</v-option>
                               <v-option value="D">Deceso</v-option>
@@ -195,26 +216,34 @@ GNU General Public License for more details.
           </panel>
         </tab>
 
-        <tab header="<i class='far fa-calendar fa-fw'></i> Cita" v-if="caso.cita">
+        <tab header="<i class='far fa-calendar fa-fw'></i> Cita">
           <panel type="warning">
             <template slot="header">
-              <i class="fa fa-fcalendar fa-fw"></i> <label> Cita </label>
+              <i class="far fa-calendar fa-fw"></i> <label> Cita </label>
             </template>
 
-            <div class="row">
+            <div class="row" v-if="caso.citas && caso.citas.length>0">
               <div class="col-md-2">
                 <label class="control-label">Fecha</label>
-                <datepicker v-model="caso.cita.fecha" format="dd/MM/yyyy" placeholder="Fecha"></datepicker>
+                <div class="btn-group btn-group-justified">
+                  <datetimepicker name="dtpicker"
+                    ref="fechacita"
+                    :disabled="isDisabledCita" @change="fechaCita"></datetimepicker>
+                </div>
               </div>
-              <div class="col-md-1">
-                <bs-input label="Hora" placeholder="Hora" v-model="caso.cita.hora" type="time"></bs-input>
+              <div class="col-md-2">
+                <label class="control-label">Hora</label>
+                <div class="btn-group btn-group-justified">
+                  <timepicker
+                    ref="horacita" :disabled="isDisabledCita" @change="horaCita"></timepicker>
+                </div>
               </div>
 
               <div class="col-md-2">
                 <label for="tipo" class="control-label">Tipo</label>
                 <div class="btn-group btn-group-justified">
-                  <v-select id="tipo" close-on-select placeholder="Tipo"
-                      v-model="caso.cita.tipo">
+                  <v-select id="tipo" close-on-select placeholder="<seleccione>" :disabled="isDisabledCita"
+                      v-model="caso.citas[0].tipo" @change="chageTipoCita">
                       <v-option :value="null"></v-option>
                       <v-option value="D">Domicilio</v-option>
                       <v-option value="C">Centro</v-option>
@@ -222,11 +251,11 @@ GNU General Public License for more details.
                 </div>
               </div>
 
-              <div class="col-md-12" v-if="caso.cita.tipo==='C'">
+              <div class="col-md-6" v-if="caso.citas[0].tipo==='C' && caso.citas[0].centro !== null">
                 <label class="control-label">Centro</label>
                 <div class="btn-group btn-group-justified">
-                  <v-select close-on-select placeholder="Centro"
-                      v-model="caso.cita.idcentro" :options="centros" options-label="nombre" options-value="id"
+                  <v-select close-on-select placeholder="<seleccione>" :disabled="isDisabledCita"
+                      v-model="caso.citas[0].centro.id" :options="centros" options-label="nombre" options-value="id"
                       search justified
                       clear-button>
                   </v-select>
@@ -234,8 +263,8 @@ GNU General Public License for more details.
               </div>
 
               <div class="col-md-12 cell-textArea-display">
-                <bs-input id="comentario" label="Comentarios" type="textarea" :rows="3" placeholder="Comentarios"
-                    v-model.lazy.trim="caso.cita.comentario"></bs-input>
+                <bs-input id="comentario" label="Comentarios" type="textarea" :rows="3" placeholder="Comentarios" :disabled="isDisabledCita"
+                    v-model.lazy.trim="caso.citas[0].comentarios"></bs-input>
               </div>
 
             </div>
@@ -247,7 +276,7 @@ GNU General Public License for more details.
       <div class="col-md-12">
         <button class="btn btn-primary pull-right my-btn" @click="guardarDatos()" v-if="caso.estado!=='FI'">Guardar caso</button>
         <button class="btn btn-info pull-right my-btn" @click="setcontactado()" v-if="caso.estado==='PC'">Paciente Contactado</button>
-        <button class="btn btn-info pull-right my-btn" @click="gestionarcita()" v-if="caso.estado==='PC' || caso.estado==='CO'">Gestionar cita</button>
+        <button class="btn btn-info pull-right my-btn" @click="gestionarcita()" v-if="(caso.estado==='PC' || caso.estado==='CO') && activeTab!==2">Gestionar cita</button>
         <button class="btn btn-default pull-right my-btn" @click="volver()">Volver</button>
       </div>
       <div class="col-md-12"><br></div>
@@ -264,6 +293,7 @@ import {mapGetters, mapActions, mapMutations} from 'vuex';
 import axios from 'axios';
 import moment from 'moment';
 import datetimepicker from '../utils/datetimepicker.vue';
+import timepicker from '../utils/timepicker.vue';
 import * as VueGoogleMaps from 'vue2-google-maps';
 
 export default {
@@ -282,6 +312,7 @@ export default {
     'datepicker': VueStrap.datepicker,
 
     datetimepicker: datetimepicker,
+    timepicker: timepicker,
     estado: estado,
     resultadofisico: resultadofisico,
   },
@@ -290,16 +321,19 @@ export default {
       spinner: false,
       fullscreen: false,
       mensajeError: null,
+      mensajeInfo: null,
       activeTab: 0,
 
-      centros: this.$store.getters.centros,
+      idmunicipio: null,
       valoranterior: null,
       center: this.$store.getters.configuracion.general.center,
+
+      contactado: false,
 
     }
   },
   computed: {
-    ...mapGetters(['caso','triagecaso']),
+    ...mapGetters(['caso','triagecaso','municipios','centros']),
     hora() {
       if (this.caso && this.caso.fecha) {
         var date = moment(this.caso.fecha);
@@ -309,6 +343,7 @@ export default {
       }
     },
     isDisabled() {return this.caso===null || this.caso.estado===null || (this.caso.estado!=='PC' && this.caso.estado!=='CO')},
+    isDisabledCita() {return this.caso===null || this.caso.estado===null || (this.caso.estado!=='PC' && this.caso.estado!=='CO' && this.caso.estado!=='PT')},
     markers() {
       if (this.center) {
         return [{
@@ -320,8 +355,12 @@ export default {
     }
   },
   watch: {
-    triagecaso (newValue, oldValue) {
+    triagecaso (newValue, oldValue) {},
+    municipios(newValue, oldValue) {},
+    idmunicipio(newValue, oldValue) {
+      this.selectMunicipio(this.idmunicipio);
     },
+    activeTab (newValue, oldValue) {},
   },
   created() {
   },
@@ -329,17 +368,37 @@ export default {
     console.log("-- RECUPERA LOS DATOS DEL CASO " + this.$route.params.id);
     this.fetchCaso(this.$route.params.id).then((respuesta) => {
         if (respuesta.status == 200) {
-          console.log(respuesta.data.success);
           if (respuesta.data.success) {
             //guardamos el dato en store
             this.$store.dispatch("changecaso", respuesta.data.data).then(() => {
-              console.log(this.$refs.direccion);
+              console.log(this.caso);
               if (this.caso) {
+                //console.log(this.caso);
                 if (this.$refs.direccion) {
                   this.$refs.direccion.$el.value = this.caso.direccion;
                 }
                 this.center = {lat: this.caso.lat, lng: this.caso.lng};
+                this.fetchMunicipios();
+                this.fetchCentros();
                 this.rellenaPreguntas(this.caso.id);
+
+                this.idmunicipio = (this.caso.municipio && this.caso.municipio.id?this.caso.municipio.id:null);
+                if (!this.caso.citas || this.caso.citas.length<=0) {
+                    this.caso.citas=[{id:null, fecha: null, hora: null, tipo: null, centro: null}];
+                }
+
+                if (this.caso.citas && this.caso.citas.length>0) {
+                  if (this.$refs.fechacita && this.caso.citas[0].fecha) {
+                    this.$refs.fechacita.$refs.fecha.value = moment(this.caso.citas[0].fecha).format("DD/MM/YYYY");
+                  }
+
+                  if (this.$refs.horacita && this.caso.citas[0].hora) {
+                    this.$refs.horacita.$refs.hora.value = moment(this.caso.citas[0].hora, "LTS").format("HH:mm"); //this.caso.citas[0].hora.substring(0, 5);
+                  }
+
+                  this.chageTipoCita(this.caso.citas[0].tipo);
+                }
+
               } else {
                 this.mensajeError = "No se ha podido recuperar el caso. Inténtelo más tarde.";
               }
@@ -362,13 +421,6 @@ export default {
 
   },
   methods: {
-    addMensajeError(mensaje) {
-      if (!this.mensajeError) {
-        this.mensajeError="";
-      }
-      this.mensajeError += " " + mensaje;
-    },
-
     getObjetoLista(campo, valor) {
       var ret = null;
       if (this.combos[campo]) {
@@ -384,15 +436,121 @@ export default {
     },
 
     guardarDatos() {
-      //TODO
+      if (!this.caso.nombre || this.isEmpty(this.caso.nombre)) {
+        this.mensajeError = "Debe indicar el nombre.";
+        return;
+      } else if (!this.caso.direccion || this.isEmpty(this.caso.direccion)) {
+        this.mensajeError = "Debe indicar la dirección.";
+        return;
+      } else if (!this.caso.dni || this.isEmpty(this.caso.dni)) {
+        this.mensajeError = "Debe indicar el DNI.";
+        return;
+      } else if (!this.caso.telefono || this.isEmpty(this.caso.telefono)) {
+        this.mensajeError = "Debe indicar el teléfono.";
+        return;
+      } else {
+        if (this.caso.citas && this.caso.citas.length>0) {
+          //Datos de la cita. Si hay datos de la fecha, se deben rellenar el resto de datos obligatorios
+          if (this.caso.citas[0].fecha) {
+            if (!this.caso.citas[0].hora) {
+              this.mensajeError = "Debe indicar la hora de la cita.";
+              return;
+            } else if (!this.caso.citas[0].tipo) {
+              this.mensajeError = "Debe indicar el tipo de la cita.";
+              return;
+            } else if (moment(this.caso.citas[0].hora, "LTS").isValid()) {
+              //Formateo de fecha de la cita (si el fotmato es LTS hay que tranformarlo en date)
+              this.caso.citas[0].hora = moment(this.caso.citas[0].hora, "LTS");
+            }
+          }
+        }
+
+        //Guardamos el caso
+        this.spinner = true;
+        try {
+          this.saveCaso().then((respuesta) => {
+              if (respuesta.status == 200) {
+                console.log(respuesta.data.success);
+                if (respuesta.data.success) {
+                  console.log("** caso guardado")
+                  this.spinner = false;
+                  this.mensajeInfo = "Datos guardados correctamente.";
+
+                  //recargamos la página de nuevo
+                  this.reload();
+                } else {
+                  this.addMensajeError(respuesta.data.message, respuesta.data.message);
+                }
+              } else {
+                this.addMensajeError("Se ha producido un error al guardar el caso.", "Respuesta status: " + respuesta.status);
+              }
+            }).catch((e) => {
+              this.addMensajeError("Se ha producido un error al guardar el caso.", e);
+            });
+          } catch (e) {
+            this.addMensajeError("Se ha producido un error al guardar el caso.", e);
+          }
+      }
+    },
+
+    reload() {
+      var location = this.$route.fullPath
+      this.$router.replace('/')
+      this.$nextTick(() => this.$router.replace(location))
+    },
+
+    addMensajeError(mensaje, e) {
+      this.spinner = false;
+      this.mensajeError = mensaje;
+      if (this.contactado) {
+        this.caso.estado="PC";
+        this.contactado = false;
+      }
+      if (e) {
+        console.error(e);
+      }
     },
 
     setcontactado() {
-      //TODO
+      this.contactado = true;
+      this.caso.estado = 'CO';
+      this.guardarDatos();
     },
 
     gestionarcita() {
-      //TODO
+      this.activeTab=2;
+    },
+
+    fechaCita(fecha) {
+      if (this.caso.citas && this.caso.citas.length>0) {
+        this.caso.citas[0].fecha = fecha;
+      }
+    },
+
+    horaCita(hora) {
+      if (this.caso.citas && this.caso.citas.length>0) {
+        this.caso.citas[0].hora = hora;
+      }
+    },
+
+    chageTipoCita(tipo) {
+      if (tipo==='D') {
+        if (this.caso.citas && this.caso.citas.length>0) {
+          this.caso.citas[0].centro = null;
+        }
+      } else if (tipo==='C') {
+        if (this.caso.citas && this.caso.citas.length>0 && this.caso.citas[0].centro === null) {
+          this.caso.citas[0].centro = {id: null, nombre: null};
+        }
+      }
+    },
+
+    selectMunicipio(idmunicipio) {
+      if (idmunicipio && this.municipios) {
+        this.caso.municipio = this.municipios.find(i=>i.id === idmunicipio);
+      } else {
+        this.caso.municipio = null;
+      }
     },
 
     setPlace(place){
@@ -438,9 +596,25 @@ export default {
     volver() {
       this.$router.push("/main/");
     },
+
+    isEmpty(e) {
+      switch (e) {
+        case "":
+        case null:
+        case false:
+        case typeof(e) == "undefined":
+          return true;
+        default:
+          return false;
+      }
+    },
+    //////////////////////////////////////////////////////////////////////
     ...mapActions({
       fetchCaso: 'fetchCaso',
-      fetchTriageCaso: 'fetchTriageCaso'
+      fetchTriageCaso: 'fetchTriageCaso',
+      fetchMunicipios: 'fetchMunicipios',
+      fetchCentros: 'fetchCentros',
+      saveCaso: 'saveCaso',
     }),
   },
 

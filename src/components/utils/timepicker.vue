@@ -13,9 +13,9 @@ GNU General Public License for more details.
 -->
 <template>
     <div class='input-group date'>
-        <input type='text' class="form-control" ref="fecha" :disabled="disabled" />
+        <input type='text' class="form-control" ref="hora" :disabled="disabled" />
         <span class="input-group-addon">
-            <span class="glyphicon glyphicon-calendar"></span>
+            <span class="glyphicon glyphicon-time"></span>
         </span>
     </div>
 </template>
@@ -26,7 +26,7 @@ import moment from 'moment'
 import eonosdandatetimepicker from 'eonasdan-bootstrap-datetimepicker'
 
 export default {
-  name: 'vue-datetimepicker',
+  name: 'vue-timepicker',
   props: {
     disabled: {
       type: Boolean,
@@ -35,11 +35,10 @@ export default {
   },
   data () {
     return {
-      value: '',
+      value: ''
     }
   },
   watch: {
-    value (newValue, oldValue) {},
     options: function (options) {
       // update options
       $(this.$el).datetimepicker({ data: options })
@@ -47,7 +46,7 @@ export default {
   },
   mounted: function () {
     var vm = this
-    var mycomp = $(this.$el).datetimepicker({format: 'DD/MM/YYYY', locale: 'es'})
+    var mycomp = $(this.$el).datetimepicker({format: 'LT', locale: 'es'})
     mycomp.on('dp.change', function (e) {
       vm.value = e.date
       vm.$emit('change', vm.value)

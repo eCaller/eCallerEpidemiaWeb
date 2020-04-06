@@ -8,6 +8,8 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
+
+@author jfpastor@ingenia.es
 -->
 <template lang="html">
   <div>
@@ -16,7 +18,7 @@ GNU General Public License for more details.
       <a class="navbar-brand"><h2 class="title">Módulo Epidemiológico</h2></a>
 
       <ul class="nav navbar-top-links navbar-right">
-          <li><a class="pointer" @click="listadoCasos()"><i class="far fa-copy fa-fw"></i><span> Gestión casos</span></a></li>
+          <li><a class="pointer" @click="listadoCasos()"><i class="far fa-copy fa-fw"></i><span> Seguimiento casos</span></a></li>
           <li><a class="pointer" @click="listadoTriage()"><i class="far fa-edit fa-fw"></i><span> Diseño triage</span></a></li>
           <li><a class="pointer" @click="sie()"><i class="far fa-chart-bar fa-fw"></i><span> SIE</span></a></li>
           <li class="dropdown" v-if="false">

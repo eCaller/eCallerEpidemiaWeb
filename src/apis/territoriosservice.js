@@ -14,6 +14,17 @@ import qs from "qs";
 import conf from '../store/configuracion.js';
 
 export default {
+    getCentros() {
+      return new Promise((resolve, reject) => {
+        axios.get(conf.state.territorios.urlCentros)
+              .then((respuesta) => {
+                  resolve(respuesta);
+              })
+              .catch((error) => {
+                  reject({data: []})
+              });
+      });
+    },
 
     getDepartamentos() {
       return new Promise((resolve, reject) => {

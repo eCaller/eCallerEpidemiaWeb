@@ -21,6 +21,11 @@ export default {
     //Triage del caso
     triagecaso: null,
 
+    //Filtros de las listas
+    filtroslistas: {estados:"cita"},
+    tipolistas:'C',
+
+    //Resumen estadísticas
     resumen: [
       {id:1, nombre:'Sospechosos', value: 0, percent: 0, clase: "t-success", flecha: "fa fa-arrow-down fa-fw t-success", select: true},
       {id:2, nombre:'Confirmados', value: 0, percent: 0, clase: "t-success", flecha: "fa fa-arrow-down fa-fw t-success", select: true},
@@ -29,6 +34,7 @@ export default {
       {id:5, nombre:'Decesos', value: 0, percent: 0, clase: "t-success", flecha: "fa fa-arrow-down fa-fw t-success", select: true},
     ],
 
+    //Resumen filtros
     resumenfiltro: [
       {id:1, nombre:'Sospechosos', value: 0, percent: 0, clase: "t-success", flecha: "fa fa-arrow-down fa-fw t-success", select: true},
       {id:2, nombre:'Confirmados', value: 0, percent: 0, clase: "t-success", flecha: "fa fa-arrow-down fa-fw t-success", select: true},
@@ -37,6 +43,7 @@ export default {
       {id:5, nombre:'Decesos', value: 0, percent: 0, clase: "t-success", flecha: "fa fa-arrow-down fa-fw t-success", select: true},
     ],
 
+    //Estadísticas datos
     estadisticas: {
       sospechosos: [],
       confirmados: [],
@@ -45,6 +52,7 @@ export default {
       decesos: []
     },
 
+    //Estadísticas mapas
     casosmapa: [],
 
   },
@@ -55,6 +63,14 @@ export default {
 
     triagecaso (state) {
       return state.triagecaso;
+    },
+
+    filtroslistas (state) {
+      return state.filtroslistas;
+    },
+
+    tipolistas (state) {
+      return state.tipolistas;
     },
 
     resumen (state) {
@@ -78,8 +94,16 @@ export default {
       return casosservice.getCaso(id);
     },
 
+    fetchContadoresCaso ({commit}) {
+      return casosservice.getContadoresCaso();
+    },
+
     changecaso({state, commit}, caso) {
       commit('setCaso', {caso: caso})
+    },
+
+    saveCaso({state, commit}) {
+      return casosservice.saveCaso(state.caso);
     },
 
     fetchTriageCaso({commit}, id) {
@@ -127,6 +151,12 @@ export default {
     },
     setTriagecaso(state, response) {
       state.triagecaso = response.triagecaso.data;
+    },
+    setFiltroslistas(state, response) {
+      state.filtroslistas = response;
+    },
+    setTipolistas(state, response) {
+      state.tipolistas = response;
     },
     setResumen(state, response) {
       if (response.resumen) {
