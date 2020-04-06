@@ -46,10 +46,10 @@ export default {
 
       casos: {
         url: config.url + "/caso",
-        urlResumen: config.url + "/caso/resumen",
-        urlResumenFiltro: config.url + "/caso/resumenfiltro",
-        urlEstadisticas: config.url + "/caso/estadisticas",
-        urlMapa: config.url + "/caso/mapa"
+        urlResumen: config.url + "/casos/resumen",
+        urlResumenFiltro: config.url + "/casos/resumenfiltro",
+        urlEstadisticas: config.url + "/casos/estadisticas",
+        urlMapa: config.url + "/casos/mapa"
       },
 
   },
