@@ -11,7 +11,7 @@ GNU General Public License for more details.
 */
 export default {
   googlemapkey:"<api key google maps>",
-  url: "https://127.0.0.1:8443",
+  url: "https://localhost:8443",
   center: {lat: -16.2901535, lng: -63.5886536},
   zoom: 5,
 }
