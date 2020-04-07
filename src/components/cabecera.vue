@@ -35,7 +35,7 @@ GNU General Public License for more details.
                   <strong>{{$t('messages.user')}} </strong><i class="fa fa-caret-down"></i> <img :alt="usuario.nombre" :src="usuario.imagen" class="img-circle" style="width: 39px;">
               </a>
               <ul class="dropdown-menu">
-                  <li v-if="false"><a href="#" @click="configuracion()"><i class="fa fa-cog fa-fw"></i> {{$t('menu.configuracion')}}</a></li>
+                  <li><a href="#" @click="configuracion()"><i class="fa fa-cog fa-fw"></i> {{$t('menu.configuracion')}}</a></li>
                   <li class="divider"></li>
                   <li><a href="#" @click="logout()"><i class="fa fa-sign-out-alt fa-fw"></i> {{$t('messages.salir')}}</a></li>
               </ul>
@@ -87,7 +87,7 @@ export default {
         this.$router.replace({name: "sie"});
       },
       configuracion() {
-        //TODO en construcción
+        this.$router.replace({name: "configuracionUsuario"});
       },
       usuarios() {
         //TODO en construcción
