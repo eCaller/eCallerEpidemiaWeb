@@ -72,9 +72,10 @@ export default {
         //$("#wrapper").toggleClass("active");
       },
       logout() {
-        this.$store.dispatch('logout').then(() => {
-          this.$router.push("/")
-        });
+        this.$store.dispatch('logout')
+          .then(() => {
+            this.$router.push("/")
+          });
       },
       listadoCasos(){
         this.$router.replace({name: "listado"});

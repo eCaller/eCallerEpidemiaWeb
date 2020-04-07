@@ -59,6 +59,7 @@ export const store = new Vuex.Store({
   plugins: [createPersistedState({ storage: window.sessionStorage })],
   mutations: {
     [LOGIN] (state) {
+      state.isLoggedIn = false;
       state.pending = true;
       state.base64.authdata = null;
     },
@@ -99,57 +100,36 @@ export const store = new Vuex.Store({
     guardarToken({state, commit}, token) {
       commit(GUARDAR_TOKEN, token);
     },
-    login({state, commit}) {
+    login({state, commit}, datos) {
       return new Promise((resolve, reject) => {
-        let instance = axios.create({
-          baseURL: state.configuracion.autenticacion.url,
+        let instance = {
+          method: 'POST',
+          url: state.configuracion.autenticacion.url,
           headers: {
-            'Authorization':'Basic ' + state.base64.authdata
+            'Content-Type': 'application/json'
+          },
+          data: {
+            username: datos.username, 
+            password: datos.password
           }
-        });
-
-        instance.get()
+        };
+        axios(instance)
           .then((respuesta) => {
             if (respuesta.status === 200) {
-              localStorage.setItem("token", "Basic " + state.base64.authdata);
               commit(ASIGNAR, respuesta.data);
               commit(LOGIN_SUCCESS);
+              axios.defaults.headers.common['Authorization'] = 'JWT ' + respuesta.data.token
               resolve(respuesta);
             }
-          })
-          .catch((error) => {
-            reject('No encontrado')
+          }).catch((error) => {
+            reject('Usuario incorrecto')
           });
       })
     },
-    recargarAccessToken({state, commit}) {
-      let instance = axios.create({
-        baseURL: state.configuracion.autenticacion.url,
-        headers: {
-          'Authorization':'Basic ' + state.base64.authdata,
-          'Content-Type':'application/x-www-form-urlencoded'
-        },
-        params: {
-          'grant_type':'refresh_token',
-          'refresh_token':state.usuario.refresh_token
-        }
-      });
-
-      instance.post('/oauth/token')
-        .then((respuesta) => {
-          if (respuesta.status == 200) {
-            if (respuesta.data != null) {
-              commit(GUARDAR_TOKEN, respuesta.data);
-            }
-          }
-        })
-        .catch((error) => {
-        });
-    },
-    logout({commit}) {
-      localStorage.removeItem("token");
+    logout({state, commit}) {      
       localStorage.clear();
       commit(LOGOUT);
+      axios.get(state.configuracion.autenticacion.urlLogout);
     }
   },
 

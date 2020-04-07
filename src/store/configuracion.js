@@ -25,6 +25,7 @@ export default {
 
       autenticacion: {
         url: config.url + "/autenticacion/login",
+        urlLogout: config.url + "/autenticacion/logout"
       },
 
       triage: {

@@ -18,7 +18,7 @@ GNU General Public License for more details.
         <div class="col-md-12">
           <a class="myheader" href="index.html"><img :alt="$t('messages.name')" src="../assets/logo.png" class="logo" /><h2>{{$t('messages.name')}}</h2></a>
         </div>
-      </v
+      </div>
       <div class="row">
         <div class="col-md-4 col-md-offset-4">
           <div class="login-panel panel panel-default">
@@ -77,9 +77,7 @@ export default {
       //show spinner
       this.spinner = true;
       this.$store.commit("LOGIN");
-      this.$store.commit('encode', this.username + ':' + this.password);
-
-      this.$store.dispatch("login")
+      this.$store.dispatch("login", {username: this.username, password: this.password})
         .then((res) => {
           this.spinner = false;
           this.$router.push("/main");
@@ -87,89 +85,7 @@ export default {
           this.mensajeError="Se ha producido un error al validar al usuario.";
           this.spinner = false;
         });
-    },
-    //Conseguir un token bearer
-  	getToken(baseURL){
-      let datosAutenticacion = {
-        url: baseURL,
-        authdata: this.$store.state.base64.authdata,
-        username: this.username,
-        password: this.password,
-      }
-      axiosCustom
-        .axiosConParams(datosAutenticacion)
-        .post('/oauth/token')
-      		.then((res) => {
-      			if(res.status == 200) {
-      				this.$store.dispatch("guardarToken",res.data).then(() => {
-      					this.getUsuario(baseURL);
-      				}, (error)=> {
-      					console.error(error);
-                this.validado = false;
-                this.mensajeError="Se ha producido un error al validar al usuario.";
-                this.spinner = false;
-      				});
-      			} else {
-          		console.error("Respuesta status: " + res.status);
-          		this.validado = false;
-          		this.mensajeError="Se ha producido un error al validar al usuario.";
-          		this.spinner = false;
-           	}
-      		})
-      		.catch((error) => {
-      			console.error(error);
-          	this.validado = false;
-          	this.mensajeError="Se ha producido un error al validar al usuario.";
-          	this.spinner = false;
-      		});
-      	//return true;
-  	},
-  	// Información del usuario
-  	getUsuario(baseURL){
-		//Usuarios disponibles
-      if (this.$store.state.base64.authdata) {
-      	axiosCustom
-          .axiosAutenticadoConUrl(baseURL, this.$store.state.usuario.access_token)
-          .post('/user')
-      			.then((respuesta) => {
-        			if(respuesta.status == 200) {
-        				if(respuesta.data.authenticated){
-                  this.$store.dispatch("login", respuesta.data.principal).then(() => {
-                    this.spinner = false;
-                    this.$router.push("/main");
-                  })
-                  .catch((error) => {
-                    console.error(error);
-                    this.validado = false;
-                    this.mensajeError="Se ha producido un error al validar al usuario.";
-                    this.spinner = false;
-                  })
-        				} else {
-              		console.error(respuesta.statusText);
-              		this.validado = false;
-              		this.mensajeError=respuesta.statusText;
-              		this.spinner = false;
-            		}
-        			} else {
-            		console.error("Respuesta status: " + respuesta.status);
-            		this.validado = false;
-            		this.mensajeError="Se ha producido un error al validar al usuario.";
-            		this.spinner = false;
-           		}
-      			})
-      			.catch((error) => {
-        			console.error(error);
-              	this.validado = false;
-              	this.mensajeError="Se ha producido un error al validar al usuario.2";
-              	this.spinner = false;
-        		});
-    	} else {
-     	 	console.error("Error authdata");
-      	this.validado = false;
-      	this.mensajeError="Se ha producido un error al validar al usuario.3";
-     		this.spinner = false;
-    	}
-  	},
+    }
   }
 }
 </script>
