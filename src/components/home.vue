@@ -16,7 +16,7 @@ GNU General Public License for more details.
     <div id="page-wrapper" class="fondo">
       <div class="row">
         <div class="col-md-12">
-          <a class="myheader" href="index.html"><img :alt="$t('messages.name')" src="../assets/logo.png" class="logo" /><h2>{{$t('messages.name')}}</h2></a>
+          <a class="myheader" href="index.html"><img :alt="$t('messages.name')" src="../assets/logo.png" class="logo" width="20%" /><h2>{{$t('messages.name')}}</h2></a>
         </div>
       </v
       <div class="row">

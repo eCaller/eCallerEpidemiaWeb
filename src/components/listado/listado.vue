@@ -12,7 +12,7 @@ GNU General Public License for more details.
 @author jfpastor@ingenia.es
 -->
 <template lang="html">
-    <div id="page-wrapper">
+    <div id="page-wrapper" style="margin-top:30px">
       <div class="row">
 			  <div class="col-lg-3 col-md-4">
           <div class="panel panel-yellow">
