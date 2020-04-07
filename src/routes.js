@@ -20,6 +20,7 @@ import listado from './components/listado/listado.vue'
 import triage from './components/triage/triage.vue'
 import sie from './components/sie/sie.vue'
 import caso from './components/caso/caso.vue'
+import configuracionUsuario from './components/configuracionUsuario/configuracionUsuario.vue'
 
 export const routes = [
   {path: '/', component: home, name:"home"},
@@ -29,6 +30,7 @@ export const routes = [
      {path: 'triage', name:'triage', component:triage},
      {path: 'sie', name:'sie', component:sie},
      {path: 'caso/:id', name:'caso', component:caso},
+     {path: 'configuracionUsuario', name:'configuracionUsuario', component:configuracionUsuario},
    ],
     beforeEnter: (to, from, next) => {
       //console.log("Se puede navegar?: " + store.state.isLoggedIn);

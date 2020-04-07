@@ -11,6 +11,9 @@ GNU General Public License for more details.
 
 @author jfpastor@ingenia.es
 */
+
+import usuarioservice from '@/apis/usuariosservice'
+
 export default {
   state: {
         id: null,
@@ -26,7 +29,7 @@ export default {
       if (!state.imagen){
         state.imagen = "static/img/avatarx.png";
       } else {
-        if (!state.imagen.startsWith("data:image/")) {
+        if (state!= null && state.imagen != null /*&& !state.imagen.startsWith("data:image/")*/) {
           state.imagen = "static/img/avatarx2.png";
         }
       }
@@ -37,5 +40,35 @@ export default {
 
       return state;
     }
+  },
+  actions: {
+    fetchUser ({commit}) {
+      usuarioservice.updateUser()
+        .then((respuesta) => {
+          commit('setUpdateUser', {variables: respuesta.data})
+        })
+        .catch((error) => {
+          commit('setUpdateUser', {variables: error.data})
+        });
+    },
+    updateUser (state,user) {
+      let usuario = {
+        id: state.getters.usuario.id,
+        username: state.getters.usuario.username,
+        nombre: state.getters.usuario.nombre,
+        imagen: state.getters.usuario.imagen,
+        rol: state.getters.usuario.rol,
+        access_token: state.getters.usuario.access_token,
+        refresh_token: state.getters.usuario.refresh_token,
+        password: user.password
+      }
+      return usuarioservice.updateUser({variables: usuario});
+    }
+  },
+  mutations: {
+    setUpdateUser(state, response) {
+      //state.username = response.variables;
+    },
+
   }
 };
