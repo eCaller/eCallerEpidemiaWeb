@@ -52,6 +52,10 @@ export default {
         urlMapa: config.url + "/casos/mapa"
       },
 
+      configuracionUsuario:{
+        url: config.url + "/configuracionUsuario"
+      },
+
   },
 
   getters: {
