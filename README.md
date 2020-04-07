@@ -36,6 +36,28 @@ eCaller Epidemias está constituida por dos componentes software:
     4. Medición cualitativa y cuantitativamente del grado de evolución de la enfermedad.
     5. Identificación de las zonas de riesgo.
 
+## Instalación
+1. Clonar el repositorio en una carpeta local
+
+    * `git clone  https://github.com/eCaller/eCallerEpidemiaWeb.git`
+  
+    * `cd eCallerEpidemiasWeb`
+  
+2. Instalación librería
+  
+    * `npm install`
+
+3. Configuración entorno
+    * cp src/config.js.example src/config.js
+    * Editar el fichero src/config.js con las valores correcta para el entorno de ejecución
+
+## Ejecución en local
+Como requerimiento antes de ejecutar la aplicación debe instalarse y configurarse el proyecto: [eCallerEpidemiaBackEnd](https://github.com/eCaller/eCallerEpidemiaBackEnd/)
+
+1. Ejecución en modo desarrollo
+
+    * `npm run dev`
+
 ## Repositorios
 
 * **`App móvil`**.
