@@ -12,7 +12,7 @@ GNU General Public License for more details.
 @author jfpastor@ingenia.es
 -->
 <template lang="html">
-    <div id="page-wrapper">
+    <div id="page-wrapper" style="margin-top:30px">
       <div class="row">
 			  <div class="col-lg-3 col-md-4">
           <div class="panel panel-yellow">
@@ -87,8 +87,8 @@ GNU General Public License for more details.
       <casos
           :apiUrl="this.$store.state.configuracion.casos.url"
           :titulo="titulo"
-          :moreParamsDefault="filtros"
-          :tipo="tipo"
+          :moreParamsDefault="filtroslistas"
+          :tipo="tipolistas"
           :filtrar="filtrar"
           @updateTotal="refrescaTotal($event)"
           >
@@ -100,10 +100,31 @@ GNU General Public License for more details.
 import {usuario} from '../../store/usuario.js';
 import VueStrap from 'vue-strap';
 import casos from './casos.vue';
+import {mapGetters, mapMutations, mapActions} from 'vuex';
 
 export default {
   components: {
     casos,
+  },
+  computed: {
+    ...mapGetters(['filtroslistas','tipolistas']),
+  },
+  mounted() {
+    this.fetchContadoresCaso(this.$route.params.id).then((respuesta) => {
+        if (respuesta.status == 200) {
+          if (respuesta.data.success) {
+            this.pendientes = (respuesta.data.data.pendientes?respuesta.data.data.pendientes:0);
+            this.programados = (respuesta.data.data.programados?respuesta.data.data.programados:0);
+            this.evolucion = (respuesta.data.data.evolucion?respuesta.data.data.evolucion:0);
+          } else {
+            console.error("Respuesta success: " + respuesta.data.success);
+          }
+        } else {
+          console.error("Respuesta status: " + respuesta.status);
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
   },
   data () {
     return {
@@ -112,28 +133,26 @@ export default {
       evolucion: 0,
 
       titulo: "Pendientes de cita",
-      filtros: {estados:"cita"},
-      tipo: 'C',
       filtrar: false,
     }
   },
   methods: {
     filtrarCita() {
       this.titulo="Pendientes de cita";
-      this.filtros={estados:"cita"};
-      this.tipo = 'C';
+      this.setFiltroslistas({estados:"cita"});
+      this.setTipolistas('C');
       this.filtrar=false;
     },
     filtrarPrueba() {
       this.titulo="Pendientes de prueba física";
-      this.filtros={estados:"fisica"};
-      this.tipo = 'P';
+      this.setFiltroslistas({estados:"fisica"});
+      this.setTipolistas('P');
       this.filtrar=false;
     },
     filtrarEvolucion() {
       this.titulo="Pendientes evolución";
-      this.filtros={estados:"evolucion"};
-      this.tipo = 'F';
+      this.setFiltroslistas({estados:"evolucion"});
+      this.setTipolistas('F');
       this.filtrar=true;
     },
     refrescaTotal(value) {
@@ -147,6 +166,14 @@ export default {
         }
       }
     },
+    //////////////////////////////////////////////////////////////
+    ...mapMutations({
+      setFiltroslistas: 'setFiltroslistas',
+      setTipolistas: 'setTipolistas'
+    }),
+    ...mapActions({
+      fetchContadoresCaso: 'fetchContadoresCaso',
+    }),
   },
 }
 </script>

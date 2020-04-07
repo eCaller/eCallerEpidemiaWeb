@@ -8,6 +8,8 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
+
+@author jfpastor@ingenia.es
 */
 import Vue from 'vue'
 import App from './App'
@@ -16,8 +18,9 @@ import {store} from './store/store.js';
 import {routes} from './routes.js';
 import * as VueGoogleMaps from 'vue2-google-maps';
 import conf from './store/configuracion.js';
+import { i18n } from '@/plugins/i18n';
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 Vue.use(VueRouter);
 Vue.use(VueGoogleMaps, {
   load: {
@@ -34,6 +37,7 @@ const router = new VueRouter({
 
 /* eslint-disable no-new */
 var principal = new Vue({
+  i18n,
   el: '#app',
   router,
   store: store,

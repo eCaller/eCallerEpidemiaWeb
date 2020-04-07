@@ -8,26 +8,35 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
+
+@author jfpastor@ingenia.es
 */
+import territoriosservice from '@/apis/territoriosservice'
+
 export default {
   state: {
-    centro: {
-        id: null,
-        nombre: null,
-        lat: null,
-        lng: null
-    },
-    centros: [
-      {id: 1, nombre: "Centro 1"},
-      {id: 2, nombre: "Centro 2"}
-    ]
+    centros: []
   },
   getters: {
-    centro (state) {
-      return state.centro;
-    },
     centros (state) {
       return state.centros;
     },
+  },
+  actions: {
+    fetchCentros ({commit}) {
+      territoriosservice.getCentros()
+        .then((respuesta) => {
+          commit('setCentros', {centros: respuesta.data})
+        })
+        .catch((error) => {
+          commit('setCentros', {centros: error.data})
+        });
+    },
+  },
+  mutations: {
+    setCentros(state, response) {
+      state.centros = response.centros;
+    },
+
   }
 };

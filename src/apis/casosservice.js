@@ -10,6 +10,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 */
 import axios from "axios";
+import qs from "qs";
 import conf from '../store/configuracion.js';
 
 export default {
@@ -37,9 +38,25 @@ export default {
       });
     },
 
-    getResumen() {
+    saveCaso(caso) {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.casos.urlResumen)
+        axios.put(conf.state.casos.url, caso, {
+              headers: {
+              "Content-Type": 'application/json'
+            }
+          })
+          .then((respuesta) => {
+              resolve(respuesta);
+          })
+          .catch((error) => {
+              reject({data: []})
+          });
+      });
+    },
+
+    getContadoresCaso() {
+      return new Promise((resolve, reject) => {
+        axios.get(conf.state.casos.urlContadores)
               .then((respuesta) => {
                   resolve(respuesta);
               })
@@ -49,27 +66,70 @@ export default {
       });
     },
 
-    getEstadisticas() {
+    /////////////////////////////////////////////////////////////////////////
+
+    getResumen(estados, tipo, lista) {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.casos.urlEstadisticas)
-              .then((respuesta) => {
-                  resolve(respuesta);
-              })
-              .catch((error) => {
-                  reject({data: []})
-              });
+        axios.get(conf.state.casos.urlResumen, {
+            params: {
+              estados: estados,
+              tipo: tipo,
+              lista: lista
+            },
+            paramsSerializer: params => {
+              return qs.stringify(params)
+            }
+          })
+          .then((respuesta) => {
+              resolve(respuesta);
+          })
+          .catch((error) => {
+              reject({data: []})
+          });
       });
     },
 
-    getCasosMapa() {
+    getEstadisticas(acumulado, estados, tipo, lista) {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.casos.urlMapa)
-              .then((respuesta) => {
-                  resolve(respuesta);
-              })
-              .catch((error) => {
-                  reject({data: []})
-              });
+        axios.get(conf.state.casos.urlEstadisticas, {
+            params: {
+              acumulado: acumulado,
+              estados: estados,
+              tipo: tipo,
+              lista: lista
+            },
+            paramsSerializer: params => {
+              return qs.stringify(params)
+            }
+          })
+          .then((respuesta) => {
+              resolve(respuesta);
+          })
+          .catch((error) => {
+            console.error(error);
+              reject({data: []})
+          });
+      });
+    },
+
+    getCasosMapa(estados, tipo, lista) {
+      return new Promise((resolve, reject) => {
+        axios.get(conf.state.casos.urlMapa, {
+            params: {
+              estados: estados,
+              tipo: tipo,
+              lista: lista
+            },
+            paramsSerializer: params => {
+              return qs.stringify(params)
+            }
+          })
+          .then((respuesta) => {
+              resolve(respuesta);
+          })
+          .catch((error) => {
+              reject({data: []})
+          });
       });
     },
 

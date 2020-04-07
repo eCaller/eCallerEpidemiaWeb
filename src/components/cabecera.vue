@@ -13,31 +13,31 @@ GNU General Public License for more details.
   <div>
     <navbar placement="top" type="default">
       <a class="navbar-brand logo" href="#" @click="logout()"><img alt="Módulo Epidemiológico" src="../assets/logo2.png" /></a>
-      <a class="navbar-brand"><h2 class="title">Módulo Epidemiológico</h2></a>
+      <a class="navbar-brand"><h2 class="title">{{$t('messages.name')}}</h2></a>
 
       <ul class="nav navbar-top-links navbar-right">
-          <li><a class="pointer" @click="listadoCasos()"><i class="far fa-copy fa-fw"></i><span> Gestión casos</span></a></li>
-          <li><a class="pointer" @click="listadoTriage()"><i class="far fa-edit fa-fw"></i><span> Diseño triage</span></a></li>
-          <li><a class="pointer" @click="sie()"><i class="far fa-chart-bar fa-fw"></i><span> SIE</span></a></li>
+          <li><a class="pointer" @click="listadoCasos()"><i class="far fa-copy fa-fw"></i><span> {{$t('menu.gestion-casos')}}</span></a></li>
+          <li><a class="pointer" @click="listadoTriage()"><i class="far fa-edit fa-fw"></i><span> {{$t('menu.diseno-triage')}}</span></a></li>
+          <li><a class="pointer" @click="sie()"><i class="far fa-chart-bar fa-fw"></i><span> {{$t('menu.sie')}}</span></a></li>
           <li class="dropdown" v-if="false">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-cog fa-fw"></i><span> Configuración </span><i class="fa fa-caret-down"></i></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-cog fa-fw"></i><span> {{$t('menu.configuracion')}} </span><i class="fa fa-caret-down"></i></a>
             <ul class="dropdown-menu">
-                <li><a href="#" @click="usuarios()"><i class="fa fa-user fa-fw"></i> Usuarios</a></li>
-                <li><a href="#" @click="centros()"><i class="far fa-hospital fa-fw"></i> Centros</a></li>
+                <li><a href="#" @click="usuarios()"><i class="fa fa-user fa-fw"></i> {{$t('menu.usuarios')}}</a></li>
+                <li><a href="#" @click="centros()"><i class="far fa-hospital fa-fw"></i> {{$t('menu.centros')}}</a></li>
                 <li class="divider"></li>
-                <li><a href="#" @click="provincias()"><i class="fa fa-map fa-fw"></i> Provincias</a></li>
-                <li><a href="#" @click="municipios()"><i class="far fa-map fa-fw"></i> Municipios</a></li>
-                <li><a href="#" @click="distritos()"><i class="fa fa-map-marked-alt fa-fw"></i> Distritos</a></li>
+                <li><a href="#" @click="provincias()"><i class="fa fa-map fa-fw"></i> {{$t('menu.provincias')}}</a></li>
+                <li><a href="#" @click="municipios()"><i class="far fa-map fa-fw"></i> {{$t('menu.municipios')}}</a></li>
+                <li><a href="#" @click="distritos()"><i class="fa fa-map-marked-alt fa-fw"></i> {{$t('menu.distritos')}}</a></li>
             </ul>
           </li>
           <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                  <strong>Usuario </strong><i class="fa fa-caret-down"></i> <img :alt="usuario.nombre" :src="usuario.imagen" class="img-circle" style="width: 39px;">
+                  <strong>{{$t('messages.user')}} </strong><i class="fa fa-caret-down"></i> <img :alt="usuario.nombre" :src="usuario.imagen" class="img-circle" style="width: 39px;">
               </a>
               <ul class="dropdown-menu">
-                  <li><a href="#" @click="configuracion()"><i class="fa fa-cog fa-fw"></i> Configuración</a></li>
+                  <li><a href="#" @click="configuracion()"><i class="fa fa-cog fa-fw"></i> {{$t('menu.configuracion')}}</a></li>
                   <li class="divider"></li>
-                  <li><a href="#" @click="logout()"><i class="fa fa-sign-out-alt fa-fw"></i> Salir</a></li>
+                  <li><a href="#" @click="logout()"><i class="fa fa-sign-out-alt fa-fw"></i> {{$t('messages.salir')}}</a></li>
               </ul>
           </li>
       </ul>
@@ -72,9 +72,10 @@ export default {
         //$("#wrapper").toggleClass("active");
       },
       logout() {
-        this.$store.dispatch('logout').then(() => {
-          this.$router.push("/")
-        });
+        this.$store.dispatch('logout')
+          .then(() => {
+            this.$router.push("/")
+          });
       },
       listadoCasos(){
         this.$router.replace({name: "listado"});

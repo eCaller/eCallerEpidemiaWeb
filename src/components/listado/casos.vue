@@ -34,11 +34,11 @@ GNU General Public License for more details.
             <spinner ref="spinner" v-model="spinner" size="xl" text="Cargando"></spinner>
 
             <div class="row bottom-align ">
-              <div class="col-md-2" v-if="filtrar">
+              <div class="col-md-2" v-if="filtrar && false">
                 <label class="control-label">Fecha inicio</label>
                 <datepicker name="fini" v-model="fechainicio" format="dd/MM/yyyy" ></datepicker>
               </div>
-              <div class="col-md-2" v-if="filtrar">
+              <div class="col-md-2" v-if="filtrar && false">
                 <label class="control-label">Fecha fin</label>
                 <datepicker name="ffin" v-model="fechafin" format="dd/MM/yyyy" ></datepicker>
               </div>
@@ -113,7 +113,6 @@ import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePagination
 import tableConf from '../../store/table-configuration.js';
 import axiosCustom from '../../store/axios-custom.js';
 import moment from 'moment';
-import datetimepicker from '../utils/datetimepicker.vue';
 import {mapMutations} from 'vuex';
 
 export default {
@@ -126,7 +125,6 @@ export default {
     'bs-input': VueStrap.input,
     'datepicker': VueStrap.datepicker,
 
-    datetimepicker: datetimepicker,
     Vuetable,
     VuetablePaginationBootstrap,
     VuetablePaginationInfo
@@ -155,8 +153,8 @@ export default {
   },
 
   watch: {
-  	titulo: function(newVal, oldVal) { },
-    moreParamsDefault: function(newVal, oldVal) {
+  	titulo (newVal, oldVal) { },
+    moreParamsDefault (newVal, oldVal) {
       this.moreParams = this.moreParamsDefault;
       this.filterText = "";
       this.refresh();

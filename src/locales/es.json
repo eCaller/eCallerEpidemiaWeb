@@ -1,0 +1,26 @@
+{
+  "messages": {
+    "name": "Módulo Epidemiológico",
+    "user": "Usuario",
+    "salir": "Salir",
+    "loading": "Cargando"
+  },
+  "menu": {
+    "gestion-casos": "Seguimiento casos",
+    "diseno-triage": "Diseño triage",
+    "configuracion": "Configuración",
+    "usuarios": "Usuarios",
+    "centros": "Centros",
+    "provincias": "Provincias",
+    "municipios": "Municipios",
+    "distritos": "Distritos",
+    "sie": "SIE"
+  },
+  "login": {
+    "title": "Acceso al sistema",
+    "error-user": "Indique el nombre del usuario",
+    "password": "Password",
+    "error-password": "Indique la password del usuario",
+    "sign-in": "Entrar"
+  }
+}

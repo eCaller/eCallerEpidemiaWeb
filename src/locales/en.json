@@ -1,0 +1,25 @@
+{
+  "messages": {
+    "name": "Epidemiological Module",
+    "salir": "Logout",
+    "user": "User",
+    "loading": "Loading"
+  },
+  "menu": {
+    "gestion-casos": "Case management",
+    "centros": "Centers",
+    "configuracion": "Setting",
+    "diseno-triage": "Triage design",
+    "distritos": "Districts",
+    "municipios": "Municipalities",
+    "provincias": "Cities",
+    "usuarios": "Users"
+  },
+  "login": {
+    "error-password": "Enter the user's password",
+    "password": "Password",
+    "sign-in": "Sign in",
+    "title": "Access to the system",
+    "error-user": "Enter the username"
+  }
+}

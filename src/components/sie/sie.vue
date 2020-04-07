@@ -12,7 +12,7 @@ GNU General Public License for more details.
 @author jfpastor@ingenia.es
 -->
 <template lang="html">
-  <div id="page-wrapper" :class="[{'full-width-div': fullscreen}]">
+  <div id="page-wrapper" >
     <spinner ref="spinner" v-model="spinner" size="xl" text="Cargando"></spinner>
 
     <alert v-model="mensajeError" placement="top-right" type="danger" duration="3000" dismissable>
@@ -27,6 +27,7 @@ GNU General Public License for more details.
            <div class="pull-right ">
              <i class="far fa-clock fa-fw"></i>
              <label> {{dateFormat(fecha)}} </label>
+             <button class="btn btn-default" @click="reload()"><i class="fa fa-sync fa-fw"></i></button>
            </div>
         </h3>
   		</div>
@@ -130,6 +131,7 @@ GNU General Public License for more details.
                   :position="m.location"
                   :clickable="true"
                   :draggable="false"
+                  :icon = "m.icon"
                   @click="center=m.position"
                 />
               </gmap-map>
@@ -173,7 +175,7 @@ GNU General Public License for more details.
           </template>
 
           <div class="row" v-for="d2 in resumenfiltro" :key="d2.id">
-            <div class="col-md-6"><checkbox v-model="d2.select" type="info" style="margin-top: 0px; margin-bottom: 0px; font-weight: 100;">{{d2.nombre}}</checkbox></div>
+            <div class="col-md-6"><checkbox v-model="d2.select" type="info" style="margin-top: 0px; margin-bottom: 0px; font-weight: 100;" @checked="filtraestados(d2.id, $event)">{{d2.nombre}}</checkbox></div>
             <div class="col-md-1"><label :class="d2.clase">{{d2.value}}</label></div>
             <div class="col-md-1"><i :class="d2.flecha"></i></div>
             <div class="col-md-1">{{d2.percent}}%</div>
@@ -234,7 +236,7 @@ export default {
   mounted () {
     this.fetchDepartamentos();
     this.fetchResumen();
-    this.fetchCasosMapa();
+    this.fetchCasosMapa({tipo: "D", lista: []});
   },
   watch: {
     departamentosselect(newValue, oldValue) {
@@ -251,6 +253,8 @@ export default {
           this.centrar(p.lat, p.lng);
         }
       }
+
+      this.cambiaGrafica();
     },
     provinciasselect(newValue, oldValue) {
       if (this.provinciasselect && this.provinciasselect.length>0) {
@@ -261,9 +265,13 @@ export default {
       }
       this.provinciasselobject = this.getprovinciasselobject();
       this.municipiosselobject = this.getmunicipiosselobject();
+
+      this.cambiaGrafica();
     },
     municipiosselect(newValue, oldValue) {
       this.municipiosselobject = this.getmunicipiosselobject();
+
+      this.cambiaGrafica();
     },
     estadisticas(newValue, oldValue) {
       this.asignaEstadisticas();
@@ -279,7 +287,6 @@ export default {
   data () {
     return {
       spinner: false,
-      fullscreen: false,
       mensajeError: null,
 
       fecha: new Date(),
@@ -343,11 +350,34 @@ export default {
     },
 
     cambiaGrafica() {
-        if (this.grafica==="E" || this.grafica==="S") {
-          this.fetchEstadisticas();
-        } else if (this.grafica==="M" || this.grafica==="C") {
-          this.fetchCasosMapa();
+      this.spinner = true;
+      let tipo = "D";
+      let lista = [];
+      if (this.municipiosselobject && this.municipiosselobject.length>0) {
+        tipo="M";
+        for (let i in this.municipiosselobject) {
+          lista.push(this.municipiosselobject[i].id);
         }
+      } else if (this.provinciasselobject && this.provinciasselobject.length>0) {
+        tipo="P";
+        for (let i in this.provinciasselobject) {
+          lista.push(this.provinciasselobject[i].id);
+        }
+      } else if (this.departamentosselect && this.departamentosselect.length>0) {
+        tipo="D";
+        lista = this.departamentosselect;
+      }
+
+      if (this.grafica==="E") {
+        this.fetchEstadisticas({acumulado: true, tipo: tipo, lista: lista});
+      } else if (this.grafica==="S") {
+        this.fetchEstadisticas({acumulado: false, tipo: tipo, lista: lista});
+      } else if (this.grafica==="M" || this.grafica==="C") {
+        this.fetchCasosMapa({tipo: tipo, lista: lista});
+      }
+
+      //Actualizamos el resumen filtrado
+      this.fetchResumenFiltro({tipo: tipo, lista: lista});
     },
 
     asignaEstadisticasLine() {
@@ -361,33 +391,33 @@ export default {
         },
         toolbox: { show: true,
           feature: {
-            dataView: {show: true, readOnly: false},
-            magicType: {show: true, type: ['line', 'bar']},
-            saveAsImage: {show: true}
+            dataView: {title: 'Ver datos', show: true, readOnly: false, lang:['Datos', 'Volver', 'Actualizar']},
+            magicType: {title: 'Tipo gráfica', show: true, type: ['line', 'bar']},
+            saveAsImage: {title: 'Guardar como imagen', show: true},
           }
         },
         calculable: true,
         xAxis: [ { type: 'category', data: fechas } ],
         yAxis: [ { type: 'value' } ],
         series: [
-          { name: 'Sospechosos', type: 'bar', data: this.estadisticas.sospechosos,
-            markPoint: { data: [ {type: 'max', name: 'Max'}, {type: 'min', name: 'Min'} ] }
+          { name: 'Sospechosos', type: 'bar', color:'#E89612', smooth: 0.3, data: this.estadisticas.sospechosos,
+            markPoint: { data: [ {type: 'max', name: 'Max'} ] }
           },
-          { name: 'Confirmados', type: 'bar', data: this.estadisticas.confirmados,
-            markPoint: { data: [ {name: 'Max', value: 182.2, xAxis: 7, yAxis: 183}, {name: 'Min', value: 2.3, xAxis: 11, yAxis: 3} ] }
+          { name: 'Confirmados', type: 'bar', color:'#0085AA', smooth: 0.3, data: this.estadisticas.confirmados,
+            markPoint: { data: [ {type: 'max', name: 'Max'} ] }
           },
-          { name: 'Activos', type: 'bar', data: this.estadisticas.activos,
-            markPoint: { data: [ {type: 'max', name: 'Max'}, {type: 'min', name: 'Min'} ] }
+          { name: 'Activos', type: 'bar', color:'#A8AA23', smooth: 0.3, data: this.estadisticas.activos,
+            markPoint: { data: [ {type: 'max', name: 'Max'} ] }
           },
-          { name: 'Recuperados', type: 'bar', data: this.estadisticas.recuperados,
-            markPoint: { data: [ {type: 'max', name: 'Max'}, {type: 'min', name: 'Min'} ] }
+          { name: 'Recuperados', type: 'bar', color:'#4DB717', smooth: 0.3, data: this.estadisticas.recuperados,
+            markPoint: { data: [ {type: 'max', name: 'Max'} ] }
           },
-          { name: 'Decesos', type: 'bar', data: this.estadisticas.decesos,
-            markPoint: { data: [ {type: 'max', name: 'Max'}, {type: 'min', name: 'Min'} ] }
+          { name: 'Decesos', type: 'bar', color:'#DD0000', smooth: 0.3, data: this.estadisticas.decesos,
+            markPoint: { data: [ {type: 'max', name: 'Max'} ] }
           },
         ]
       };
-
+      this.spinner = false;
     },
 
     asignaEstadisticas() {
@@ -397,19 +427,19 @@ export default {
         title: { text: 'Evolución diaria' },
         tooltip: { trigger: 'axis', axisPointer: { type: 'cross', label: { backgroundColor: '#6a7985'} } },
         legend: { data: ['Sospechosos', 'Confirmados', 'Activos', 'Recuperados', 'Decesos'] },
-        toolbox: { feature: { saveAsImage: {} } },
+        toolbox: { feature: { saveAsImage: {title: 'Guardar como imagen', show: true} } },
         grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
         xAxis: [ { type: 'category', boundaryGap: false, data: fechas } ],
         yAxis: [ { type: 'value' } ],
         series: [
-            { name: 'Sospechosos', type: 'line', stack: 'Total', areaStyle: {}, data: this.estadisticas.sospechosos },
-            { name: 'Confirmados', type: 'line', stack: 'Total', areaStyle: {}, data: this.estadisticas.confirmados },
-            { name: 'Activos', type: 'line', stack: 'Total', areaStyle: {}, data: this.estadisticas.activos },
-            { name: 'Recuperados', type: 'line', stack: 'Total', areaStyle: {}, data: this.estadisticas.recuperados },
-            { name: 'Decesos', type: 'line', stack: 'Total', label: { normal: { show: true, position: 'top' } }, areaStyle: {}, data: this.estadisticas.decesos }
+            { name: 'Sospechosos', type: 'line', color:'#E89612', smooth: 0.3, stack: 'Total', areaStyle: {}, data: this.estadisticas.sospechosos },
+            { name: 'Confirmados', type: 'line', color:'#0085AA', smooth: 0.3, stack: 'Total', areaStyle: {}, data: this.estadisticas.confirmados },
+            { name: 'Activos', type: 'line', color:'#A8AA23', smooth: 0.3, stack: 'Total', areaStyle: {}, data: this.estadisticas.activos },
+            { name: 'Recuperados', type: 'line', color:'#4DB717', smooth: 0.3, stack: 'Total', areaStyle: {}, data: this.estadisticas.recuperados },
+            { name: 'Decesos', type: 'line', color:'#DD0000', smooth: 0.3, stack: 'Total', label: { normal: { show: true, position: 'top' } }, areaStyle: {}, data: this.estadisticas.decesos }
         ]
       };
-
+      this.spinner = false;
     },
     getFechasEstadistica() {
       let hoy = new Date();
@@ -426,6 +456,7 @@ export default {
     cambiaPuntosMapa() {
       var self =this;
       let mapa = null;
+
       if (this.grafica==="M"){
         mapa = this.$refs.mapa;
       } else if (this.grafica==="C") {
@@ -435,19 +466,45 @@ export default {
       if (mapa) {
         mapa.$mapPromise.then(() => {
           self.markers = [];
+          let icon = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           for (let i in self.casosmapa) {
+            if (self.casosmapa[i].tipo === "S") {
+              icon = "http://maps.google.com/mapfiles/ms/icons/orange-dot.png";
+            } else if (self.casosmapa[i].tipo === "C") {
+              icon = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
+            } else if (self.casosmapa[i].tipo === "A") {
+              icon = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+            } else if (self.casosmapa[i].tipo === "R") {
+              icon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+            } else { //"D"
+            }
             self.markers.push(
-                {location: new google.maps.LatLng(self.casosmapa[i].lat, self.casosmapa[i].lng), weight: 3}
+                {location: new google.maps.LatLng(self.casosmapa[i].lat, self.casosmapa[i].lng), weight: 3, icon:icon}
               );
           }
         });
       }
-
+      this.spinner = false;
     },
     centrar(lat, lng) {
       this.center={lat: lat, lng: lng};
       this.zoom = 7;
     },
+
+    filtraestados(id, e) {
+      let op = this.resumenfiltro.find(i=>i.id===id);
+      if (op) {
+        op.select = e;
+      }
+      this.cambiaGrafica();
+    },
+
+    reload() {
+      var location = this.$route.fullPath
+      this.$router.replace('/')
+      this.$nextTick(() => this.$router.replace(location))
+    },
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
     ...mapActions({
       fetchDepartamentos: 'fetchDepartamentos',
       fetchProvincias: 'fetchProvincias',
@@ -455,6 +512,7 @@ export default {
       reloadProvincias: 'reloadProvincias',
       reloadMunicipios: 'reloadMunicipios',
       fetchResumen: 'fetchResumen',
+      fetchResumenFiltro: 'fetchResumenFiltro',
       fetchEstadisticas: 'fetchEstadisticas',
       fetchCasosMapa: 'fetchCasosMapa'
     }),

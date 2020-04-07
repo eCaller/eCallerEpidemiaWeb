@@ -25,6 +25,7 @@ export default {
 
       autenticacion: {
         url: config.url + "/autenticacion/login",
+        urlLogout: config.url + "/autenticacion/logout"
       },
 
       triage: {
@@ -38,6 +39,7 @@ export default {
       },
 
       territorios: {
+        urlCentros: config.url + "/centros",
         urlDepartamentos: config.url + "/departamentos",
         urlProvincias: config.url + "/provincias",
         urlMunicipios: config.url + "/municipios",
@@ -46,6 +48,7 @@ export default {
 
       casos: {
         url: config.url + "/caso",
+        urlContadores: config.url + "/casos/contadores",
         urlResumen: config.url + "/casos/resumen",
         urlResumenFiltro: config.url + "/casos/resumenfiltro",
         urlEstadisticas: config.url + "/casos/estadisticas",

@@ -12,7 +12,7 @@ GNU General Public License for more details.
 @author jfpastor@ingenia.es
 -->
 <template lang="html">
-  <div id="page-wrapper" :class="[{'full-width-div': fullscreen}]">
+  <div id="page-wrapper" >
     <spinner ref="spinner" v-model="spinner" size="xl" text="Cargando"></spinner>
 
     <alert v-model="mensajeError" placement="top-right" type="danger" duration="3000" dismissable>
@@ -342,14 +342,12 @@ export default {
       //Comprobamos primero que los datos están correctos.
 
       // - exista al menos una pregunta con una respuesta
-
       if (!this.triage || this.triage.length<=0) {
         this.mensajeError = "Debe indicar al menos una pregunta y una respuesta";
         return;
       }
 
       // - todas las preguntas y respuestas rellenas
-
       for (let i in this.triage) {
           if (!this.triage[i].pregunta || this.isEmpty(this.triage[i].pregunta)) {
             this.mensajeError = "Todas las preguntas deben tener algún texto";
