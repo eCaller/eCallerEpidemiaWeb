@@ -3,7 +3,8 @@
     "name": "Epidemiological Module",
     "salir": "Logout",
     "user": "User",
-    "loading": "Loading"
+    "loading": "Loading",
+    "fecha-inicio": "Start date"
   },
   "menu": {
     "gestion-casos": "Case management",

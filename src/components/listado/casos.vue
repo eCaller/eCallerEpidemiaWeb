@@ -16,7 +16,7 @@ GNU General Public License for more details.
     <div class="col-lg-12">
       <alert v-model="mensajeError" placement="top-right" type="danger" duration="3000" dismissable>
         <span class="icon-info-circled alert-icon-float-left"></span>
-        <strong>¡Error!</strong>
+        <strong>{{$t('messages.error')}}</strong>
         <p>{{mensajeError}}</p>
       </alert>
 
@@ -31,32 +31,32 @@ GNU General Public License for more details.
         </template>
         <div class="row">
           <div class="col-md-12">
-            <spinner ref="spinner" v-model="spinner" size="xl" text="Cargando"></spinner>
+            <spinner ref="spinner" v-model="spinner" size="xl" :text="$t('messages.loading')"></spinner>
 
             <div class="row bottom-align ">
               <div class="col-md-2" v-if="filtrar && false">
                 <label class="control-label">Fecha inicio</label>
-                <datepicker name="fini" v-model="fechainicio" format="dd/MM/yyyy" ></datepicker>
+                <datepicker name="fini" v-model="fechainicio" :format="$t('formatos.fecha')" ></datepicker>
               </div>
               <div class="col-md-2" v-if="filtrar && false">
                 <label class="control-label">Fecha fin</label>
-                <datepicker name="ffin" v-model="fechafin" format="dd/MM/yyyy" ></datepicker>
+                <datepicker name="ffin" v-model="fechafin" :format="$t('formatos.fecha')" ></datepicker>
               </div>
 
               <div class="col-md-4">
                 <div class="form-group">
-                  <label class="control-label">Buscar</label>
-                  <bs-input v-model="filterText" placeholder="código, nombre o dirección" style="width: 100%;"></bs-input>
+                  <label class="control-label">{{$t('messages.buscar')}}</label>
+                  <bs-input v-model="filterText" :placeholder="$t('caso.busqueda-codigo-nombre-direccion')" style="width: 100%;"></bs-input>
                 </div>
               </div>
 
               <div class="col-md-1" style="display: grid;">
                 <label class="control-label">&nbsp;</label>
-                <button class="btn btn-primary" @click="doFilter">Buscar</button>
+                <button class="btn btn-primary" @click="doFilter">{{$t('messages.buscar')}}</button>
               </div>
               <div class="col-md-1" style="display: grid;">
                 <label class="control-label">&nbsp;</label>
-                <button class="btn btn-default" @click="resetFilter">Limpiar</button>
+                <button class="btn btn-default" @click="resetFilter">{{$t('messages.limpiar')}}</button>
               </div>
             </div>
 
@@ -71,7 +71,7 @@ GNU General Public License for more details.
               :append-params="moreParams"
               :row-class="rowClassCB"
               :http-fetch="myFetch"
-              no-data-template="Sin datos"
+              :no-data-template="$t('messages.sin-datos')"
               @vuetable:pagination-data="onPaginationData"
               @vuetable:loading="onLoading"
               @vuetable:loaded="onLoaded"
@@ -79,7 +79,7 @@ GNU General Public License for more details.
             ></vuetable>
             <div class="col-md-1">
               <vuetable-pagination-info ref="paginationInfo"
-                info-template="Total {total} filas"
+                :info-template="$t('messages.total-total-filas')"
                 no-data-template=""
               ></vuetable-pagination-info>
             </div>
@@ -94,7 +94,7 @@ GNU General Public License for more details.
 
         <div class="row">
           <div class="col-md-12">
-            <button class="btn btn-primary pull-right my-btn" @click="abrirCaso()">Abrir caso</button>
+            <button class="btn btn-primary pull-right my-btn" @click="abrirCaso()">{{$t('caso.abrir-caso')}}</button>
             <slot name='botones'></slot>
           </div>
         </div>
@@ -114,6 +114,7 @@ import tableConf from '../../store/table-configuration.js';
 import axiosCustom from '../../store/axios-custom.js';
 import moment from 'moment';
 import {mapMutations} from 'vuex';
+import { i18n } from '@/plugins/i18n';
 
 export default {
   components: {
@@ -174,18 +175,18 @@ export default {
 
       fields: [
         { name: 'id', title: 'id', visible: false },
-        { name: 'fecha', title: '<span class="orderList"><i class="far fa-calendar-alt"></i> Fecha</span>',
+        { name: 'fecha', title: () =>'<span class="orderList"><i class="far fa-calendar-alt"></i> ' + i18n.t('messages.fecha') +'</span>',
           titleClass: 'text-center', dataClass: 'text-center', sortField: 'fecha',
           callback: (value) => {
-            return this.formatDate(value, 'DD/MM/YYYY');
+            return this.formatDate(value, i18n.t('formatos.fecha'));
           }
         },
-        { name: 'codigo', title: '<span class="orderList"><i class="far fa-file"></i> Código</span>', sortField: 'codigo' },
-        { name: 'nombre', title: '<span class="orderList"><i class="glyphicon glyphicon-user"></i> Nombre</span>', sortField: 'nombre' },
-        { name: 'direccion', title: '<span class="orderList"><i class="fa fa-map-signs"></i> Dirección</span>' },
-        { name: 'telefono', title: '<span class="orderList"><i class="fa fa-phone-alt"></i> Teléfono</span>' },
-        { name: 'email', title: '<span class="orderList"><i class="far fa-envelope"></i> Email</span>' },
-        { name: 'estado', title: '<span class="orderList">Estado</span>', sortField: 'estado',
+        { name: 'codigo', title: () => '<span class="orderList"><i class="far fa-file"></i> '+ i18n.t('messages.codigo') + '</span>', sortField: 'codigo' },
+        { name: 'nombre', title:  () => '<span class="orderList"><i class="glyphicon glyphicon-user"></i> '+ i18n.t('caso.nombre') + '</span>', sortField: 'nombre' },
+        { name: 'direccion', title: () => '<span class="orderList"><i class="fa fa-map-signs"></i> '+ i18n.t('caso.direccion') + '</span>' },
+        { name: 'telefono', title: () => '<span class="orderList"><i class="fa fa-phone-alt"></i> '+ i18n.t('caso.telefono') + '</span>' },
+        { name: 'email', title: () => '<span class="orderList"><i class="far fa-envelope"></i> '+ i18n.t('caso.email') + '</span>' },
+        { name: 'estado', title: () => '<span class="orderList">'+ i18n.t('caso.estado') + '</span>', sortField: 'estado',
           callback: (value) => {
             return this.estadoLabel (value);
           },
@@ -251,7 +252,7 @@ export default {
       },
       abrirCaso() {
         if (!this.selected) {
-          this.mensajeError = "Debe seleccionar una fila";
+          this.mensajeError = i18n.t('messages.seleccionar-una-fila');
         } else {
           this.setCaso({caso:null});
           this.$router.replace({name: "caso", params: {id: this.selected.id}});
@@ -264,22 +265,22 @@ export default {
       let ret ='<span></span>';
       switch (value) {
         case "PC":
-          ret = "<span class='label label-danger'>Pendiente contacto</span>";
+          ret = "<span class='label label-danger'>" + i18n.t('caso.estado-pendiente-contacto') + "</span>";
           break;
         case "CO":
-          ret = "<span class='label label-info'>Contactado</span>";
+          ret = "<span class='label label-info'>" + i18n.t('caso.estado-contactado') + "</span>";
           break;
         case "PT":
-          ret = "<span class='label label-warning'>Pendiente prueba</span>";
+          ret = "<span class='label label-warning'>" + i18n.t('caso.estado-pendiente-prueba') + "</span>";
           break;
         case "PR":
-          ret = "<span class='label label-default'>Pendiente resultado</span>";
+          ret = "<span class='label label-default'>" + i18n.t('caso.estado-pendiente-resultado') + "</span>";
           break;
         case "PE":
-          ret = "<span class='label label-primary'>Pendiente evolución</span>";
+          ret = "<span class='label label-primary'>" + i18n.t('caso.estado-pendiente-evolucion') + "</span>";
           break;
         case "FI":
-          ret = "<span class='label label-success'>Finalizado</span>";
+          ret = "<span class='label label-success'>" + i18n.t('caso.estado-finalizado') + "</span>";
           break;
         default:
           ret =  "<span></span>";

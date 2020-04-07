@@ -29,21 +29,21 @@ GNU General Public License for more details.
     <div id="page-wrapper" :class="[{'full-width-div': fullscreen}]" v-if="caso!==null">
       <alert v-model="mensajeError" placement="top-right" type="danger" duration="3000" dismissable>
         <span class="icon-info-circled alert-icon-float-left"></span>
-        <strong>¡Error!</strong>
+        <strong>{{$t('messages.error')}}!</strong>
         <p>{{mensajeError}}</p>
       </alert>
       <alert v-model="mensajeInfo" placement="top-right" type="success" duration="3000" dismissable>
         <span class="icon-info-circled alert-icon-float-left"></span>
-        <strong>Información</strong>
+        <strong>{{$t('messages.informacion')}}</strong>
         <p>{{mensajeInfo}}</p>
       </alert>
 
-      <spinner ref="spinner" v-model="spinner" size="xl" text="Cargando"></spinner>
+      <spinner ref="spinner" v-model="spinner" size="xl" :text="$t('messages.loading')"></spinner>
 
       <div class="row">
         <div class="col-md-12">
         	<h3>
-        	   <i class="far fa-file fa-fw"></i> <label> Caso </label><span> {{caso.codigo}} </span><i class="far fa-clock fa-fw"></i><span> {{hora}} </span>
+        	   <i class="far fa-file fa-fw"></i> <label> {{ $t('caso.caso') }} </label><span> {{caso.codigo}} </span><i class="far fa-clock fa-fw"></i><span> {{hora}} </span>
              <span><resultadofisico :codigo="caso.resultadotest"></resultadofisico></span>
              <span class="pull-right"><estado :codigo="caso.estado"></estado></span>
     			</h3>
@@ -54,7 +54,7 @@ GNU General Public License for more details.
         <tab header="<i class='far fa-file fa-fw'></i> Datos caso">
           <panel type="info">
             <template slot="header">
-              <i class="far fa-file fa-fw"></i> <label> Caso </label><span> {{caso.codigo}} </span>
+              <i class="far fa-file fa-fw"></i> <label> {{$t('caso.caso')}} </label><span> {{caso.codigo}} </span>
               <i class="far fa-clock fa-fw"></i><span> {{hora}} </span>
               <div class="pull-right">
                 <button type="button" class="btn btn-default btn-xs" @click="reload()">
@@ -68,10 +68,10 @@ GNU General Public License for more details.
 
                 <div class="row">
                   <div class="col-md-12">
-                    <bs-input label="Nombre" placeholder="Nombre" v-model="caso.nombre" :disabled="isDisabled"></bs-input>
+                    <bs-input :label="$t('caso.nombre')" :placeholder="$t('caso.nombre')" v-model="caso.nombre" :disabled="isDisabled"></bs-input>
                   </div>
                   <div class="col-md-8">
-                    <label for="mapadir" class="control-label">Dirección</label>
+                    <label for="mapadir" class="control-label">{{$t('caso.direccion')}}</label>
                     <div class="input-group">
                       <gmap-autocomplete
                         ref="direccion"
@@ -89,34 +89,34 @@ GNU General Public License for more details.
                   </div>
 
                   <div class="col-md-4">
-                    <label class="control-label">Municipio</label>
+                    <label class="control-label">{{$t('caso.municipio')}}</label>
                     <button-group justified>
                       <v-select v-model="idmunicipio" :options="municipios" options-label="nombre" options-value="id" :disabled="isDisabled"
                         show-count
-                        placeholder="<Seleccione>"
+                        :placeholder="$t('messages.combo-seleccione')"
                         search justified
                         clear-button
                       ></v-select></button-group>
                   </div>
 
                   <div class="col-md-3">
-                    <bs-input label="Teléfono" placeholder="Teléfono" v-model="caso.telefono" :disabled="isDisabled"></bs-input>
+                    <bs-input :label="$t('caso.telefono')" :placeholder="$t('caso.telefono')" v-model="caso.telefono" :disabled="isDisabled"></bs-input>
                   </div>
 
                   <div class="col-md-3">
-                    <bs-input label="Email" placeholder="Email" v-model="caso.email" :disabled="isDisabled"></bs-input>
+                    <bs-input :label="$t('caso.email')" :placeholder="$t('caso.email')" v-model="caso.email" :disabled="isDisabled"></bs-input>
                   </div>
 
                   <div class="col-md-1">
-                    <bs-input label="Edad" placeholder="Edad" v-model="caso.edad" :disabled="isDisabled"></bs-input>
+                    <bs-input :label="$t('caso.edad')" :placeholder="$t('caso.edad')" v-model="caso.edad" :disabled="isDisabled"></bs-input>
                   </div>
 
                   <div class="col-md-2">
-                    <bs-input label="DNI" placeholder="DNI" v-model="caso.dni" :disabled="isDisabled"></bs-input>
+                    <bs-input :label="$t('caso.dni')" :placeholder="$t('caso.dni')" v-model="caso.dni" :disabled="isDisabled"></bs-input>
                   </div>
 
                   <div class="col-md-12 cell-textArea-display">
-                    <bs-input id="observaciones" label="Observaciones" type="textarea" :rows="3" placeholder="Observaciones"
+                    <bs-input id="observaciones" :label="$t('caso.observaciones')" type="textarea" :rows="3" :placeholder="$t('caso.observaciones')"
                         v-model.lazy.trim="caso.observaciones"
                         :disabled="caso.estado==='FI'"></bs-input>
                   </div>
@@ -125,27 +125,27 @@ GNU General Public License for more details.
                     <div class="row">
 
                       <div class="col-md-3">
-                        <label for="resultado" class="control-label">Resultado prueba física</label>
+                        <label for="resultado" class="control-label">{{$t('caso.resultado-prueba-fisica')}}</label>
                         <div class="btn-group btn-group-justified">
                           <v-select id="resultado" close-on-select placeholder=" "
                               v-model="caso.resultadotest" clear-button
                               :disabled="caso.estado==='FI'">
                               <v-option :value="null"></v-option>
-                              <v-option value="P">Positivo</v-option>
-                              <v-option value="N">Negativo</v-option>
+                              <v-option value="P">{{$t('caso.resultado-positivo')}}</v-option>
+                              <v-option value="N">{{$t('caso.resultado-negativo')}}</v-option>
                           </v-select>
                         </div>
                       </div>
 
                       <div class="col-md-3">
-                        <label for="resultado" class="control-label">Resultado final</label>
+                        <label for="resultado" class="control-label">{{$t('caso.resultado-final')}}</label>
                         <div class="btn-group btn-group-justified">
                           <v-select id="resultado" close-on-select placeholder=" "
                               v-model="caso.resultado" clear-button
                               :disabled="caso.estado==='FI'">
                               <v-option :value="null"></v-option>
-                              <v-option value="R">Recuperado</v-option>
-                              <v-option value="D">Deceso</v-option>
+                              <v-option value="R">{{$t('caso.resultado-recuperado')}}</v-option>
+                              <v-option value="D">{{$t('caso.resultado-deceso')}}</v-option>
                           </v-select>
                         </div>
                       </div>
@@ -154,7 +154,7 @@ GNU General Public License for more details.
 
                       <div class="col-md-4">
                         <table class="table table-bordered">
-                          <thead><tr><th>Fecha</th><th>Estado</th></tr></thead>
+                          <thead><tr><th>{{$t('messages.fecha')}}</th><th>{{$t('caso.estado')}}</th></tr></thead>
                           <tbody>
                             <tr v-for="es in caso.casosxestados" :key="es.id">
                               <td>{{getFechaFormated(es.fecha)}}</td><td><estado :codigo="es.estado"></estado></td>
@@ -201,7 +201,7 @@ GNU General Public License for more details.
         <tab header="<i class='fa fa-mobile-alt fa-fw'></i> Respuestas triage" v-if="triagecaso">
           <panel type="danger">
             <template slot="header">
-              <i class="fa fa-mobile-alt fa-fw"></i> <label> Respuestas triage</label>
+              <i class="fa fa-mobile-alt fa-fw"></i> <label> {{$t('caso.respuestas-triage')}}</label>
             </template>
 
             <div class="row">
@@ -219,12 +219,12 @@ GNU General Public License for more details.
         <tab header="<i class='far fa-calendar fa-fw'></i> Cita">
           <panel type="warning">
             <template slot="header">
-              <i class="far fa-calendar fa-fw"></i> <label> Cita </label>
+              <i class="far fa-calendar fa-fw"></i> <label> {{$t('caso.cita')}} </label>
             </template>
 
             <div class="row" v-if="caso.citas && caso.citas.length>0">
               <div class="col-md-2">
-                <label class="control-label">Fecha</label>
+                <label class="control-label">{{ $t('messages.fecha') }}</label>
                 <div class="btn-group btn-group-justified">
                   <datetimepicker name="dtpicker"
                     ref="fechacita"
@@ -232,7 +232,7 @@ GNU General Public License for more details.
                 </div>
               </div>
               <div class="col-md-2">
-                <label class="control-label">Hora</label>
+                <label class="control-label">{{$t('messages.hora')}}</label>
                 <div class="btn-group btn-group-justified">
                   <timepicker
                     ref="horacita" :disabled="isDisabledCita" @change="horaCita"></timepicker>
@@ -242,19 +242,19 @@ GNU General Public License for more details.
               <div class="col-md-2">
                 <label for="tipo" class="control-label">Tipo</label>
                 <div class="btn-group btn-group-justified">
-                  <v-select id="tipo" close-on-select placeholder="<seleccione>" :disabled="isDisabledCita"
+                  <v-select id="tipo" close-on-select :placeholder="$t('messages.combo-seleccione')" :disabled="isDisabledCita"
                       v-model="caso.citas[0].tipo" @change="chageTipoCita">
                       <v-option :value="null"></v-option>
-                      <v-option value="D">Domicilio</v-option>
-                      <v-option value="C">Centro</v-option>
+                      <v-option value="D">{{$t('caso.domicilio')}}</v-option>
+                      <v-option value="C">{{$t('caso.centro')}}</v-option>
                   </v-select>
                 </div>
               </div>
 
               <div class="col-md-6" v-if="caso.citas[0].tipo==='C' && caso.citas[0].centro !== null">
-                <label class="control-label">Centro</label>
+                <label class="control-label">{{$t('caso.centro')}}</label>
                 <div class="btn-group btn-group-justified">
-                  <v-select close-on-select placeholder="<seleccione>" :disabled="isDisabledCita"
+                  <v-select close-on-select :placeholder="$t('messages.combo-seleccione')" :disabled="isDisabledCita"
                       v-model="caso.citas[0].centro.id" :options="centros" options-label="nombre" options-value="id"
                       search justified
                       clear-button>
@@ -263,7 +263,7 @@ GNU General Public License for more details.
               </div>
 
               <div class="col-md-12 cell-textArea-display">
-                <bs-input id="comentario" label="Comentarios" type="textarea" :rows="3" placeholder="Comentarios" :disabled="isDisabledCita"
+                <bs-input id="comentario" :label="$t('caso.comentarios')" type="textarea" :rows="3" :placeholder="$t('caso.comentarios')" :disabled="isDisabledCita"
                     v-model.lazy.trim="caso.citas[0].comentarios"></bs-input>
               </div>
 
@@ -274,10 +274,10 @@ GNU General Public License for more details.
       </tabs>
 
       <div class="col-md-12">
-        <button class="btn btn-primary pull-right my-btn" @click="guardarDatos()" v-if="caso.estado!=='FI'">Guardar caso</button>
-        <button class="btn btn-info pull-right my-btn" @click="setcontactado()" v-if="caso.estado==='PC'">Paciente Contactado</button>
-        <button class="btn btn-info pull-right my-btn" @click="gestionarcita()" v-if="(caso.estado==='PC' || caso.estado==='CO') && activeTab!==2">Gestionar cita</button>
-        <button class="btn btn-default pull-right my-btn" @click="volver()">Volver</button>
+        <button class="btn btn-primary pull-right my-btn" @click="guardarDatos()" v-if="caso.estado!=='FI'">{{$t('caso.guardar-caso')}}</button>
+        <button class="btn btn-info pull-right my-btn" @click="setcontactado()" v-if="caso.estado==='PC'">{{$t('caso.estado-paciente-contactado')}}</button>
+        <button class="btn btn-info pull-right my-btn" @click="gestionarcita()" v-if="(caso.estado==='PC' || caso.estado==='CO') && activeTab!==2">{{$t('caso.gestionar-cita')}}</button>
+        <button class="btn btn-default pull-right my-btn" @click="volver()">{{$t('messages.volver')}}</button>
       </div>
       <div class="col-md-12"><br></div>
 
@@ -295,6 +295,7 @@ import moment from 'moment';
 import datetimepicker from '../utils/datetimepicker.vue';
 import timepicker from '../utils/timepicker.vue';
 import * as VueGoogleMaps from 'vue2-google-maps';
+import { i18n } from '@/plugins/i18n';
 
 export default {
   components: {
@@ -337,7 +338,7 @@ export default {
     hora() {
       if (this.caso && this.caso.fecha) {
         var date = moment(this.caso.fecha);
-        return date.format("DD/MM/YYYY HH:mm");
+        return date.format(i18n.t('formatos.fecha-hora'));
       } else {
         return "";
       }
@@ -389,21 +390,21 @@ export default {
 
                 if (this.caso.citas && this.caso.citas.length>0) {
                   if (this.$refs.fechacita && this.caso.citas[0].fecha) {
-                    this.$refs.fechacita.$refs.fecha.value = moment(this.caso.citas[0].fecha).format("DD/MM/YYYY");
+                    this.$refs.fechacita.$refs.fecha.value = moment(this.caso.citas[0].fecha).format(i18n.t('formatos.fecha'));
                   }
 
                   if (this.$refs.horacita && this.caso.citas[0].hora) {
-                    this.$refs.horacita.$refs.hora.value = moment(this.caso.citas[0].hora, "LTS").format("HH:mm"); //this.caso.citas[0].hora.substring(0, 5);
+                    this.$refs.horacita.$refs.hora.value = moment(this.caso.citas[0].hora, "LTS").format(i18n.t('formatos.hora')); //this.caso.citas[0].hora.substring(0, 5);
                   }
 
                   this.chageTipoCita(this.caso.citas[0].tipo);
                 }
 
               } else {
-                this.mensajeError = "No se ha podido recuperar el caso. Inténtelo más tarde.";
+                this.mensajeError = i18n.t('caso.error-carga-caso');
               }
             }, (error)=> {
-              this.mensajeError = "Se ha producido un error al recuperar el caso.";
+              this.mensajeError = i18n.t('caso.error-recuperar-caso');
               console.error(error);
             });
           } else {
@@ -412,11 +413,11 @@ export default {
           }
         } else {
           console.error("Respuesta status: " + respuesta.status);
-          this.mensajeError = "Se ha producido un error al recuperar el caso.";
+          this.mensajeError = i18n.t('caso.error-recuperar-caso');
         }
       }).catch((error) => {
         console.error(error);
-        this.mensajeError = "Se ha producido un error al recuperar el caso.";
+        this.mensajeError = i18n.t('caso.error-recuperar-caso');
       });
 
   },
@@ -437,26 +438,26 @@ export default {
 
     guardarDatos() {
       if (!this.caso.nombre || this.isEmpty(this.caso.nombre)) {
-        this.mensajeError = "Debe indicar el nombre.";
+        this.mensajeError = i18n.t('caso.error-indicar-nombre');
         return;
       } else if (!this.caso.direccion || this.isEmpty(this.caso.direccion)) {
-        this.mensajeError = "Debe indicar la dirección.";
+        this.mensajeError = i18n.t('caso.error-indicar-direccion');
         return;
       } else if (!this.caso.dni || this.isEmpty(this.caso.dni)) {
-        this.mensajeError = "Debe indicar el DNI.";
+        this.mensajeError = i18n.t('caso.error-indicar-dni');
         return;
       } else if (!this.caso.telefono || this.isEmpty(this.caso.telefono)) {
-        this.mensajeError = "Debe indicar el teléfono.";
+        this.mensajeError = i18n.t('caso.error-indicar-telefono');
         return;
       } else {
         if (this.caso.citas && this.caso.citas.length>0) {
           //Datos de la cita. Si hay datos de la fecha, se deben rellenar el resto de datos obligatorios
           if (this.caso.citas[0].fecha) {
             if (!this.caso.citas[0].hora) {
-              this.mensajeError = "Debe indicar la hora de la cita.";
+              this.mensajeError = i18n.t('caso.error-indicar-hora-cita');
               return;
             } else if (!this.caso.citas[0].tipo) {
-              this.mensajeError = "Debe indicar el tipo de la cita.";
+              this.mensajeError = i18n.t('caso.error-tipo-cita');
               return;
             } else if (moment(this.caso.citas[0].hora, "LTS").isValid()) {
               //Formateo de fecha de la cita (si el fotmato es LTS hay que tranformarlo en date)
@@ -474,7 +475,7 @@ export default {
                 if (respuesta.data.success) {
                   console.log("** caso guardado")
                   this.spinner = false;
-                  this.mensajeInfo = "Datos guardados correctamente.";
+                  this.mensajeInfo = i18n.t('caso.guardar-correcto');
 
                   //recargamos la página de nuevo
                   this.reload();
@@ -482,13 +483,13 @@ export default {
                   this.addMensajeError(respuesta.data.message, respuesta.data.message);
                 }
               } else {
-                this.addMensajeError("Se ha producido un error al guardar el caso.", "Respuesta status: " + respuesta.status);
+                this.addMensajeError(i18n.t('caso.error-guardar-caso'), i18n.t('caso.respuesta-status',[respuesta.status]));
               }
             }).catch((e) => {
-              this.addMensajeError("Se ha producido un error al guardar el caso.", e);
+              this.addMensajeError(i18n.t('caso.error-guardar-caso'), e);
             });
           } catch (e) {
-            this.addMensajeError("Se ha producido un error al guardar el caso.", e);
+            this.addMensajeError(i18n.t('caso.error-guardar-caso'), e);
           }
       }
     },
@@ -580,7 +581,7 @@ export default {
     getFechaFormated(fecha) {
       if (fecha) {
         var date = moment(new Date(fecha));
-        return date.format("DD/MM/YYYY HH:mm");
+        return date.format(i18n.t("formatos.fecha-hora"));
       } else {
         return "";
       }
