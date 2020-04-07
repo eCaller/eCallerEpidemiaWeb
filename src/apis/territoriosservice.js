@@ -10,13 +10,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 */
 import axios from "axios";
+import axiosCustom from "../store/axios-custom";
 import qs from "qs";
 import conf from '../store/configuracion.js';
 
 export default {
     getCentros() {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.territorios.urlCentros)
+        axiosCustom.axiosJwtToken().get(conf.state.territorios.urlCentros)
               .then((respuesta) => {
                   resolve(respuesta);
               })
@@ -28,7 +29,7 @@ export default {
 
     getDepartamentos() {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.territorios.urlDepartamentos)
+        axiosCustom.axiosJwtToken().get(conf.state.territorios.urlDepartamentos)
               .then((respuesta) => {
                   resolve(respuesta);
               })
@@ -40,7 +41,7 @@ export default {
 
     getProvincias(departamentos) {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.territorios.urlProvincias, {
+        axiosCustom.axiosJwtToken().get(conf.state.territorios.urlProvincias, {
             params: {
               departamentos: departamentos
             },
@@ -59,7 +60,7 @@ export default {
 
     getMunicipios(provincias) {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.territorios.urlMunicipios, {
+        axiosCustom.axiosJwtToken().get(conf.state.territorios.urlMunicipios, {
             params: {
               provincias: provincias
             },
@@ -78,7 +79,7 @@ export default {
 
     getDistritos(municipios) {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.territorios.urlDistritos, {
+        axiosCustom.axiosJwtToken().get(conf.state.territorios.urlDistritos, {
             params: {
               municipios: municipios
             },

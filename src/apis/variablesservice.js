@@ -10,12 +10,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 */
 import axios from "axios";
+import axiosCustom from "../store/axios-custom";
 import conf from '../store/configuracion.js';
 
 export default {
     getVariables() {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.variables.url)
+        axiosCustom.axiosJwtToken().get(conf.state.variables.url)
               .then((respuesta) => {
                   resolve(respuesta);
               })
@@ -27,7 +28,7 @@ export default {
 
     saveVariables(variables) {
       return new Promise((resolve, reject) => {
-        axios.put(conf.state.variables.url, variables, {
+        axiosCustom.axiosJwtToken().put(conf.state.variables.url, variables, {
               headers: {
               "Content-Type": 'application/json'
             }

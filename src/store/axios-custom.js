@@ -14,10 +14,10 @@ GNU General Public License for more details.
 import axios from 'axios';
 
 export default {
-	axiosParaVueTable(access_token) {
+	axiosJwtToken() {
 		return axios.create({
 			headers: {
-				'Authorization': axios.defaults.headers.common['Authorization'],
+				'Authorization': localStorage.getItem('token')
 			},
 		});
 	}

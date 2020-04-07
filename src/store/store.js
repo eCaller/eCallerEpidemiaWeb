@@ -15,6 +15,7 @@ GNU General Public License for more details.
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
+import axiosCustom from './axios-custom';
 import {mapGetters} from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 import base64 from './base64.js';
@@ -84,9 +85,9 @@ export const store = new Vuex.Store({
       state.usuario.imagen = usuario.imagen;
       state.usuario.rol = usuario.rol;
     },
-    [GUARDAR_TOKEN](state, token) {
-      state.usuario.access_token = token.access_token;
-      state.usuario.refresh_token = token.refresh_token;
+    [GUARDAR_TOKEN](state, datos) {
+      localStorage.setItem("token", datos.token);
+      state.usuario.token = datos.token;
     },
 
   },
@@ -97,9 +98,6 @@ export const store = new Vuex.Store({
 
   },
   actions: {
-    guardarToken({state, commit}, token) {
-      commit(GUARDAR_TOKEN, token);
-    },
     login({state, commit}, datos) {
       return new Promise((resolve, reject) => {
         let instance = {
@@ -118,7 +116,7 @@ export const store = new Vuex.Store({
             if (respuesta.status === 200) {
               commit(ASIGNAR, respuesta.data);
               commit(LOGIN_SUCCESS);
-              axios.defaults.headers.common['Authorization'] = 'JWT ' + respuesta.data.token
+              commit(GUARDAR_TOKEN, {token: 'JWT ' + respuesta.data.token})
               resolve(respuesta);
             }
           }).catch((error) => {
@@ -129,7 +127,7 @@ export const store = new Vuex.Store({
     logout({state, commit}) {      
       localStorage.clear();
       commit(LOGOUT);
-      axios.get(state.configuracion.autenticacion.urlLogout);
+      axiosCustom.axiosJwtToken().get(state.configuracion.autenticacion.urlLogout);
     }
   },
 

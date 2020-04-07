@@ -10,12 +10,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 */
 import axios from "axios";
+import axiosCustom from "../store/axios-custom";
 import conf from '../store/configuracion.js';
 
 export default {
     getTriage() {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.triage.url)
+        axiosCustom.axiosJwtToken().get(conf.state.triage.url)
               .then((respuesta) => {
                   resolve(respuesta);
               })
@@ -27,7 +28,7 @@ export default {
 
     getCombinaciones() {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.triage.urlCasospositivos)
+        axiosCustom.axiosJwtToken().get(conf.state.triage.urlCasospositivos)
               .then((respuesta) => {
                   resolve(respuesta);
               })
@@ -39,7 +40,7 @@ export default {
 
     saveTriage(triage) {
       return new Promise((resolve, reject) => {
-        axios.post(conf.state.triage.url, triage, {
+        axiosCustom.axiosJwtToken().post(conf.state.triage.url, triage, {
               headers: {
               "Content-Type": 'application/json'
             }

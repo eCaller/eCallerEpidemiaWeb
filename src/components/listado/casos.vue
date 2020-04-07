@@ -202,7 +202,7 @@ export default {
   },
   methods: {
       myFetch(apiUrl, httpOptions){
-        return axiosCustom.axiosParaVueTable(this.$store.state.usuario.access_token).get(apiUrl, httpOptions);
+        return axiosCustom.axiosJwtToken(this.$store.state.usuario.token).get(apiUrl, httpOptions);
       },
       onPaginationData (paginationData) {
         this.$refs.pagination.setPaginationData(paginationData);

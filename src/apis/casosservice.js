@@ -10,13 +10,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 */
 import axios from "axios";
+import axiosCustom from '../store/axios-custom'
 import qs from "qs";
 import conf from '../store/configuracion.js';
 
 export default {
     getCaso(id) {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.casos.url + "/" + id)
+        axiosCustom.axiosJwtToken().get(conf.state.casos.url + "/" + id)
               .then((respuesta) => {
                   resolve(respuesta);
               })
@@ -28,7 +29,7 @@ export default {
 
     getTriagecaso(id) {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.triage.urlcaso + "/" + id)
+        axiosCustom.axiosJwtToken().get(conf.state.triage.urlcaso + "/" + id)
               .then((respuesta) => {
                   resolve(respuesta);
               })
@@ -40,7 +41,7 @@ export default {
 
     saveCaso(caso) {
       return new Promise((resolve, reject) => {
-        axios.put(conf.state.casos.url, caso, {
+        axiosCustom.axiosJwtToken().put(conf.state.casos.url, caso, {
               headers: {
               "Content-Type": 'application/json'
             }
@@ -56,7 +57,7 @@ export default {
 
     getContadoresCaso() {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.casos.urlContadores)
+        axiosCustom.axiosJwtToken().get(conf.state.casos.urlContadores)
               .then((respuesta) => {
                   resolve(respuesta);
               })
@@ -70,7 +71,7 @@ export default {
 
     getResumen(estados, tipo, lista) {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.casos.urlResumen, {
+        axiosCustom.axiosJwtToken().get(conf.state.casos.urlResumen, {
             params: {
               estados: estados,
               tipo: tipo,
@@ -91,7 +92,7 @@ export default {
 
     getEstadisticas(acumulado, estados, tipo, lista) {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.casos.urlEstadisticas, {
+        axiosCustom.axiosJwtToken().get(conf.state.casos.urlEstadisticas, {
             params: {
               acumulado: acumulado,
               estados: estados,
@@ -114,7 +115,7 @@ export default {
 
     getCasosMapa(estados, tipo, lista) {
       return new Promise((resolve, reject) => {
-        axios.get(conf.state.casos.urlMapa, {
+        axiosCustom.axiosJwtToken().get(conf.state.casos.urlMapa, {
             params: {
               estados: estados,
               tipo: tipo,
