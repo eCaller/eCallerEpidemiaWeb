@@ -42,33 +42,20 @@ export default {
     }
   },
   actions: {
-    fetchUser ({commit}) {
-      usuarioservice.updateUser()
-        .then((respuesta) => {
-          commit('setUpdateUser', {variables: respuesta.data})
-        })
-        .catch((error) => {
-          commit('setUpdateUser', {variables: error.data})
-        });
-    },
-    updateUser (state,user) {
+    updateUser ({state},user) {
       let usuario = {
-        id: state.getters.usuario.id,
-        username: state.getters.usuario.username,
-        nombre: state.getters.usuario.nombre,
-        imagen: state.getters.usuario.imagen,
-        rol: state.getters.usuario.rol,
-        access_token: state.getters.usuario.access_token,
-        refresh_token: state.getters.usuario.refresh_token,
+        id: state.usuario.id,
+        username: state.usuario.username,
+        nombre: state.usuario.nombre,
+        imagen: state.usuario.imagen,
+        rol: state.usuario.rol,
+        access_token: state.usuario.access_token,
+        refresh_token: state.usuario.refresh_token,
         password: user.password
       }
       return usuarioservice.updateUser({variables: usuario});
     }
   },
   mutations: {
-    setUpdateUser(state, response) {
-      //state.username = response.variables;
-    },
-
   }
 };
