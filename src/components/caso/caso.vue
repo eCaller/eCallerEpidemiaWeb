@@ -14,7 +14,7 @@ GNU General Public License for more details.
 <template lang="html">
   <div>
 
-    <div id="page-wrapper" :class="[{'full-width-div': fullscreen}]"  v-if="caso===null">
+    <div id="page-wrapper" v-if="caso===null">
       <div class="row"><div class="col-md-12"><h1 class="page-header-clean"></h1></div></div>
       <div class="row">
         <div class="col-md-12">
@@ -26,7 +26,7 @@ GNU General Public License for more details.
       </div>
     </div>
 
-    <div id="page-wrapper" :class="[{'full-width-div': fullscreen}]" v-if="caso!==null">
+    <div id="page-wrapper" v-if="caso!==null">
       <alert v-model="mensajeError" placement="top-right" type="danger" duration="3000" dismissable>
         <span class="icon-info-circled alert-icon-float-left"></span>
         <strong>¡Error!</strong>

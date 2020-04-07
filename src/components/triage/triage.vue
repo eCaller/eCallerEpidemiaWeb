@@ -12,7 +12,7 @@ GNU General Public License for more details.
 @author jfpastor@ingenia.es
 -->
 <template lang="html">
-  <div id="page-wrapper" :class="[{'full-width-div': fullscreen}]">
+  <div id="page-wrapper" >
     <spinner ref="spinner" v-model="spinner" size="xl" text="Cargando"></spinner>
 
     <alert v-model="mensajeError" placement="top-right" type="danger" duration="3000" dismissable>
