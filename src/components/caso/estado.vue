@@ -13,12 +13,12 @@ GNU General Public License for more details.
 -->
 <template lang="html">
   <span>
-    <span v-if="codigo=='PC'" class='label label-danger'>Pendiente contacto</span>
-    <span v-else-if="codigo=='CO'" class='label label-info'>Contactado</span>
-    <span v-else-if="codigo=='PT'" class='label label-warning'>Pendiente prueba</span>
-    <span v-else-if="codigo=='PR'" class='label label-default'>Pendiente resultado</span>
-    <span v-else-if="codigo=='PE'" class='label label-primary'>Pendiente evolución</span>
-    <span v-else-if="codigo=='FI'" class='label label-success'>Finalizado</span>
+    <span v-if="codigo=='PC'" class='label label-danger'>{{$t('caso.estado-pendiente-contacto')}}</span>
+    <span v-else-if="codigo=='CO'" class='label label-info'>{{$t('caso.estado-contactado')}}</span>
+    <span v-else-if="codigo=='PT'" class='label label-warning'>{{$t('caso.estado-pendiente-prueba')}}</span>
+    <span v-else-if="codigo=='PR'" class='label label-default'>{{$t('caso.estado-pendiente-resultado')}}</span>
+    <span v-else-if="codigo=='PE'" class='label label-primary'>{{$t('caso.estado-pendiente-evolucion')}}</span>
+    <span v-else-if="codigo=='FI'" class='label label-success'>{{$t('caso.estado-finalizado')}}</span>
     <span v-else ></span>
   </span>
 </template>

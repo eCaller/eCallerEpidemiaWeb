@@ -13,8 +13,8 @@ GNU General Public License for more details.
 -->
 <template lang="html">
   <span>
-    <span v-if="codigo=='P'" class='label label-danger'>Positivo</span>
-    <span v-else-if="codigo=='N'" class='label label-success'>Negativo</span>
+    <span v-if="codigo=='P'" class='label label-danger'>{{$t('caso.resultado-positivo')}}</span>
+    <span v-else-if="codigo=='N'" class='label label-success'>{{$t('caso.resultado-negativo')}}</span>
     <span v-else ></span>
   </span>
 </template>
