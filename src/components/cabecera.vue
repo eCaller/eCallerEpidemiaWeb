@@ -32,7 +32,7 @@ GNU General Public License for more details.
           </li>
           <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                  <strong>{{$t('messages.user')}} </strong><i class="fa fa-caret-down"></i> <img :alt="usuario.nombre" :src="usuario.imagen" class="img-circle" style="width: 39px;">
+                  <strong>{{usuario.nombre}} </strong><i class="fa fa-caret-down"></i> <img :alt="usuario.nombre" :src="usuario.imagen" class="img-circle" style="width: 39px;">
               </a>
               <ul class="dropdown-menu">
                   <li><a href="#" @click="configuracion()"><i class="fa fa-cog fa-fw"></i> {{$t('menu.configuracion')}}</a></li>

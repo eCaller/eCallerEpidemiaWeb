@@ -383,7 +383,7 @@ table.dataTable thead .sorting:after {
 
 .btn {
     padding: 3px 5px;
-    height: 28px;
+    /* height: 28px; */
 }
 
 .control-label {
