@@ -87,7 +87,18 @@ Como pasos previos se deberán realizar los pasos del apartado [Instalación](RE
     
   2. Ejecución del contendor Docker
   
-    `docker run -p 80:80 -v %cd%/dist/:/usr/share/nginx/html/ -it nginx:stable-alpine`
+    * En sistemas Windows
+  
+```        
+   docker run -p 80:80 --rm --name ecaller-epidemas-web-1 -v %cd%/dist/:/usr/share/nginx/html/ -d nginx:stable-alpine
+       
+```
+
+    * En sistemas Linux
+```        
+   docker run -p 80:80 --rm --name ecaller-epidemas-web-1 -v $PWD/dist:/usr/share/nginx/html -d nginx:stable-alpine
+        
+```
 
 ## Repositorios
 
