@@ -75,8 +75,7 @@ export const store = new Vuex.Store({
       state.usuario.nombre = null;
       state.usuario.imagen = null;
       state.usuario.rol = null;
-      state.usuario.access_token = null;
-      state.usuario.refresh_token = null;
+      state.usuario.token = null;
     },
     [ASIGNAR](state, usuario) {
       state.usuario.id = usuario.id;
@@ -89,7 +88,6 @@ export const store = new Vuex.Store({
       localStorage.setItem("token", datos.token);
       state.usuario.token = datos.token;
     },
-
   },
   getters: {
     isLoggedIn(state) {
@@ -124,10 +122,10 @@ export const store = new Vuex.Store({
           });
       })
     },
-    logout({state, commit}) {      
+    logout({state, commit}) {  
+      axiosCustom.axiosJwtToken().get(state.configuracion.autenticacion.urlLogout); 
+      commit(LOGOUT);   
       localStorage.clear();
-      commit(LOGOUT);
-      axiosCustom.axiosJwtToken().get(state.configuracion.autenticacion.urlLogout);
     }
   },
 

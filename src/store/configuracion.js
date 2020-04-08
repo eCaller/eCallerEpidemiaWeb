@@ -56,7 +56,8 @@ export default {
       },
 
       configuracionUsuario:{
-        url: config.url + "/configuracionUsuario"
+        url: config.url + "/configuracionUsuario",
+        urlCheck: config.url + "/checkPassword"
       },
 
   },

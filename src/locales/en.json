@@ -43,6 +43,7 @@
     "contain-upper":"Debe contener al menos una mayúscula",
     "contain-lower":"Debe contener al menos una minúscula",
     "contain-character":"Debe contener al menos un caracter especial",
-    "error-update":"Se ha producido un error al actualizar"
+    "error-update":"Se ha producido un error al actualizar",
+    "error-password": "La contraseña antigua introducida no es válida"
   }
 }

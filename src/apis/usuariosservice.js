@@ -10,22 +10,40 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 */
 import axios from "axios";
+import axiosCustom from "../store/axios-custom";
 import conf from '../store/configuracion.js';
 
 export default {
-    updateUser(variables) {
-      return new Promise((resolve, reject) => {
-        axios.post(conf.state.configuracionUsuario.url, variables, {
-              headers: {
+  updatePassword(usuario) {
+    return new Promise((resolve, reject) => {
+      axiosCustom.axiosJwtToken().post(conf.state.configuracionUsuario.url, usuario, {
+            headers: {
               "Content-Type": 'application/json'
             }
-          })
-          .then((respuesta) => {
-              resolve(respuesta);
-          })
-          .catch((error) => {
-              reject({data: []})
-          });
-      });
-    }
+        }).then((respuesta) => {
+          if (respuesta.status === 200) {
+            resolve(true);
+          } else {
+            reject(false)
+          }
+        }).catch((error) => {
+          reject(false)
+        });
+    });
+  },
+  checkPassword(usuario) {
+    return new Promise((resolve, reject) => {
+      axiosCustom.axiosJwtToken().post(conf.state.configuracionUsuario.urlCheck, usuario)
+        .then((respuesta) => {
+          if (respuesta.status === 200) {
+            resolve(true)
+          } else {
+            reject(false)
+          }
+        })
+        .catch((error) => {
+          reject(false);
+        })
+      })
+  }
 }

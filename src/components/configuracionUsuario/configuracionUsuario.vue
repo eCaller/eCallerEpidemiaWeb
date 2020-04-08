@@ -125,64 +125,61 @@ export default {
       onLoaded() {
         this.spinner = false;
       },
+      testContraseña() {        
+        const format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+        if (this.passwordN != this.passwordR) {
+          this.mensajeError=i18n.t('configUser.same-pass');
+        } else if (this.passwordN == null || this.passwordN.length < 7) {
+          this.mensajeError=i18n.t('configUser.lenght-min');
+        } else if(!/[A-Z]/.test(this.passwordN)) {
+          this.mensajeError=i18n.t('configUser.contain-upper');
+        } else if(!/[a-z]/.test(this.passwordN)) {
+          this.mensajeError=i18n.t('configUser.contain-lower');
+        } else if(!/[0-9]/.test(this.passwordN)) {
+          this.mensajeError=i18n.t('configUser.contain-number');
+        } else if(!format.test(this.passwordN)) {
+          this.mensajeError=i18n.t('configUser.contain-character');
+        }
+        return this.mensajeError == null;
+      },
       cambiarPass(){
         //show spinner
         this.spinner = true;
-        const format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
-
-        this.$store.commit("LOGIN");
-        this.$store.commit('encode', this.usuario.username + ':' + this.passwordA);
-
-        this.$store.dispatch("login")
-        .then((res) => {
-          if(this.passwordN != this.passwordR){
-            this.mensajeError=i18n.t('configUser.same-pass');
-          }else if(this.passwordN.length < 7){
-            this.mensajeError=i18n.t('configUser.lenght-min');
-          }else if(!/[A-Z]/.test(this.passwordN)){
-            this.mensajeError=i18n.t('configUser.contain-upper');
-          }else if(!/[a-z]/.test(this.passwordN)){
-           this.mensajeError=i18n.t('configUser.contain-lower');
-          }else if(!/[0-9]/.test(this.passwordN)){
-            this.mensajeError=i18n.t('configUser.contain-number');
-          }else if(!format.test(this.passwordN)){
-            this.mensajeError=i18n.t('configUser.contain-character');
-          }else{
-            //update user in BD
-            this.savePass();
-          }
-
+        this.mensajeError = null;
+        if (this.testContraseña()) {
+          this.$store.dispatch('checkPassword', {
+            oldPassword: this.passwordA          
+          }).then((respuesta) => {
+              // Si llega aqui, las contraseña antigua y la nueva
+              // son correctas
+              this.savePass();
+            })
+            .catch((error) => {
+              // Si llega aquí, la contraseña antigua no es válida
+              this.spinner = false;
+              this.mensajeError = i18n.t('configUser.error-password');;
+            })
+        } else {
           this.spinner = false;
-        }, (error)=> {
-          this.spinner = false;
-        });
+        }
       },
-      savePass(){
+      savePass() {
         try {
-
-          let user={
-            username: this.usuario.username,
-            password: this.passwordN,
-          }
-          this.updateUser(user).then((respuesta) => {
-            this.spinner = false;
-          })
-          .catch((error) => {
-            this.spinner = false;
+          this.$store.dispatch('updatePassword', {
+            newPassword: this.passwordN          
+          }).then((respuesta) => {
+              this.spinner = false;
+          }).catch((error) => {
+              this.spinner = false;
+              this.mensajeError = i18n.t('configUser.error-update');;
           });
         }catch (e) {
           this.spinner = false;
           this.mensajeError = i18n.t('configUser.error-update');;
           console.error(e);
         }
-      },
-      ...mapActions({
-        fetchUser:'fetchUser',
-        updateUser: 'updateUser',
-      }),
-
+      }
   },
-
 }
 </script>
 

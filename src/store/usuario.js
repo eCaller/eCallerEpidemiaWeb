@@ -11,8 +11,7 @@ GNU General Public License for more details.
 
 @author jfpastor@ingenia.es
 */
-
-import usuarioservice from '@/apis/usuariosservice'
+import usuarioService from '@/apis/usuariosservice'
 
 export default {
   state: {
@@ -21,8 +20,7 @@ export default {
         nombre: null,
         imagen: null,
         rol: null,
-        access_token: null,
-        refresh_token: null,
+        token: null
   },
   getters: {
     usuario (state) {
@@ -42,20 +40,32 @@ export default {
     }
   },
   actions: {
-    updateUser ({state},user) {
+    updatePassword ({state}, payload) {
       let usuario = {
-        id: state.usuario.id,
-        username: state.usuario.username,
-        nombre: state.usuario.nombre,
-        imagen: state.usuario.imagen,
-        rol: state.usuario.rol,
-        access_token: state.usuario.access_token,
-        refresh_token: state.usuario.refresh_token,
-        password: user.password
+        username: state.username,
+        password: payload.newPassword
       }
-      return usuarioservice.updateUser({variables: usuario});
+      return new Promise((resolve, reject) => {
+        usuarioService.updatePassword(usuario)
+          .then((respuesta) => {
+            resolve(true)
+          })
+          .catch((error) => {
+            reject(false);
+          });
+      })
+    },
+    checkPassword ({state}, payload) {
+      return new Promise((resolve, reject) => {
+        usuarioService.checkPassword({
+          username: state.username,
+          password: payload.oldPassword
+          }).then((respuesta) => {
+            resolve(true)
+          }).catch((error) => {
+            reject(false)
+          })
+      })
     }
-  },
-  mutations: {
   }
 };
