@@ -49,7 +49,7 @@ eCaller Epidemias está constituida por dos componentes software:
 
 3. Configuración entorno
     * cp src/config.js.example src/config.js
-    * Editar el fichero src/config.js con las valores correcta para el entorno de ejecución
+    * Editar el fichero src/config.js con los valores correctos para el entorno de ejecución
 
 ## Ejecución en local
 Como requerimiento antes de ejecutar la aplicación debe instalarse y configurarse el proyecto: [eCallerEpidemiaBackEnd](https://github.com/eCaller/eCallerEpidemiaBackEnd/)
