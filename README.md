@@ -57,6 +57,48 @@ Como requerimiento antes de ejecutar la aplicación debe instalarse y configurar
 1. Ejecución en modo desarrollo
 
     * `npm run dev`
+    
+## Ejecución en NGINX mediante contendor Docker
+
+La ejecución de la aplicación en NGINX, mediante contenerdor Docker, se puede hacer de dos formas:
+
+* Creando y ejecutando una imagen creada del proyecto
+
+* Ejecución directamente desde una imagen de NGINX ya existente previamente
+
+### Creación y ejecución de un contenedor Docker
+
+Como pasos previos se deberán realizar los pasos del apartado [Instalación](README.md#Instalación) y seguidamente realizar los siguientes pasos:
+
+1. Creación de la imagen Docker
+
+    `docker build -t ecaller-epidemias/ecaller-epidemias-web .`
+
+2. Ejecución de la imagen Docker
+
+    `docker run -d -p 80:80 --rm --name ecaller-epidemas-web-1 ecaller-epidemias/ecaller-epidemias-web`
+
+## Ejecución directa desde imagen Docker de NGINX-alpine
+Como pasos previos se deberán realizar los pasos del apartado [Instalación](README.md#Instalación) y seguidamente realizar los siguientes pasos:
+
+  1. Compilación del proyecto
+
+      `npm run build`
+    
+  2. Ejecución del contendor Docker
+  
+    * En sistemas Windows
+  
+```        
+   docker run -p 80:80 --rm --name ecaller-epidemas-web-1 -v %cd%/dist/:/usr/share/nginx/html/ -d nginx:stable-alpine
+       
+```
+
+    * En sistemas Linux
+```        
+   docker run -p 80:80 --rm --name ecaller-epidemas-web-1 -v $PWD/dist:/usr/share/nginx/html -d nginx:stable-alpine
+        
+```
 
 ## Repositorios
 
