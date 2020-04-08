@@ -23,13 +23,13 @@ GNU General Public License for more details.
                       </div>
                       <div class="col-xs-9 text-right">
                           <div class="huge">{{pendientes}}</div>
-                          <div>Pendientes de cita</div>
+                          <div>{{$t('caso.pendientes-de-cita')}}</div>
                       </div>
                   </div>
               </div>
               <a class="pointer" @click="filtrarCita()">
                   <div class="panel-footer">
-                      <span class="pull-left">Ver Detalles</span>
+                      <span class="pull-left">{{$t('messages.ver-detalles')}}</span>
                       <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                       <div class="clearfix"></div>
                   </div>
@@ -45,13 +45,13 @@ GNU General Public License for more details.
                         </div>
                         <div class="col-xs-9 text-right">
                             <div class="huge">{{programados}}</div>
-                            <div>Pendiente de prueba física</div>
+                            <div>{{$t('caso.pendiente-de-prueba-fisica')}}</div>
                         </div>
                     </div>
                 </div>
                 <a class="pointer" @click="filtrarPrueba()">
                     <div class="panel-footer">
-                        <span class="pull-left">Ver Detalles</span>
+                        <span class="pull-left">{{$t('messages.ver-detalles')}}</span>
                         <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                         <div class="clearfix"></div>
                     </div>
@@ -68,13 +68,13 @@ GNU General Public License for more details.
                         </div>
                         <div class="col-xs-9 text-right">
                             <div class="huge">{{evolucion}}</div>
-                            <div>Pendientes evolución</div>
+                            <div>{{$t('caso.pendientes-evolucion')}}</div>
                         </div>
                     </div>
                 </div>
                 <a class="pointer" @click="filtrarEvolucion()">
                     <div class="panel-footer">
-                        <span class="pull-left">Ver Detalles</span>
+                        <span class="pull-left">{{$t('messages.ver-detalles')}}</span>
                         <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                         <div class="clearfix"></div>
                     </div>
