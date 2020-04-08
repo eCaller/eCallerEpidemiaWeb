@@ -630,4 +630,10 @@ export default {
 .t-primary {
     color: #337ab7;
 }
+.bootstrap-datetimepicker-widget.dropdown-menu {
+    display: block;
+    margin: 2px 0;
+    padding: 4px;
+    width: 100%;
+}
 </style>

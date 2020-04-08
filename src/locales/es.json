@@ -90,5 +90,28 @@
     "fecha-hora": "DD/MM/YYYY HH:mm",
     "fecha": "DD/MM/YYYY",
     "hora": "HH:mm"
+  },
+  "configUser":{
+    "error": "Error",
+    "config-user": "Configuración del usuario",
+    "change-data": "Cambie los datos de su usuario",
+    "date-user": "Datos de su usuario",
+    "user":"Usuario",
+    "name":"Nombre",
+    "load":"Cargando",
+    "intro-old-pass":"Introduce la password antigua",
+    "old-pass":"Password antigua",
+    "intro-new-pass":"Introduce la password nueva",
+    "new-pass":"Password nueva",
+    "error-pass":"Indique la password",
+    "repeat-pass-new":"Repita password nueva",
+    "update-data":"Actualizar datos",
+    "same-pass":"Las password no coinciden",
+    "lenght-min":"El tamaño no deber ser inferior a 8 caracteres.",
+    "contain-number":"Debe contener al menos un número",
+    "contain-upper":"Debe contener al menos una mayúscula",
+    "contain-lower":"Debe contener al menos una minúscula",
+    "contain-character":"Debe contener al menos un caracter especial",
+    "error-update":"Se ha producido un error al actualizar"
   }
 }
