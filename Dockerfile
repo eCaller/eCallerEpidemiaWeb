@@ -1,10 +1,11 @@
 # build stage
 FROM node:10.16.2-alpine as build-stage
+COPY . .
 WORKDIR /
 RUN npm install
 RUN npm uninstall node-sass
 RUN npm install node-sass
-COPY . .
+
 RUN npm run build
 
 # production stage
