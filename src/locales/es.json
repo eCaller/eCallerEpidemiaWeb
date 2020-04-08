@@ -17,7 +17,8 @@
     "total-total-filas": "Total {total} filas",
     "codigo": "Código",
     "seleccionar-una-fila": "Debe seleccionar una fila",
-    "ver-detalles": "Ver Detalles"
+    "ver-detalles": "Ver Detalles",
+    "tipo": "Tipo"
   },
   "menu": {
     "gestion-casos": "Seguimiento casos",
@@ -25,6 +26,7 @@
     "configuracion": "Configuración",
     "usuarios": "Usuarios",
     "centros": "Centros",
+    "departamentos": "Departamentos",
     "provincias": "Provincias",
     "municipios": "Municipios",
     "distritos": "Distritos",
@@ -79,10 +81,11 @@
     "estado-contactado": "Contactado",
     "estado-pendiente-prueba": "Pendiente prueba",
     "estado-pendiente-resultado": "Pendiente resultado",
+    "pendiente-resultado-test": "Pendiente resultado prueba",
     "estado-pendiente-evolucion": "Pendiente evolución",
     "estado-finalizado": "Finalizado",
     "abrir-caso": "Abrir caso",
-    "pendiente-de-prueba-fisica": "Pendiente de prueba física",
+    "pendiente-de-prueba-fisica": "Pendientes de prueba física",
     "pendientes-de-cita": "Pendientes de cita",
     "pendientes-evolucion": "Pendientes evolución"
   },
@@ -91,7 +94,7 @@
     "fecha": "DD/MM/YYYY",
     "hora": "HH:mm"
   },
-  "configUser":{
+  "configUser": {
     "error": "Error",
     "config-user": "Configuración del usuario",
     "change-data": "Cambie los datos de su usuario",
@@ -149,6 +152,32 @@
     "data-save-error":"Se ha producido un error al guardar el triage",
     "combined": "Combinación",
     "public": "Publicar",
-    "cancel": "Cancelar"
+    "cancel": "Configuración del usuario"
+  },
+  "sie": {
+    "error": "¡Error!",
+    "sie": "Sistema de información epidemiológica",
+    "departamentos": "Departamentos",
+    "provincias": "Provincias",
+    "nada-seleccionado": "Nada seleccionado",
+    "municipios": "Municipios",
+    "grafica": "Gráfica",
+    "estado-general-actual": "Estado general actual",
+    "estado-por-seleccion": "Estado por selección",
+    "mapa-calor": "Mapa de calor",
+    "mapa-casos": "Mapa de casos",
+    "seguimiento-casos": "Seguimiento de casos",
+    "evolucion-diaria": "Evolución diaria",
+    "Sospechosos": "Sospechosos",
+    "Confirmados": "Confirmados",
+    "Activos": "Activos",
+    "Recuperados": "Recuperados",
+    "Decesos": "Decesos",
+    "ver-datos": "Ver datos",
+    "datos": "Datos",
+    "volver": "Volver",
+    "actualizar": "Actualizar",
+    "tipo-grafica": "Tipo gráfica",
+    "guardar-imagen": "Guardar como imagen"
   }
 }

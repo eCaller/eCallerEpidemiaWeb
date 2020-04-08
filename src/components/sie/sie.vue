@@ -17,13 +17,13 @@ GNU General Public License for more details.
 
     <alert v-model="mensajeError" placement="top-right" type="danger" duration="3000" dismissable>
       <span class="icon-info-circled alert-icon-float-left"></span>
-      <strong>¡Error!</strong>
+      <strong>{{$t('sie.error')}}</strong>
       <p>{{mensajeError}}</p>
     </alert>
 
     <div class="row">
       <div class="col-md-12">
-      	<h3><i class="fa fa-chart-bar fa-fw"></i> <label>Sistema de información epidemiológica </label>
+      	<h3><i class="fa fa-chart-bar fa-fw"></i> <label>{{$t('sie.sie')}} </label>
            <div class="pull-right ">
              <i class="far fa-clock fa-fw"></i>
              <label> {{dateFormat(fecha)}} </label>
@@ -37,7 +37,7 @@ GNU General Public License for more details.
       <div class="col-md-2">
         <panel type="danger">
           <template slot="header">
-            <i class="far fa-map fa-fw"></i> <label> Departamentos</label>
+            <i class="far fa-map fa-fw"></i> <label> {{$t('sie.departamentos')}}</label>
           </template>
 
           <div class="row">
@@ -53,7 +53,7 @@ GNU General Public License for more details.
 
         <panel type="warning">
           <template slot="header">
-            <i class="fa fa-map fa-fw"></i> <label> Provincias</label>
+            <i class="fa fa-map fa-fw"></i> <label> {{$t('sie.provincias')}}</label>
           </template>
 
           <div class="row">
@@ -61,7 +61,7 @@ GNU General Public License for more details.
               <button-group justified>
                 <v-select v-model="provinciasselect" :options="provincias" options-label="nombre" options-value="id"
                   multiple show-count
-                  placeholder="Nada seleccionado"
+                  :placeholder="$t('sie.nada-seleccionado')"
                   search justified
                   clear-button
                 ></v-select>
@@ -76,7 +76,7 @@ GNU General Public License for more details.
 
         <panel type="success">
           <template slot="header">
-            <i class="fa fa-map-marked fa-fw"></i> <label> Municipios</label>
+            <i class="fa fa-map-marked fa-fw"></i> <label> {{$t('sie.municipios')}}</label>
           </template>
 
           <div class="row">
@@ -84,7 +84,7 @@ GNU General Public License for more details.
               <button-group justified>
                 <v-select v-model="municipiosselect" :options="municipios" options-label="nombre" options-value="id"
                   multiple show-count
-                  placeholder="Nada seleccionado"
+                  :placeholder="$t('sie.nada-seleccionado')"
                   search justified
                   clear-button
                 ></v-select></button-group>
@@ -102,7 +102,7 @@ GNU General Public License for more details.
       <div class="col-md-8">
         <panel type="info">
           <template slot="header">
-            <i class="fa fa-chart-bar fa-fw"></i> <label> Gráfica</label>
+            <i class="fa fa-chart-bar fa-fw"></i> <label> {{$t('sie.grafica')}}</label>
           </template>
 
           <div class="row">
@@ -158,11 +158,11 @@ GNU General Public License for more details.
 
         <panel type="primary">
           <template slot="header">
-            <i class="far fa-calendar-alt fa-fw"></i> <label> Estado general actual</label>
+            <i class="far fa-calendar-alt fa-fw"></i> <label> {{$t('sie.estado-general-actual')}}</label>
           </template>
 
           <div class="row" v-for="d in resumen" :key="d.id">
-            <div class="col-md-6">{{d.nombre}}</div>
+            <div class="col-md-6">{{$t('sie.' + d.nombre)}}</div>
             <div class="col-md-1"><label :class="d.clase">{{d.value}}</label></div>
             <div class="col-md-1"><i :class="d.flecha"></i></div>
             <div class="col-md-1">{{d.percent}}%</div>
@@ -171,11 +171,11 @@ GNU General Public License for more details.
 
         <panel type="info">
           <template slot="header">
-            <i class="far fa-calendar-alt fa-fw"></i> <label> Estado por selección</label>
+            <i class="far fa-calendar-alt fa-fw"></i> <label> {{$t('sie.estado-por-seleccion')}}</label>
           </template>
 
           <div class="row" v-for="d2 in resumenfiltro" :key="d2.id">
-            <div class="col-md-6"><checkbox v-model="d2.select" type="info" style="margin-top: 0px; margin-bottom: 0px; font-weight: 100;" @checked="filtraestados(d2.id, $event)">{{d2.nombre}}</checkbox></div>
+            <div class="col-md-6"><checkbox v-model="d2.select" type="info" style="margin-top: 0px; margin-bottom: 0px; font-weight: 100;" @checked="filtraestados(d2.id, $event)">{{$t('sie.' + d2.nombre)}}</checkbox></div>
             <div class="col-md-1"><label :class="d2.clase">{{d2.value}}</label></div>
             <div class="col-md-1"><i :class="d2.flecha"></i></div>
             <div class="col-md-1">{{d2.percent}}%</div>
@@ -206,6 +206,8 @@ import 'echarts/lib/component/markPoint'
 import * as VueGoogleMaps from 'vue2-google-maps';
 import { gmapApi } from 'vue2-google-maps'
 import GmapHeatmapLayer from '@/components/sie/HeatMap';
+
+import { i18n } from '@/plugins/i18n';
 
 export default {
   components: {
@@ -298,10 +300,10 @@ export default {
 
       grafica: "M",
       tiposGrafica: [
-        {tipo: "M", nombre: "Mapa de calor"},
-        {tipo: "C", nombre: "Mapa de casos"},
-        {tipo: "S", nombre: "Seguimiento de casos"},
-        {tipo: "E", nombre: "Evolución diaria"},
+        {tipo: "M", nombre: i18n.t('sie.mapa-calor')},
+        {tipo: "C", nombre: i18n.t('sie.mapa-casos')},
+        {tipo: "S", nombre: i18n.t('sie.seguimiento-casos')},
+        {tipo: "E", nombre: i18n.t('sie.evolucion-diaria')},
       ],
 
       graficalineoption: null,
@@ -383,35 +385,35 @@ export default {
       let fechas = this.getFechasEstadistica();
 
       this.graficalineoption = {
-        title: { text: 'Seguimiento de casos' },
+        title: { text: i18n.t('sie.seguimiento-casos') },
         tooltip: { trigger: 'axis' },
         legend: {
-          data: ['Sospechosos', 'Confirmados', 'Activos', 'Recuperados', 'Decesos']
+          data: [i18n.t('sie.Sospechosos'), i18n.t('sie.Confirmados'), i18n.t('sie.Activos'), i18n.t('sie.Recuperados'), i18n.t('sie.Decesos')]
         },
         toolbox: { show: true,
           feature: {
-            dataView: {title: 'Ver datos', show: true, readOnly: false, lang:['Datos', 'Volver', 'Actualizar']},
-            magicType: {title: 'Tipo gráfica', show: true, type: ['line', 'bar']},
-            saveAsImage: {title: 'Guardar como imagen', show: true},
+            dataView: {title: i18n.t('sie.ver-datos'), show: true, readOnly: false, lang:[i18n.t('sie.datos'), i18n.t('sie.volver'), i18n.t('sie.actualizar')]},
+            magicType: {title: i18n.t('sie.tipo-grafica'), show: true, type: ['line', 'bar']},
+            saveAsImage: {title: i18n.t('sie.guardar-imagen'), show: true},
           }
         },
         calculable: true,
         xAxis: [ { type: 'category', data: fechas } ],
         yAxis: [ { type: 'value' } ],
         series: [
-          { name: 'Sospechosos', type: 'bar', color:'#E89612', smooth: 0.3, data: this.estadisticas.sospechosos,
+          { name: i18n.t('sie.Sospechosos'), type: 'bar', color:'#E89612', smooth: 0.3, data: this.estadisticas.sospechosos,
             markPoint: { data: [ {type: 'max', name: 'Max'} ] }
           },
-          { name: 'Confirmados', type: 'bar', color:'#0085AA', smooth: 0.3, data: this.estadisticas.confirmados,
+          { name: i18n.t('sie.Confirmados'), type: 'bar', color:'#0085AA', smooth: 0.3, data: this.estadisticas.confirmados,
             markPoint: { data: [ {type: 'max', name: 'Max'} ] }
           },
-          { name: 'Activos', type: 'bar', color:'#A8AA23', smooth: 0.3, data: this.estadisticas.activos,
+          { name: i18n.t('sie.Activos'), type: 'bar', color:'#A8AA23', smooth: 0.3, data: this.estadisticas.activos,
             markPoint: { data: [ {type: 'max', name: 'Max'} ] }
           },
-          { name: 'Recuperados', type: 'bar', color:'#4DB717', smooth: 0.3, data: this.estadisticas.recuperados,
+          { name: i18n.t('sie.Recuperados'), type: 'bar', color:'#4DB717', smooth: 0.3, data: this.estadisticas.recuperados,
             markPoint: { data: [ {type: 'max', name: 'Max'} ] }
           },
-          { name: 'Decesos', type: 'bar', color:'#DD0000', smooth: 0.3, data: this.estadisticas.decesos,
+          { name: i18n.t('sie.Decesos'), type: 'bar', color:'#DD0000', smooth: 0.3, data: this.estadisticas.decesos,
             markPoint: { data: [ {type: 'max', name: 'Max'} ] }
           },
         ]
@@ -423,19 +425,19 @@ export default {
       let fechas = this.getFechasEstadistica();
 
       this.graficaop = {
-        title: { text: 'Evolución diaria' },
+        title: { text: i18n.t('sie.evolucion-diaria') },
         tooltip: { trigger: 'axis', axisPointer: { type: 'cross', label: { backgroundColor: '#6a7985'} } },
-        legend: { data: ['Sospechosos', 'Confirmados', 'Activos', 'Recuperados', 'Decesos'] },
-        toolbox: { feature: { saveAsImage: {title: 'Guardar como imagen', show: true} } },
+        legend: { data: [i18n.t('sie.Sospechosos'), i18n.t('sie.Confirmados'), i18n.t('sie.Activos'), i18n.t('sie.Recuperados'), i18n.t('sie.Decesos')] },
+        toolbox: { feature: { saveAsImage: {title: i18n.t('sie.guardar-imagen'), show: true} } },
         grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
         xAxis: [ { type: 'category', boundaryGap: false, data: fechas } ],
         yAxis: [ { type: 'value' } ],
         series: [
-            { name: 'Sospechosos', type: 'line', color:'#E89612', smooth: 0.3, stack: 'Total', areaStyle: {}, data: this.estadisticas.sospechosos },
-            { name: 'Confirmados', type: 'line', color:'#0085AA', smooth: 0.3, stack: 'Total', areaStyle: {}, data: this.estadisticas.confirmados },
-            { name: 'Activos', type: 'line', color:'#A8AA23', smooth: 0.3, stack: 'Total', areaStyle: {}, data: this.estadisticas.activos },
-            { name: 'Recuperados', type: 'line', color:'#4DB717', smooth: 0.3, stack: 'Total', areaStyle: {}, data: this.estadisticas.recuperados },
-            { name: 'Decesos', type: 'line', color:'#DD0000', smooth: 0.3, stack: 'Total', label: { normal: { show: true, position: 'top' } }, areaStyle: {}, data: this.estadisticas.decesos }
+            { name: i18n.t('sie.Sospechosos'), type: 'line', color:'#E89612', smooth: 0.3, stack: 'Total', areaStyle: {}, data: this.estadisticas.sospechosos },
+            { name: i18n.t('sie.Confirmados'), type: 'line', color:'#0085AA', smooth: 0.3, stack: 'Total', areaStyle: {}, data: this.estadisticas.confirmados },
+            { name: i18n.t('sie.Activos'), type: 'line', color:'#A8AA23', smooth: 0.3, stack: 'Total', areaStyle: {}, data: this.estadisticas.activos },
+            { name: i18n.t('sie.Recuperados'), type: 'line', color:'#4DB717', smooth: 0.3, stack: 'Total', areaStyle: {}, data: this.estadisticas.recuperados },
+            { name: i18n.t('sie.Decesos'), type: 'line', color:'#DD0000', smooth: 0.3, stack: 'Total', label: { normal: { show: true, position: 'top' } }, areaStyle: {}, data: this.estadisticas.decesos }
         ]
       };
       this.spinner = false;

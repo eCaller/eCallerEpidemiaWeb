@@ -101,6 +101,7 @@ import {usuario} from '../../store/usuario.js';
 import VueStrap from 'vue-strap';
 import casos from './casos.vue';
 import {mapGetters, mapMutations, mapActions} from 'vuex';
+import { i18n } from '@/plugins/i18n';
 
 export default {
   components: {
@@ -132,25 +133,25 @@ export default {
       programados: 0,
       evolucion: 0,
 
-      titulo: "Pendientes de cita",
+      titulo: i18n.t('caso.pendientes-de-cita'),
       filtrar: false,
     }
   },
   methods: {
     filtrarCita() {
-      this.titulo="Pendientes de cita";
+      this.titulo=i18n.t('caso.pendientes-de-cita');
       this.setFiltroslistas({estados:"cita"});
       this.setTipolistas('C');
       this.filtrar=false;
     },
     filtrarPrueba() {
-      this.titulo="Pendientes de prueba física";
+      this.titulo=i18n.t('caso.pendiente-de-prueba-fisica');
       this.setFiltroslistas({estados:"fisica"});
       this.setTipolistas('P');
       this.filtrar=false;
     },
     filtrarEvolucion() {
-      this.titulo="Pendientes evolución";
+      this.titulo=i18n.t('caso.pendientes-evolucion');
       this.setFiltroslistas({estados:"evolucion"});
       this.setTipolistas('F');
       this.filtrar=true;
