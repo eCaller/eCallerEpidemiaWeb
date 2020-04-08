@@ -27,12 +27,12 @@ GNU General Public License for more details.
     </div>
 
     <div id="page-wrapper" v-if="caso!==null">
-      <alert v-model="mensajeError" placement="top-right" type="danger" duration="3000" dismissable>
+      <alert v-model="mensajeError" placement="top-right" type="danger" duration="3000" width="400px" dismissable>
         <span class="icon-info-circled alert-icon-float-left"></span>
         <strong>{{$t('messages.error')}}!</strong>
         <p>{{mensajeError}}</p>
       </alert>
-      <alert v-model="mensajeInfo" placement="top-right" type="success" duration="3000" dismissable>
+      <alert v-model="mensajeInfo" placement="top-right" type="success" duration="3000" width="400px" dismissable>
         <span class="icon-info-circled alert-icon-float-left"></span>
         <strong>{{$t('messages.informacion')}}</strong>
         <p>{{mensajeInfo}}</p>
