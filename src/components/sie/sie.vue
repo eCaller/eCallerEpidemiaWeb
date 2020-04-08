@@ -15,7 +15,7 @@ GNU General Public License for more details.
   <div id="page-wrapper" >
     <spinner ref="spinner" v-model="spinner" size="xl" text="Cargando"></spinner>
 
-    <alert v-model="mensajeError" placement="top-right" type="danger" duration="3000" dismissable>
+    <alert v-model="mensajeError" placement="top-right" type="danger" duration="3000" width="400px" dismissable>
       <span class="icon-info-circled alert-icon-float-left"></span>
       <strong>{{$t('sie.error')}}</strong>
       <p>{{mensajeError}}</p>

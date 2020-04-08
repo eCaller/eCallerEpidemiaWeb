@@ -24,12 +24,12 @@ GNU General Public License for more details.
           <li class="dropdown" v-if="false">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-cog fa-fw"></i><span> {{$t('menu.configuracion')}} </span><i class="fa fa-caret-down"></i></a>
             <ul class="dropdown-menu">
-                <li><a href="#" @click="usuarios()"><i class="fa fa-user fa-fw"></i> {{$t('menu.usuarios')}}</a></li>
-                <li><a href="#" @click="centros()"><i class="far fa-hospital fa-fw"></i> {{$t('menu.centros')}}</a></li>
+                <li><a class="pointer" @click="usuarios()"><i class="fa fa-user fa-fw"></i> {{$t('menu.usuarios')}}</a></li>
+                <li><a class="pointer" @click="centros()"><i class="far fa-hospital fa-fw"></i> {{$t('menu.centros')}}</a></li>
                 <li class="divider"></li>
-                <li><a href="#" @click="departamentos()"><i class="far fa-map fa-fw"></i> {{$t('menu.departamentos')}}</a></li>
-                <li><a href="#" @click="provincias()"><i class="fa fa-map fa-fw"></i> {{$t('menu.provincias')}}</a></li>
-                <li><a href="#" @click="municipios()"><i class="fa fa-map-marked fa-fw"></i> {{$t('menu.municipios')}}</a></li>
+                <li><a class="pointer" @click="departamentos()"><i class="far fa-map fa-fw"></i> {{$t('menu.departamentos')}}</a></li>
+                <li><a class="pointer" @click="provincias()"><i class="fa fa-map fa-fw"></i> {{$t('menu.provincias')}}</a></li>
+                <li><a class="pointer" @click="municipios()"><i class="fa fa-map-marked fa-fw"></i> {{$t('menu.municipios')}}</a></li>
 
             </ul>
           </li>
@@ -38,15 +38,15 @@ GNU General Public License for more details.
                   <strong>{{usuario.nombre}} </strong><i class="fa fa-caret-down"></i> <img :alt="usuario.nombre" :src="usuario.imagen" class="img-circle" style="width: 39px;">
               </a>
               <ul class="dropdown-menu">
-                  <li><a href="#" @click="configuracion()"><i class="fa fa-cog fa-fw"></i> {{$t('menu.configuracion')}}</a></li>
+                  <li><a class="pointer" @click="configuracion()"><i class="fa fa-cog fa-fw"></i> {{$t('menu.configuracion')}}</a></li>
                   <li class="divider"></li>
-                  <li><a href="#" @click="logout()"><i class="fa fa-sign-out-alt fa-fw"></i> {{$t('messages.salir')}}</a></li>
+                  <li><a class="pointer" @click="logout()"><i class="fa fa-sign-out-alt fa-fw"></i> {{$t('messages.salir')}}</a></li>
               </ul>
           </li>
       </ul>
 
     </navbar>
-    <alert v-model="mensajeError" placement="top-right" duration="3000" type="danger" dismissable>
+    <alert v-model="mensajeError" placement="top-right" duration="3000" type="danger" width="400px" dismissable>
       <span class="icon-info-circled alert-icon-float-left"></span>
       <strong>Error</strong>
       <p>{{mensajeError}}</p>

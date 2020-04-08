@@ -15,12 +15,12 @@ GNU General Public License for more details.
   <div id="page-wrapper" >
     <spinner ref="spinner" v-model="spinner" size="xl" :text="$t('triage.load')"></spinner>
 
-    <alert v-model="mensajeError" placement="top-right" type="danger" duration="3000" dismissable>
+    <alert v-model="mensajeError" placement="top-right" type="danger" width="400px" duration="3000" dismissable>
       <span class="icon-info-circled alert-icon-float-left"></span>
       <strong>¡{{$t('triage.error')}}!</strong>
       <p>{{mensajeError}}</p>
     </alert>
-    <alert v-model="mensajeInfo" placement="top-right" type="success" duration="3000" dismissable>
+    <alert v-model="mensajeInfo" placement="top-right" type="success" width="400px" duration="3000" dismissable>
       <span class="icon-info-circled alert-icon-float-left"></span>
       <strong>{{$t('triage.info')}}</strong>
       <p>{{mensajeInfo}}</p>
