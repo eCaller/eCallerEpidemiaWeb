@@ -51,7 +51,7 @@ GNU General Public License for more details.
   		</div>
 
       <tabs v-model="activeTab" nav-style="tabs">
-        <tab header="<i class='far fa-file fa-fw'></i> Datos caso">
+        <tab :header="'<i class=\'far fa-file fa-fw\'></i> ' + $t('caso.datos-caso') ">
           <panel type="info">
             <template slot="header">
               <i class="far fa-file fa-fw"></i> <label> {{$t('caso.caso')}} </label><span> {{caso.codigo}} </span>
@@ -198,7 +198,7 @@ GNU General Public License for more details.
           </panel>
         </tab>
 
-        <tab header="<i class='fa fa-mobile-alt fa-fw'></i> Respuestas triage" v-if="triagecaso">
+        <tab :header="'<i class=\'fa fa-mobile-alt fa-fw\'></i> ' + $t('caso.respuestas-triage') " v-if="triagecaso">
           <panel type="danger">
             <template slot="header">
               <i class="fa fa-mobile-alt fa-fw"></i> <label> {{$t('caso.respuestas-triage')}}</label>
@@ -216,7 +216,7 @@ GNU General Public License for more details.
           </panel>
         </tab>
 
-        <tab header="<i class='far fa-calendar fa-fw'></i> Cita">
+        <tab :header="'<i class=\'far fa-calendar fa-fw\'></i> ' + $t('caso.cita') " >
           <panel type="warning">
             <template slot="header">
               <i class="far fa-calendar fa-fw"></i> <label> {{$t('caso.cita')}} </label>
