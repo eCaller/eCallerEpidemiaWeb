@@ -290,7 +290,6 @@ import VueStrap from 'vue-strap';
 import estado from './estado.vue';
 import resultadofisico from './resultadofisico.vue';
 import {mapGetters, mapActions, mapMutations} from 'vuex';
-import axios from 'axios';
 import moment from 'moment';
 import datetimepicker from '../utils/datetimepicker.vue';
 import timepicker from '../utils/timepicker.vue';

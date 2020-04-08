@@ -54,7 +54,6 @@ GNU General Public License for more details.
 <script>
 import VueStrap from 'vue-strap';
 import {mapGetters} from 'vuex';
-import axios from 'axios';
 
 export default {
   components: {

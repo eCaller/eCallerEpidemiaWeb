@@ -9,7 +9,6 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 */
-import axios from "axios";
 import axiosCustom from '../store/axios-custom'
 import qs from "qs";
 import conf from '../store/configuracion.js';
