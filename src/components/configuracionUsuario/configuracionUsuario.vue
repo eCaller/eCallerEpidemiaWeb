@@ -36,30 +36,30 @@ GNU General Public License for more details.
               <div class="col-md-11">
                 <div class="row">
                   <div class="col-md-3">
-                    <bs-input label="Usuario" :placeholder="$t('configUser.user')" name="usuario" id="usuario" disabled v-model.trim="usuario.username"></bs-input>
+                    <bs-input :label="$t('configUser.user')" :placeholder="$t('configUser.user')" name="usuario" id="usuario" disabled v-model.trim="usuario.username"></bs-input>
                   </div>
                   <div class="col-md-5">
-                    <bs-input label="Nombre" :placeholder="$t('configUser.name')" name="nombre" id="nombre" disabled v-model.trim="usuario.nombre"></bs-input>
+                    <bs-input :label="$t('configUser.name')" :placeholder="$t('configUser.name')" name="nombre" id="nombre" disabled v-model.trim="usuario.nombre"></bs-input>
                   </div>
                 </div>
                 <div class="row">&nbsp;</div>
                 <div class="row">
                   <div class="col-md-3">
-                    <bs-input label="Introduce la password antigua" type="password" :placeholder="$t('configUser.old-pass')" 
+                    <bs-input :label="$t('configUser.intro-old-pass')" type="password" :placeholder="$t('configUser.old-pass')" 
                     :error="$t('configUser.error-pass')" icon required name="password" id="passwordA" v-model.trim="passwordA"></bs-input>
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-3">
-                    <bs-input label="Introduce la password nueva" type="password" :placeholder="$t('configUser.new-pass')" 
+                    <bs-input :label="$t('configUser.intro-new-pass')" type="password" :placeholder="$t('configUser.new-pass')" 
                     :error="$t('configUser.error-pass')" icon required name="password" id="passwordN" v-model.trim="passwordN"></bs-input>
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-3">
-                    <bs-input label="Repita la password nueva" type="password" :placeholder="$t('configUser.repeat-pass-new')"
+                    <bs-input :label="$t('configUser.repeat-pass-new')" type="password" :placeholder="$t('configUser.repeat-pass-new')"
                     :error="$t('configUser.error-pass')" icon required name="password" id="passwordR" v-model.trim="passwordR"></bs-input>
                   </div>
                 </div>
@@ -189,5 +189,8 @@ export default {
 }
 .margin-lateral{
   margin-left: 9px;
+}
+.has-feedback label~.form-control-feedback{
+  top:20px;
 }
 </style>
