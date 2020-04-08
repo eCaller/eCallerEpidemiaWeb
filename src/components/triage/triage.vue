@@ -13,23 +13,23 @@ GNU General Public License for more details.
 -->
 <template lang="html">
   <div id="page-wrapper" >
-    <spinner ref="spinner" v-model="spinner" size="xl" text="Cargando"></spinner>
+    <spinner ref="spinner" v-model="spinner" size="xl" :text="$t('triage.load')"></spinner>
 
     <alert v-model="mensajeError" placement="top-right" type="danger" duration="3000" dismissable>
       <span class="icon-info-circled alert-icon-float-left"></span>
-      <strong>¡Error!</strong>
+      <strong>¡{{$t('triage.error')}}!</strong>
       <p>{{mensajeError}}</p>
     </alert>
     <alert v-model="mensajeInfo" placement="top-right" type="success" duration="3000" dismissable>
       <span class="icon-info-circled alert-icon-float-left"></span>
-      <strong>Información</strong>
+      <strong>{{$t('triage.info')}}</strong>
       <p>{{mensajeInfo}}</p>
     </alert>
 
     <div class="row">
       <div class="col-md-12">
       	<h3>
-      	   <i class="fa fa-edit fa-fw"></i> <label>Diseño del triage </label>
+      	   <i class="fa fa-edit fa-fw"></i> <label>{{$t('triage.design-triage')}} </label>
            <span class="pull-right"><button class="btn btn-default" @click="reload()"><i class="fa fa-sync fa-fw"></i></button></span>
   			</h3>
   		</div>
@@ -41,7 +41,7 @@ GNU General Public License for more details.
         <accordion type="info">
           <panel type="info" is-open v-for="preg in triage" :key="preg.orden">
             <template slot="header">
-              <i class="fa fa-question fa-fw"></i> <label> Pregunta {{preg.codigo}}.</label><span> {{preg.pregunta}}</span>
+              <i class="fa fa-question fa-fw"></i> <label> {{$t('triage.question')}} {{preg.codigo}}.</label><span> {{preg.pregunta}}</span>
               <div class="pull-right">
                 <i class="fa fa-chevron-up fa-fw"></i>
               </div>
@@ -49,37 +49,36 @@ GNU General Public License for more details.
 
             <div class="row">
               <div class="col-md-8">
-                <bs-input label="Pregunta*" placeholder="Pregunta" v-model="preg.pregunta" :maxlength="5000"></bs-input>
+                <bs-input label="Pregunta*" :placeholder="$t('triage.question')" v-model="preg.pregunta" :maxlength="5000"></bs-input>
               </div>
               <div class="col-md-3">
-                <label for="tipo" class="control-label">Tipo*</label>
+                <label for="tipo" class="control-label">{{$t('triage.type')}}*</label>
                 <div class="btn-group btn-group-justified">
                   <v-select id="tipo" close-on-select placeholder=" "
                         v-model="preg.tipo">
-                      <v-option value="R"><i class='far fa-dot-circle'></i> Seleccionar</v-option>
-                      <v-option value="C"><i class='far fa-check-square'></i> Casillas verificación</v-option>
+                      <v-option value="R"><i class='far fa-dot-circle'></i> {{$t('triage.select')}}</v-option>
+                      <v-option value="C"><i class='far fa-check-square'></i> {{$t('triage.verify')}}</v-option>
                   </v-select>
                 </div>
               </div>
               <div class="col-md-1" style="display: grid;">
                 <label class="control-label">&nbsp;</label>
-                <button class="btn btn-warning" @click="borrarPregunta(preg.orden)">Borrar</i></button>
+                <button class="btn btn-warning" @click="borrarPregunta(preg.orden)">{{$t('triage.delete')}}</i></button>
               </div>
               <div class="col-md-12"><br></div>
               <div class="col-md-1"></div>
               <div class="col-md-11">
 
-
                 <panel type="default" >
                   <template slot="header">
-                    <i class="fa fa-arrow-right fa-fw"></i> <label> Respuestas </label>
+                    <i class="fa fa-arrow-right fa-fw"></i> <label> {{$t('triage.responses')}} </label>
                   </template>
                   <div class="row">
                     <div class="col-md-10">
                       <div class="row" v-for="resp in preg.respuestas" :key="resp.orden">
                         <div class="col-md-2" style="text-align: right;">{{preg.codigo}} - {{resp.codigo}}</div>
                         <div class="col-md-8">
-                          <bs-input placeholder="Respuesta" v-model="resp.respuesta" :maxlength="1000"></bs-input>
+                          <bs-input :placeholder="$t('triage.response')" v-model="resp.respuesta" :maxlength="1000"></bs-input>
                         </div>
                         <div class="col-md-2">
                           <button class="btn btn-danger" @click="borrarRespuesta(preg.orden, resp.orden)"><i class="fa fa-times fa-fw"></i></button>
@@ -87,14 +86,11 @@ GNU General Public License for more details.
                       </div>
                     </div>
                     <div class="col-md-2">
-                      <button class="btn btn-info" @click="nuevaRespuesta(preg.orden)">Añadir respuesta</button>
+                      <button class="btn btn-info" @click="nuevaRespuesta(preg.orden)">{{$t('triage.add-response')}}</button>
                     </div>
                   </div>
 
                 </panel>
-
-
-
               </div>
             </div>
           </panel>
@@ -102,25 +98,23 @@ GNU General Public License for more details.
         </accordion>
         <div class="col-md-10"></div>
         <div class="col-md-2">
-          <button class="btn btn-primary" @click="nuevaPregunta()">Añadir pregunta</button>
+          <button class="btn btn-primary" @click="nuevaPregunta()">{{$t('triage.add-question')}}</button>
         </div>
       </div>
       <div class="col-md-4">
         <div class="row">
           <div class="col-md-12">
 
-
-
             <panel type="danger" >
               <template slot="header">
-                <i class="fa fa-arrow-right fa-fw"></i> <label> Respuestas caso positivo </label>
+                <i class="fa fa-arrow-right fa-fw"></i> <label> {{$t('triage.response-case-plus')}} </label>
               </template>
               <div class="row">
                 <div class="col-md-12" v-for="conf in casospositivos" :key="conf.id">
-                  <label> Combinación {{conf.id}} </label> <button class="btn btn-warning margencombinacion" @click="borrarCombinacion(conf.id)">Borrar</button><br>
+                  <label> {{$t('triage.combined')}} {{conf.id}} </label> <button class="btn btn-warning margencombinacion" @click="borrarCombinacion(conf.id)">{{$t('triage.delete')}}</button><br>
                   <span v-for="opconf in conf.respuestas" :key="opconf.id">
                     <v-select close-on-select class="margencombinacion"
-                        :value="opconf.id" placeholder="Seleccione"
+                        :value="opconf.id" :placeholder="$t('triage.select2')"
                         :options="opcionesrespuesta" v-model="opconf.id"
                         options-value="val"></v-select><button class="btn btn-danger margencombinacion" @click="borrarOpcionCombinacion(conf.id, opconf.id)"><i class="fa fa-times fa-fw"></i></button>&nbsp;
                   </span>
@@ -129,10 +123,10 @@ GNU General Public License for more details.
                   <div class="col-md-12"><br></div>
                 </div>
 
-                <div class="col-md-12"><button class="btn btn-info pull-right my-btn" @click="nuevaCombinacion()">Añadir combinación</button></div>
+                <div class="col-md-12"><button class="btn btn-info pull-right my-btn" @click="nuevaCombinacion()">{{$t('triage.add-combined')}}</button></div>
                 <div class="col-md-12"><br></div>
                 <div class="col-md-12">
-                  <bs-input type="textarea" label="Respuesta en caso positivo" v-model="respuestapositivo.valor" :rows="5"></bs-input>
+                  <bs-input type="textarea" :label="$t('triage.response-incase-plus')" v-model="respuestapositivo.valor" :rows="5"></bs-input>
                   <br>
                   <span v-html="respuestapositivo.valor"></span>
                 </div>
@@ -143,7 +137,7 @@ GNU General Public License for more details.
           <div class="col-md-12">
             <panel type="success" >
               <template slot="header">
-                <i class="fa fa-arrow-right fa-fw"></i> <label> Respuesta caso negativo </label>
+                <i class="fa fa-arrow-right fa-fw"></i> <label> {{$t('triage.response-case-negative')}} </label>
               </template>
               <div class="row">
                 <div class="col-md-12">
@@ -154,14 +148,13 @@ GNU General Public License for more details.
               </div>
             </panel>
 
-
           </div>
 
           <div class="col-md-12"><br></div>
 
           <div class="col-md-12">
-            <input type="button" class="btn btn-warning pull-right my-btn" @click="guardar()" value="Publicar">
-            <input type="button" class="btn btn-default pull-right my-btn" @click="cancelar()" value="Cancelar">
+            <input type="button" class="btn btn-warning pull-right my-btn" @click="guardar()" :value="$t('triage.public')">
+            <input type="button" class="btn btn-default pull-right my-btn" @click="cancelar()" :value="$t('triage.cancel')">
           </div>
 
         </div>
@@ -169,9 +162,6 @@ GNU General Public License for more details.
 
       <div class="col-md-12"><br></div>
     </div>
-
-
-
 	</div>
 </template>
 
@@ -244,7 +234,7 @@ export default {
 
               for (let j in pregunta.respuestas) {
                 if (this.casospositivos[i].respuestas.find(item => item.id === pregunta.respuestas[j].id)) {
-                  this.mensajeError = "La pregunta está en alguna de las combinaciones y no se puede borrar";
+                  this.mensajeError = i18n.t('triage.same-question');
                   return;
                 }
               }
@@ -286,7 +276,7 @@ export default {
           for (let i in this.casospositivos) {
             if (this.casospositivos[i].respuestas && this.casospositivos[i].respuestas.length>0) {
               if (this.casospositivos[i].respuestas.find(item => item.id === respuesta.id)) {
-                this.mensajeError = "La respuesta está en alguna de las combinaciones y no se puede borrar";
+                this.mensajeError = i18n.t('triage.same-question');
                 return;
               }
             }
@@ -342,23 +332,23 @@ export default {
 
       // - exista al menos una pregunta con una respuesta
       if (!this.triage || this.triage.length<=0) {
-        this.mensajeError = "Debe indicar al menos una pregunta y una respuesta";
+        this.mensajeError = i18n.t('triage.select-question-response');
         return;
       }
 
       // - todas las preguntas y respuestas rellenas
       for (let i in this.triage) {
           if (!this.triage[i].pregunta || this.isEmpty(this.triage[i].pregunta)) {
-            this.mensajeError = "Todas las preguntas deben tener algún texto";
+            this.mensajeError = i18n.t('triage.question-text');
             return;
           } else {
             if (!this.triage[i].respuestas || this.triage[i].respuestas.length<=0) {
-              this.mensajeError = "Todas las preguntas deben tener al menos una respuesta";
+              this.mensajeError = i18n.t('triage.one-question-text');
               return;
             } else {
               for (let j in this.triage[i].respuestas) {
                 if (!this.triage[i].respuestas[j] || this.isEmpty(this.triage[i].respuestas[j].respuesta)) {
-                  this.mensajeError = "Todas las respuestas deben tener algún texto";
+                  this.mensajeError = i18n.t('triage.one-response-text');
                   return;
                 }
               }
@@ -369,7 +359,7 @@ export default {
       // - Al menos una combinación
 
       if (!this.casospositivos || this.casospositivos.length<=0) {
-        this.mensajeError = "Debe indicar al menos una combinación";
+        this.mensajeError = i18n.t('triage.one-combined');
         return;
       }
 
@@ -377,12 +367,12 @@ export default {
       // - Las opciones de las combinaciones no estén repetidas para una misma combinación
       for (let i in this.casospositivos) {
         if (!this.casospositivos[i].respuestas || this.casospositivos[i].respuestas.length<=0) {
-          this.mensajeError = "Todas las combinaciones deben tener al menos una respuesta";
+          this.mensajeError = i18n.t('triage.all-combined-response');
           return;
         } else {
           for (let j in this.casospositivos[i].respuestas) {
             if (!this.casospositivos[i].respuestas[j] || !this.casospositivos[i].respuestas[j].id) {
-              this.mensajeError = "Todas las combinaciones deben estar rellenas";
+              this.mensajeError = i18n.t('triage.all-combined-completed');
               return;
             }
 
@@ -391,7 +381,7 @@ export default {
             for (let j in this.casospositivos[i].respuestas) {
               let count = this.casospositivos[i].respuestas.filter(r => r.id === this.casospositivos[i].respuestas[j].id).length;
               if (count!==1) {
-                this.mensajeError = "No pueden repetirse opciones en una misma combinaciones";
+                this.mensajeError = i18n.t('triage.no-repeat-combined');
                 return;
               }
             }
@@ -403,12 +393,12 @@ export default {
       // - Las respuestas en caso positivo y negativo están rellenas
 
       if (!this.respuestanegativo || !this.respuestanegativo.valor || this.isEmpty(this.respuestanegativo.valor)) {
-        this.mensajeError = "La respuesta en caso negativo debe rellenarse";
+        this.mensajeError = i18n.t('triage.response-negative-completed');
         return;
       }
 
       if (!this.respuestapositivo || !this.respuestapositivo.valor || this.isEmpty(this.respuestapositivo.valor)) {
-        this.mensajeError = "La respuesta en caso positivo debe rellenarse";
+        this.mensajeError = i18n.t('triage.response-positive-completed');
         return;
       }
 
@@ -424,26 +414,26 @@ export default {
           this.saveVariables().then((respuesta) => {
             console.log("** variables guardado")
             this.spinner = false;
-            this.mensajeInfo = "Datos guardados correctamente.";
+            this.mensajeInfo = i18n.t('triage.data-save-good');
 
             //recargamos la página de nuevo
             this.reload();
           })
           .catch((error) => {
             this.spinner = false;
-            this.mensajeError = "Se ha producido un error al guardar el triage.";
+            this.mensajeError = i18n.t('triage.data-save-error');
             console.error(error);
           });
 
         })
         .catch((error) => {
           this.spinner = false;
-          this.mensajeError = "Se ha producido un error al guardar el triage.";
+          this.mensajeError = i18n.t('triage.data-save-error');
           console.error(error);
         });
       } catch (e) {
         this.spinner = false;
-        this.mensajeError = "Se ha producido un error al guardar el triage.";
+        this.mensajeError = i18n.t('triage.data-save-error');
         console.error(e)
       }
     },
