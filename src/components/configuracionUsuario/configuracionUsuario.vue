@@ -14,7 +14,7 @@ GNU General Public License for more details.
 <template lang="html">
   <div id="page-wrapper" :class="[{'full-width-div': fullscreen}]">
 
-    <spinner ref="spinner" v-model="spinner" size="xl" text="{{$t('configUser.load')}}"></spinner>
+    <spinner ref="spinner" v-model="spinner" size="xl" :text="$t('configUser.load')"></spinner>
 
     <div class="row">
       <div class="col-md-12">
@@ -36,31 +36,31 @@ GNU General Public License for more details.
               <div class="col-md-11">
                 <div class="row">
                   <div class="col-md-3">
-                    <bs-input label="Usuario" placeholder="{{$t('configUser.user')}}" name="usuario" id="usuario" disabled v-model.trim="usuario.username"></bs-input>
+                    <bs-input label="Usuario" :placeholder="$t('configUser.user')" name="usuario" id="usuario" disabled v-model.trim="usuario.username"></bs-input>
                   </div>
                   <div class="col-md-5">
-                    <bs-input label="Nombre" placeholder="{{$t('configUser.name')}}" name="nombre" id="nombre" disabled v-model.trim="usuario.nombre"></bs-input>
+                    <bs-input label="Nombre" :placeholder="$t('configUser.name')" name="nombre" id="nombre" disabled v-model.trim="usuario.nombre"></bs-input>
                   </div>
                 </div>
                 <div class="row">&nbsp;</div>
                 <div class="row">
                   <div class="col-md-3">
-                    <bs-input label="Introduce la password antigua" type="password" placeholder="{{$t('configUser.old-pass')}}" 
-                    error="{{$t('configUser.error-pass')}}" icon required name="password" id="passwordA" v-model.trim="passwordA"></bs-input>
+                    <bs-input label="Introduce la password antigua" type="password" :placeholder="$t('configUser.old-pass')" 
+                    :error="$t('configUser.error-pass')" icon required name="password" id="passwordA" v-model.trim="passwordA"></bs-input>
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-3">
-                    <bs-input label="Introduce la password nueva" type="password" placeholder="{{$t('configUser.new-pass')}}" 
-                    error="{{$t('configUser.error-pass')}}" icon required name="password" id="passwordN" v-model.trim="passwordN"></bs-input>
+                    <bs-input label="Introduce la password nueva" type="password" :placeholder="$t('configUser.new-pass')" 
+                    :error="$t('configUser.error-pass')" icon required name="password" id="passwordN" v-model.trim="passwordN"></bs-input>
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-3">
-                    <bs-input label="Repita la password nueva" type="password" placeholder="{{$t('configUser.repeat-pass-new')}}"
-                    error="{{$t('configUser.error-pass')}}" icon required name="password" id="passwordR" v-model.trim="passwordR"></bs-input>
+                    <bs-input label="Repita la password nueva" type="password" :placeholder="$t('configUser.repeat-pass-new')"
+                    :error="$t('configUser.error-pass')" icon required name="password" id="passwordR" v-model.trim="passwordR"></bs-input>
                   </div>
                 </div>
                 <alert v-model="mensajeError" type="danger" width="400px" dismissable>
