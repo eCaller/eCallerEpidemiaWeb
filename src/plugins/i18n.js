@@ -8,7 +8,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * @autor "Juan Carlos Díaz Abad" <jcdiaz@ingenia.es>
  */
 
@@ -29,9 +29,9 @@ export const i18n = new VueI18n({
  * Función que carga los idiomas desde los ficheros del directorio locales
  */
 function loadMessages () {
-    
+
     const locales = require.context('../locales', true, /[A-Za-z0-9-_,\s]+\.json$/i);
-    
+
     const messages = {};
 
     locales.keys().forEach(key => {
@@ -43,4 +43,3 @@ function loadMessages () {
     });
     return messages;
   }
-  

@@ -21,7 +21,7 @@ GNU General Public License for more details.
           <h3>{{mensajeError}}</h3>
         </div>
         <div class="col-md-12">
-          <button class="btn btn-default pull-right my-btn" @click="volver()">Volver</button>
+          <button class="btn btn-default pull-right my-btn" @click="volver()">{{$t('messages.volver')}}</button>
         </div>
       </div>
     </div>
@@ -68,10 +68,10 @@ GNU General Public License for more details.
 
                 <div class="row">
                   <div class="col-md-12">
-                    <bs-input :label="$t('caso.nombre')" :placeholder="$t('caso.nombre')" v-model="caso.nombre" :disabled="isDisabled"></bs-input>
+                    <bs-input :label="$t('caso.nombre') + '*'" :placeholder="$t('caso.nombre')" v-model="caso.nombre" :disabled="isDisabled"></bs-input>
                   </div>
                   <div class="col-md-8">
-                    <label for="mapadir" class="control-label">{{$t('caso.direccion')}}</label>
+                    <label for="mapadir" class="control-label">{{$t('caso.direccion') + '*'}}</label>
                     <div class="input-group">
                       <gmap-autocomplete
                         ref="direccion"
@@ -89,7 +89,7 @@ GNU General Public License for more details.
                   </div>
 
                   <div class="col-md-4">
-                    <label class="control-label">{{$t('caso.municipio')}}</label>
+                    <label class="control-label">{{$t('caso.municipio') + '*'}}</label>
                     <button-group justified>
                       <v-select v-model="idmunicipio" :options="municipios" options-label="nombre" options-value="id" :disabled="isDisabled"
                         show-count
@@ -100,7 +100,7 @@ GNU General Public License for more details.
                   </div>
 
                   <div class="col-md-3">
-                    <bs-input :label="$t('caso.telefono')" :placeholder="$t('caso.telefono')" v-model="caso.telefono" :disabled="isDisabled"></bs-input>
+                    <bs-input :label="$t('caso.telefono') + '*'" :placeholder="$t('caso.telefono')" v-model="caso.telefono" :disabled="isDisabled"></bs-input>
                   </div>
 
                   <div class="col-md-3">
@@ -112,7 +112,7 @@ GNU General Public License for more details.
                   </div>
 
                   <div class="col-md-2">
-                    <bs-input :label="$t('caso.dni')" :placeholder="$t('caso.dni')" v-model="caso.dni" :disabled="isDisabled"></bs-input>
+                    <bs-input :label="$t('caso.dni') + '*'" :placeholder="$t('caso.dni')" v-model="caso.dni" :disabled="isDisabled"></bs-input>
                   </div>
 
                   <div class="col-md-12 cell-textArea-display">
@@ -224,7 +224,7 @@ GNU General Public License for more details.
 
             <div class="row" v-if="caso.citas && caso.citas.length>0">
               <div class="col-md-2">
-                <label class="control-label">{{ $t('messages.fecha') }}</label>
+                <label class="control-label">{{ $t('messages.fecha') + '*' }}</label>
                 <div class="btn-group btn-group-justified">
                   <datetimepicker name="dtpicker"
                     ref="fechacita"
@@ -232,7 +232,7 @@ GNU General Public License for more details.
                 </div>
               </div>
               <div class="col-md-2">
-                <label class="control-label">{{$t('messages.hora')}}</label>
+                <label class="control-label">{{$t('messages.hora') + '*'}}</label>
                 <div class="btn-group btn-group-justified">
                   <timepicker
                     ref="horacita" :disabled="isDisabledCita" @change="horaCita"></timepicker>
@@ -240,7 +240,7 @@ GNU General Public License for more details.
               </div>
 
               <div class="col-md-2">
-                <label for="tipo" class="control-label">Tipo</label>
+                <label for="tipo" class="control-label">{{$t('messages.tipo') + '*'}}</label>
                 <div class="btn-group btn-group-justified">
                   <v-select id="tipo" close-on-select :placeholder="$t('messages.combo-seleccione')" :disabled="isDisabledCita"
                       v-model="caso.citas[0].tipo" @change="chageTipoCita">
@@ -276,6 +276,7 @@ GNU General Public License for more details.
       <div class="col-md-12">
         <button class="btn btn-primary pull-right my-btn" @click="guardarDatos()" v-if="caso.estado!=='FI'">{{$t('caso.guardar-caso')}}</button>
         <button class="btn btn-info pull-right my-btn" @click="setcontactado()" v-if="caso.estado==='PC'">{{$t('caso.estado-paciente-contactado')}}</button>
+        <button class="btn btn-info pull-right my-btn" @click="setresultadotest()" v-if="caso.estado==='PT'">{{$t('caso.pendiente-resultado-test')}}</button>
         <button class="btn btn-info pull-right my-btn" @click="gestionarcita()" v-if="(caso.estado==='PC' || caso.estado==='CO') && activeTab!==2">{{$t('caso.gestionar-cita')}}</button>
         <button class="btn btn-default pull-right my-btn" @click="volver()">{{$t('messages.volver')}}</button>
       </div>
@@ -329,6 +330,7 @@ export default {
       center: this.$store.getters.configuracion.general.center,
 
       contactado: false,
+      resultadotestp: false,
 
     }
   },
@@ -506,6 +508,11 @@ export default {
         this.caso.estado="PC";
         this.contactado = false;
       }
+      if (this.resultadotestp) {
+        this.caso.estado="PT";
+        this.resultadotestp = false;
+      }
+
       if (e) {
         console.error(e);
       }
@@ -514,6 +521,12 @@ export default {
     setcontactado() {
       this.contactado = true;
       this.caso.estado = 'CO';
+      this.guardarDatos();
+    },
+
+    setresultadotest() {
+      this.resultadotestp = true;
+      this.caso.estado = 'PR';
       this.guardarDatos();
     },
 

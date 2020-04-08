@@ -11,6 +11,7 @@
     "centros": "Centers",
     "configuracion": "Setting",
     "diseno-triage": "Triage design",
+    "departamentos": "Departments",
     "distritos": "Districts",
     "municipios": "Municipalities",
     "provincias": "Cities",
@@ -46,5 +47,32 @@
     "contain-character":"Debe contener al menos un caracter especial",
     "error-update":"Se ha producido un error al actualizar",
     "error-password": "La contraseña antigua introducida no es válida"
+  },
+  "sie": {
+    "error": "Error!",
+    "sie": "Epidemiological information system",
+    "departamentos": "Departments",
+    "provincias": "Cities",
+    "nada-seleccionado": "Nothing selected",
+    "municipios": "Municipalities",
+    "grafica": "Graphics",
+    "estado-general-actual": "Current general summary",
+    "estado-por-seleccion": "Filtered summary",
+    "mapa-calor": "Heat map",
+    "mapa-casos": "Case map",
+    "seguimiento-casos": "Case tracking",
+    "evolucion-diaria": "Daily evolution",
+    "Sospechosos": "Suspects",
+    "Confirmados": "Confirmed cases",
+    "Activos": "Active cases",
+    "Recuperados": "Recovered cases",
+    "Decesos": "Deceases",
+    "ver-datos": "Data",
+    "datos": "Data",
+    "volver": "Go back",
+    "actualizar": "Refresh",
+    "tipo-grafica": "Graphic type",
+    "guardar-imagen": "Save as image"
+
   }
 }

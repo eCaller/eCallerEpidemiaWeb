@@ -8,6 +8,8 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
+
+@author jfpastor@ingenia.es
 -->
 <template lang="html">
   <div>
@@ -25,9 +27,10 @@ GNU General Public License for more details.
                 <li><a href="#" @click="usuarios()"><i class="fa fa-user fa-fw"></i> {{$t('menu.usuarios')}}</a></li>
                 <li><a href="#" @click="centros()"><i class="far fa-hospital fa-fw"></i> {{$t('menu.centros')}}</a></li>
                 <li class="divider"></li>
+                <li><a href="#" @click="departamentos()"><i class="far fa-map fa-fw"></i> {{$t('menu.departamentos')}}</a></li>
                 <li><a href="#" @click="provincias()"><i class="fa fa-map fa-fw"></i> {{$t('menu.provincias')}}</a></li>
-                <li><a href="#" @click="municipios()"><i class="far fa-map fa-fw"></i> {{$t('menu.municipios')}}</a></li>
-                <li><a href="#" @click="distritos()"><i class="fa fa-map-marked-alt fa-fw"></i> {{$t('menu.distritos')}}</a></li>
+                <li><a href="#" @click="municipios()"><i class="fa fa-map-marked fa-fw"></i> {{$t('menu.municipios')}}</a></li>
+
             </ul>
           </li>
           <li class="dropdown">
@@ -100,7 +103,7 @@ export default {
       municipios() {
         //TODO en construcción
       },
-      distritos() {
+      departamentos() {
         //TODO en construcción
       },
 
