@@ -2,6 +2,8 @@
 
 [![logo](/docs/img/logo.png)](https://www.ingenia.es)
 
+> Versión en inglés (en desarrollo)
+
 ## Introducción
 
 eCaller Epidemias es una solución software desarrollada por Ingenia (https://www.ingenia.es), al margen de su línea de productos eCaller Emergencias (https://www.ingenia.es/productos/ecaller-emergencias/) y eCaller Ambulancias (https://www.ingenia.es/productos/ecaller-ambulancias/), que ha sido liberada como solución Open Source y licencia GNU GPL v3.0 (https://www.gnu.org/licenses/gpl-3.0.html).
