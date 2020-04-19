@@ -2,7 +2,7 @@
 
 [![logo](/docs/img/logo.png)](https://www.ingenia.es)
 
-> Versión en inglés (en desarrollo)
+> [**Spanish** version](https://github.com/eCaller/eCallerEpidemiaWeb/blob/master/README.md)
 
 ## Introducción
 
