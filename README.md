@@ -87,7 +87,7 @@ Como pasos previos se deberán realizar los pasos del apartado [Instalación](RE
 
       `npm run build`
     
-  2. Ejecución del contendor Docker
+  2. Ejecución del contenedor Docker
   
     * En sistemas Windows
   
