@@ -37,26 +37,24 @@ eCaller Epidemias consists of two software components:
     4. Qualitative and quantitative measurement of the degree of the spread of the virus.
     5. Identification of risk zones.
 
-## Instalación
-1. Clonar el repositorio en una carpeta local
+## Installation
 
+1. Clonar el repositorio en una carpeta local
     * `git clone  https://github.com/eCaller/eCallerEpidemiaWeb.git`
-  
     * `cd eCallerEpidemiasWeb`
   
 2. Instalación librería
-  
     * `npm install`
 
-3. Configuración entorno
+3. Setting the environment:
     * cp src/config.js.example src/config.js
     * Editar el fichero src/config.js con los valores correctos para el entorno de ejecución
 
-## Ejecución en local
+## Local execution
+
 Como requerimiento antes de ejecutar la aplicación debe instalarse y configurarse el proyecto: [eCallerEpidemiaBackEnd](https://github.com/eCaller/eCallerEpidemiaBackEnd/)
 
 1. Ejecución en modo desarrollo
-
     * `npm run dev`
     
 ## Ejecución en NGINX mediante contendor Docker
@@ -101,23 +99,23 @@ Como pasos previos se deberán realizar los pasos del apartado [Instalación](RE
         
 ```
 
-## Repositorios
+## Repositories
 
-* **`App móvil`**.
-    - [eCallerEpidemiaMovil](https://github.com/eCaller/eCallerEpidemiaMovil/)
+* **`Mobile app`**.
+    - [eCallerEpidemiaMovil](https://github.com/eCaller/eCallerEpidemiaMovil/blob/master/README-EN.md)
 
-* **`Aplicación web`**.
-    - [eCallerEpidemiaWeb](https://github.com/eCaller/eCallerEpidemiaWeb/)
-    - [eCallerEpidemiaBackEnd](https://github.com/eCaller/eCallerEpidemiaBackEnd/)
+* **`Web application`**.
+    - [eCallerEpidemiaWeb](https://github.com/eCaller/eCallerEpidemiaWeb/blob/master/README-EN.md)
+    - [eCallerEpidemiaBackEnd](https://github.com/eCaller/eCallerEpidemiaBackEnd/blob/master/README-EN.md)
 
-## Descripción funcional
+## Functional description
 
-La documentación funcional de la solución software se encuentra disponible en el enlace [Wiki-ReferenciaFuncional](https://github.com/eCaller/eCallerEpidemiaWeb/wiki/documentación-funcional).
+The functional documentation of the software solution is available at the following link [Wiki-FunctionalDescription](https://github.com/eCaller/eCallerEpidemiaWeb/wiki/functional-description).
 
-## Descripción técnica
+## Technical description
 
-La documentación técnica de la solución software se encuentra disponible en el enlace [Wiki-ReferenciaTecnica](https://github.com/eCaller/eCallerEpidemiaWeb/wiki/documentación-técnica).
+The technical documentation of the software solution is available at the following link [Wiki-TechnicalDescription](https://github.com/eCaller/eCallerEpidemiaWeb/wiki/technical-description).
 
-## Licencia
+## Licensing
 
 GNU GPL v3.0 (https://www.gnu.org/licenses/gpl-3.0.html).
