@@ -69,9 +69,11 @@ The application execution in NGINX, using Docker container, can be done in two w
 As previous steps, the steps in the [Installation](README-EN.md#Installation) section must be carried out and then the following steps must be taken:
 
 1. Docker image creation:
+
     `docker build -t ecaller-epidemias/ecaller-epidemias-web .`
 
 2. Docker image execution:
+
     `docker run -d -p 80:80 --rm --name ecaller-epidemas-web-1 ecaller-epidemias/ecaller-epidemias-web`
 
 ## Direct execution from NGINX-alpine Docker image
