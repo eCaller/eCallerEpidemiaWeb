@@ -4,39 +4,38 @@
 
 > [**Spanish** version](https://github.com/eCaller/eCallerEpidemiaWeb/blob/master/README.md)
 
-## Introducción
+## Introduction
 
-eCaller Epidemias es una solución software desarrollada por Ingenia (https://www.ingenia.es), al margen de su línea de productos eCaller Emergencias (https://www.ingenia.es/productos/ecaller-emergencias/) y eCaller Ambulancias (https://www.ingenia.es/productos/ecaller-ambulancias/), que ha sido liberada como solución Open Source y licencia GNU GPL v3.0 (https://www.gnu.org/licenses/gpl-3.0.html).
+eCaller Epidemias is a software solution developed by Ingenia (https://www.ingenia.es), as part of its eCaller Emergencias product range (https://www.ingenia.es/productos/ecaller-emergencias/) and eCaller Ambulancias (https://www.ingenia.es/productos/ecaller-ambulancias/) is licensed as an Open Source solution with licence number GNU GPL v3.0 (https://www.gnu.org/licenses/gpl-3.0.html).
 
-## ¿A quién va dirigida esta solución?
+## Who is this solution for?
 
-Esta solución ha sido concebida para aquellas empresas, organizaciones, entidades o instituciones públicas y privadas del ámbito sanitario que necesiten disponer de herramientas orientadas a conocer la magnitud y el grado de evolución de los brotes epidémicos de COVID-19 e implementar las acciones necesarias para su contención en una región determinada. En este sentido, la solución suministra un esquema de trabajo basado en los siguientes procesos:
+This solution has been designed for those companies, organizations, entities or public and private institutions in the health sector that require tools in order to be informed of the extent and degree of the spread of COVID-19 outbreaks and implement the necessary actions for their containment in a given region. As a result, the solution provides a work scheme based on the following processes:
 
-* Detección e identificación de casos sospechosos.
-* Gestión, coordinación y seguimiento de las acciones a realizar para cada uno de los casos sospechosos.
-* Representación, monitorización y cuantificación del grado de evolución de los brotes epidémicos sobre una región determinada.
+* Detection and identification of suspected cases.
+* Management, coordination and monitoring of the actions to be carried out for each of the suspected cases.
+* Representation, monitoring and quantification of the degree of the spread of outbreaks over a given region.
 
-## Beneficios
+## Benefits
 
-Una implementación coordinada de estos tres procesos permitirá a las distintas organizaciones sanitarias obtener una visión macro y micro de la magnitud de los brotes, conocer individualmente el estado de cada uno de los casos detectados, así como servir de base para orientar los esfuerzos a la implementación de medidas de contención y erradicación de los focos de transmisión.
+A coordinated implementation of these three processes will allow the different health organizations to obtain a macro and micro view of the extent of outbreaks, to be informed individually the status of each of the cases detected, and to serve as a basis for guiding efforts to implement containment measures and eradicate transmission hotspots.
 
-## Componentes de la solución software
+## Software solution components
 
-eCaller Epidemias está constituida por dos componentes software:
+eCaller Epidemias consists of two software components:
 
-* **`App móvil`**. Es una herramienta cuyo uso está destinado a los ciudadanos. Los objetivos que se persiguen con su utilización son los siguientes:
-    1. Descargar de un elevado volumen de llamadas a los centros de coordinación de las organizaciones sanitarias.
-    2. Facilitar al ciudadano un mecanismo sencillo de auto-evaluación para conocer si presenta algún síntoma compatible con el desarrollo de la enfermedad vírica.
-    3. Suministrar a cualquier ciudadano una herramienta ágil para comunicar a las organizaciones sanitarias de la posibilidad real de haber contraído el virus.
-    4. Dar a conocer a las organizaciones sanitarias los ciudadanos que manifiestan síntomas compatibles con el desarrollo de la enfermedad virica.
+* **`Mobile app`**. This is a tool is intended for the public. The objectives pursued by its use is as follows:
+    1. In order to download a high volume of calls to the focal points of health organizations.
+    2. Provide the public with a simple mechanism of self-assessment to know if they have any symptoms compatible with the development of the virus.
+    3. Provide any member of the public with an agile tool to communicate to health organizations the real possibility of contracting the virus.
+    4. To enable health organizations to identify members of the public who exhibit symptoms compatible with the development of the virus.
 
-
-* **`Aplicación web`**. Esta herramienta, que es utilizada por personal de la organización sanitaria, ha sido diseñada para cumplir los siguientes objetivos:
-    1. Proporcionar un entorno de trabajo para registrar los casos sospechosos notificados por los ciudadanos desde la app móvil.
-    2. Disponer de una herramienta centralizada para organizar las citas con los usuarios sospechosos, que deben ser sometidos al test clínico de detección de la enfermedad.
-    3. Facilitar un entorno de trabajo con el propósito de registrar información de seguimiento sobre la evolución de cada uno de los casos.
-    4. Medición cualitativa y cuantitativamente del grado de evolución de la enfermedad.
-    5. Identificación de las zonas de riesgo.
+* **`Web application`**. This tool, used by staff of the healthcare organization, has been designed to meet the following objectives:
+    1. Provide a working environment to record suspected cases reported by the public from the mobile app.
+    2. Have a centralized tool to organize appointments with suspected users, who must undergo the clinical test for detecting the virus.
+    3. Facilitate a working environment for the purpose of recording follow-up information on the extent of each case.
+    4. Qualitative and quantitative measurement of the degree of the spread of the virus.
+    5. Identification of risk zones.
 
 ## Instalación
 1. Clonar el repositorio en una carpeta local
