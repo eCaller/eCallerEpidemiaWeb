@@ -81,6 +81,7 @@ As previous steps, the steps in the [Installation](README-EN.md#Installation) se
       `npm run build`
     
   2. Running the Docker container:
+
     * On Windows systems:
 ```        
    docker run -p 80:80 --rm --name ecaller-epidemas-web-1 -v %cd%/dist/:/usr/share/nginx/html/ -d nginx:stable-alpine 
