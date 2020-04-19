@@ -39,31 +39,29 @@ eCaller Epidemias consists of two software components:
 
 ## Installation
 
-1. Clonar el repositorio en una carpeta local
+1. Clone the repository to a local folder:
     * `git clone  https://github.com/eCaller/eCallerEpidemiaWeb.git`
     * `cd eCallerEpidemiasWeb`
   
-2. Instalación librería
+2. Library installation:
     * `npm install`
 
 3. Setting the environment:
     * cp src/config.js.example src/config.js
-    * Editar el fichero src/config.js con los valores correctos para el entorno de ejecución
+    * Edit the src/config.js file with the correct values for the runtime environment.
 
 ## Local execution
 
-Como requerimiento antes de ejecutar la aplicación debe instalarse y configurarse el proyecto: [eCallerEpidemiaBackEnd](https://github.com/eCaller/eCallerEpidemiaBackEnd/)
+As a requirement before running the application, the project must be installed and configured: [eCallerEpidemiaBackEnd](https://github.com/eCaller/eCallerEpidemiaBackEnd/blob/master/README-EN.md)
 
-1. Ejecución en modo desarrollo
+1. Running in development mode:
     * `npm run dev`
     
-## Ejecución en NGINX mediante contendor Docker
+## Execution in NGINX using Docker container
 
-La ejecución de la aplicación en NGINX, mediante contenerdor Docker, se puede hacer de dos formas:
-
-* Creando y ejecutando una imagen creada del proyecto
-
-* Ejecución directamente desde una imagen de NGINX ya existente previamente
+The application execution in NGINX, using Docker container, can be done in two ways:
+* Creating and executing an image created from the project.
+* Running directly from a previously existing NGINX image.
 
 ### Creación y ejecución de un contenedor Docker
 
@@ -78,6 +76,7 @@ Como pasos previos se deberán realizar los pasos del apartado [Instalación](RE
     `docker run -d -p 80:80 --rm --name ecaller-epidemas-web-1 ecaller-epidemias/ecaller-epidemias-web`
 
 ## Ejecución directa desde imagen Docker de NGINX-alpine
+
 Como pasos previos se deberán realizar los pasos del apartado [Instalación](README.md#Instalación) y seguidamente realizar los siguientes pasos:
 
   1. Compilación del proyecto
