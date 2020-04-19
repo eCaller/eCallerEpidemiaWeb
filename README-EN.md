@@ -63,39 +63,31 @@ The application execution in NGINX, using Docker container, can be done in two w
 * Creating and executing an image created from the project.
 * Running directly from a previously existing NGINX image.
 
-### Creación y ejecución de un contenedor Docker
+### Create and run a Docker container
 
-Como pasos previos se deberán realizar los pasos del apartado [Instalación](README.md#Instalación) y seguidamente realizar los siguientes pasos:
+As previous steps, the steps in the [Installation](README-EN.md#Installation) section must be carried out and then the following steps must be taken:
 
-1. Creación de la imagen Docker
-
+1. Docker image creation:
     `docker build -t ecaller-epidemias/ecaller-epidemias-web .`
 
-2. Ejecución de la imagen Docker
-
+2. Docker image execution:
     `docker run -d -p 80:80 --rm --name ecaller-epidemas-web-1 ecaller-epidemias/ecaller-epidemias-web`
 
-## Ejecución directa desde imagen Docker de NGINX-alpine
+## Direct execution from NGINX-alpine Docker image
 
-Como pasos previos se deberán realizar los pasos del apartado [Instalación](README.md#Instalación) y seguidamente realizar los siguientes pasos:
+As previous steps, the steps in the [Installation](README-EN.md#Installation) section must be performed and then the following steps:
 
-  1. Compilación del proyecto
-
+  1. Project compilation:
       `npm run build`
     
-  2. Ejecución del contendor Docker
-  
-    * En sistemas Windows
-  
+  2. Running the Docker container:
+    * On Windows systems:
 ```        
-   docker run -p 80:80 --rm --name ecaller-epidemas-web-1 -v %cd%/dist/:/usr/share/nginx/html/ -d nginx:stable-alpine
-       
+   docker run -p 80:80 --rm --name ecaller-epidemas-web-1 -v %cd%/dist/:/usr/share/nginx/html/ -d nginx:stable-alpine 
 ```
-
-    * En sistemas Linux
+    * On Linux systems:
 ```        
    docker run -p 80:80 --rm --name ecaller-epidemas-web-1 -v $PWD/dist:/usr/share/nginx/html -d nginx:stable-alpine
-        
 ```
 
 ## Repositories
