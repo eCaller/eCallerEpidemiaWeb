@@ -55,6 +55,7 @@ eCaller Epidemias consists of two software components:
 As a requirement before running the application, the project must be installed and configured: [eCallerEpidemiaBackEnd](https://github.com/eCaller/eCallerEpidemiaBackEnd/blob/master/README-EN.md)
 
 1. Running in development mode:
+
     * `npm run dev`
     
 ## Execution in NGINX using Docker container
