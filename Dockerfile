@@ -2,6 +2,8 @@
 FROM node:10.16.2-alpine as build-stage
 COPY . .
 WORKDIR /
+RUN apk update && apk upgrade && \
+    apk add --no-cache git
 RUN npm install
 RUN npm uninstall node-sass
 RUN npm install node-sass
