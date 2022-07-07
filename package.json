@@ -16,7 +16,7 @@
     "echarts": "^4.7.0",
     "eonasdan-bootstrap-datetimepicker": "^4.17.47",
     "font-awesome": "^4.7.0",
-    "moment": "^2.20.1",
+    "moment": "^2.29.4",
     "node-sass": "^4.13.1",
     "qs": "^6.9.3",
     "sass-loader": "^6.0.6",
